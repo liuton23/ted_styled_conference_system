@@ -21,7 +21,7 @@ public class AttendeeManager implements Serializable {
         AttendeeList.add(attendee);
     }
 
-    public void addAttendeEvent(Attendee attendee, String event){
+    public void addAttendeeEvent(Attendee attendee, String event){
         attendee.addEvent(event);
     }
 
@@ -56,7 +56,7 @@ public class AttendeeManager implements Serializable {
         AttendeeManager a = new AttendeeManager();
         Attendee attendee = a.createAttendee("Bill Nye", "bill", "science");
         a.add(attendee);
-        a.addAttendeEvent(attendee, "CSC207");
+        a.addAttendeeEvent(attendee, "CSC207");
         System.out.println(a.inSystem("Bill", "Nye"));
         System.out.println(a.inSystem("Bill", "James"));
         System.out.println(a.inSystem("Steve", "Hawking"));
