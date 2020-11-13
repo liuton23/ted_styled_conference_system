@@ -53,6 +53,10 @@ public class AttendeeManager implements Serializable {
         attendee.removeEvent(event);
     }
 
+    public void makeSpeaker(Attendee attendee){
+
+    }
+
     // check this later Optionals are funky
     public Optional<Attendee> usernameToAttendeeObject(String username){
         for (Attendee user: AttendeeList) {

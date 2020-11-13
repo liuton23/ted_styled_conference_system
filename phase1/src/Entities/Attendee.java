@@ -7,7 +7,6 @@ public class Attendee {
     private String password;
     private String name;
     private boolean isOrganizer = false;
-    private boolean isSpeaker = false;
     private ArrayList<String> itinerary;
 
     public Attendee(String name, String username, String password){
@@ -26,10 +25,6 @@ public class Attendee {
 
     public String getPassword(){
         return password;
-    }
-
-    public void makeSpeaker(){
-        this.isSpeaker = true;
     }
 
     public void addEvent(String event){
