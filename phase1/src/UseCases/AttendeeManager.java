@@ -5,6 +5,7 @@ import Entities.Speaker;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class AttendeeManager implements Serializable {
 
@@ -50,6 +51,16 @@ public class AttendeeManager implements Serializable {
 
     public void dropOut(Attendee attendee, String event){
         attendee.removeEvent(event);
+    }
+
+    // check this later Optionals are funky
+    public Optional<Attendee> usernameToAttendeeObject(String username){
+        for (Attendee user: AttendeeList) {
+            if(username.equals(user.getUsername())){
+                return Optional.of(user);
+            }
+        }
+        return Optional.empty();
     }
 
     /*
