@@ -40,9 +40,17 @@ public class AttendeeManager implements Serializable {
         return attendee.getItinerary();
     }
 
-    public void changeSpeaker(String title, Speaker oldSpeaker, Speaker newSpeaker){
-        oldSpeaker.removeEvent(title);
-        newSpeaker.addEvent(title);
+    public void changeSpeaker(String title, String newSpeakerUsername){
+        for (Speaker speaker: speakerList) {
+            if (speaker.getTalkList().contains(title)) {
+                speaker.removeTalk(title);
+            }
+        }
+        for (Speaker speaker: speakerList) {
+            if(speaker.getUsername().equals(newSpeakerUsername)){
+                speaker.addTalk(title);
+            }
+        }
     }
 
     public void signUp(Attendee attendee, String event){
@@ -53,9 +61,6 @@ public class AttendeeManager implements Serializable {
         attendee.removeEvent(event);
     }
 
-    public void makeSpeaker(Attendee attendee){
-
-    }
 
     // check this later Optionals are funky
     public Optional<Attendee> usernameToAttendeeObject(String username){
