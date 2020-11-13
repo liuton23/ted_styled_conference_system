@@ -11,6 +11,7 @@ public class Event {
     private ArrayList<LocalDateTime> eventTime;
     private int room;
     private int capacity;
+    private ArrayList<String> attendeeList;
 
     // Event with one hour length
     // month should be in all caps
@@ -24,6 +25,7 @@ public class Event {
         this.eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute, 0));
         this.room = room;
         this.capacity = capacity;
+        this.attendeeList = new ArrayList<String>();
     }
 
     // getters
@@ -46,6 +48,8 @@ public class Event {
     public int getCapacity(){
         return capacity;
         }
+
+    public ArrayList<String> getAttendeeList(){ return attendeeList;}
 
     // setters
     public void setSpeaker(String newSpeaker){
@@ -71,6 +75,15 @@ public class Event {
         this.capacity = newCapacity;
     }
 
+    public void addAttendee(String attendee){
+        this.attendeeList.add(attendee);
+    }
+
+    public void removeAttendee(String attendee){
+        // check if removing an object that isn't there cause an error!
+        this.attendeeList.remove(attendee);
+    }
+
     //testing
     public static void main(String[] args) {
         Event petConference = new Event("Pet Conference", "Caesar Milan", 2020, "NOVEMBER",
@@ -82,5 +95,12 @@ public class Event {
         System.out.println(petConference.getCapacity());
         petConference.setEventTime(2020, "DECEMBER", 22, 12, 0);
         System.out.println(petConference.getEventTime());
+        System.out.println(petConference.getAttendeeList());
+        petConference.addAttendee("Heidi");
+        petConference.addAttendee("Maya");
+        System.out.println(petConference.getAttendeeList());
+        petConference.removeAttendee("Iva");
+        petConference.removeAttendee("Heidi");
+        System.out.println(petConference.getAttendeeList());
     }
 }
