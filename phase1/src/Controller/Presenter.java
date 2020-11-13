@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 public class Presenter {
 
+    public void welcomeMessage(){
+        System.out.println("Welcome to the 207th Tech Conference!");
+        System.out.println("You can enter 'E' to exit anytime.");
+    }
+
     public void promptList(ArrayList<String> options){
         System.out.println("Please choose one of the following: ");
 
@@ -13,18 +18,33 @@ public class Presenter {
     }
 
     public void prompt(ArrayList<String> options){
-        System.out.print("Please input ");
-        StringBuilder output = new StringBuilder();
+        System.out.println("Would you like to ");
         for(String option: options) {
-            output.append(option);
-            output.append(", ");
+            System.out.println(option);
         }
-        String str = output.substring(0, output.length() - 3);
-        System.out.print(str + ".\n");
+    }
+    public void displayMessages(){
+
+    }
+    public void displaySchedule(){
+
     }
 
-    public void invalid_input(){
+    public void invalidInput(){
         System.out.println("The input you entered is invalid.");
+        System.out.println("Please try again.");
+    }
+
+    public void loginMessage(){
+        System.out.println("Enter your username:");
+    }
+
+    public void passwordMessage() {
+        System.out.println("Enter your password");
+    }
+
+    public void loginFailMessage(){
+        System.out.println("Your username or password is incorrect.");
     }
 
 }
