@@ -1,6 +1,7 @@
 package UseCases;
 
 import Entities.Attendee;
+import Entities.Event;
 import Entities.Speaker;
 
 import java.io.Serializable;
@@ -9,22 +10,25 @@ import java.util.Optional;
 
 public class AttendeeManager implements Serializable {
 
-    ArrayList<Attendee> AttendeeList;
+    ArrayList<Attendee> attendeeList;
+    ArrayList<Speaker> speakerList;
 
     public AttendeeManager(){
-        AttendeeList = new ArrayList<>();
+        attendeeList = new ArrayList<Attendee>();
+        speakerList = new ArrayList<Speaker>();
     }
 
-    public Attendee createAttendee(String name, String username, String password){
-        return new Attendee(name, username, password);
-    }
-
-    public void add(Attendee attendee){
-        AttendeeList.add(attendee);
+    public Attendee createAttendee(String name, String username, String password, Boolean isOrg){
+        Attendee a = new Attendee(name, username, password);
+        attendeeList.add(a);
+        if ( isOrg ) {
+            a.makeOrganizer();
+        }
+        return a;
     }
 
     public boolean inSystem(String username, String password){
-        for (Attendee a: AttendeeList){
+        for (Attendee a: attendeeList){
             if (username.equals(a.getUsername()) && password.equals(a.getPassword())){
                 return true;
             }
@@ -32,8 +36,18 @@ public class AttendeeManager implements Serializable {
         return false;
     }
 
+    public Speaker createSpeaker(String name, String username, String password){
+        Speaker sp = new Speaker(name, username, password);
+        speakerList.add(sp);
+        return sp;
+    }
+
     public ArrayList<Attendee> getAllAttendees(){
-        return AttendeeList;
+        return attendeeList;
+    }
+
+    public ArrayList<Speaker> getAllSpeakers() {
+        return speakerList;
     }
 
     public ArrayList<String> getItinerary(Attendee attendee){
@@ -53,13 +67,10 @@ public class AttendeeManager implements Serializable {
         attendee.removeEvent(event);
     }
 
-    public void makeSpeaker(Attendee attendee){
-
-    }
 
     // check this later Optionals are funky
     public Optional<Attendee> usernameToAttendeeObject(String username){
-        for (Attendee user: AttendeeList) {
+        for (Attendee user: attendeeList) {
             if(username.equals(user.getUsername())){
                 return Optional.of(user);
             }
@@ -67,20 +78,20 @@ public class AttendeeManager implements Serializable {
         return Optional.empty();
     }
 
-    /*
+
     public ArrayList<Attendee> eventToAttendees(Event event){
-        ArrayList<Attendee> attendeeList = new ArrayList<Attendee>();
+        ArrayList<Attendee> list = new ArrayList<Attendee>();
         String title = event.getTitle();
-        for (Attendee a: AttendeeList){
+        for (Attendee a: attendeeList){
             if (a.getItinerary().contains(title)){
-                attendeeList.add(a);
+                list.add(a);
             }
         }
-        return attendeeList;
+        return list;
     }
 
-     */
     /*
+
     public static void main(String[] args) {
         AttendeeManager a = new AttendeeManager();
         Attendee attendee = a.createAttendee("Bill Nye", "bill", "science");
@@ -94,4 +105,6 @@ public class AttendeeManager implements Serializable {
     }
 
      */
+
+
 }

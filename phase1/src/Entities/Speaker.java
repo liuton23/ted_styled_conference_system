@@ -3,7 +3,9 @@ package Entities;
 import java.util.ArrayList;
 
 public class Speaker extends Attendee{
+
     private ArrayList<String> talkList;
+
     public Speaker(String name, String username, String password){
         super(name, username, password);
         this.talkList = new ArrayList<String>();
@@ -19,3 +21,4 @@ public class Speaker extends Attendee{
         return this.talkList;
     }
 }
+

@@ -35,9 +35,17 @@ public class Attendee {
         itinerary.remove(event);
     }
 
+    public void makeOrganizer(){
+        isOrganizer = true;
+    }
+
     public ArrayList<String> getItinerary(){
         itinerary.sort(String::compareToIgnoreCase);
         return itinerary;
+    }
+
+    public Boolean isOrganizer(){
+        return isOrganizer;
     }
 
     /*
