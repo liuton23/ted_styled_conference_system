@@ -22,10 +22,6 @@ public class AttendeeManager implements Serializable {
         AttendeeList.add(attendee);
     }
 
-    public void addAttendeeEvent(Attendee attendee, String event){
-        attendee.addEvent(event);
-    }
-
     public boolean inSystem(String username, String password){
         for (Attendee a: AttendeeList){
             if (username.equals(a.getUsername()) && password.equals(a.getPassword())){
@@ -37,6 +33,10 @@ public class AttendeeManager implements Serializable {
 
     public ArrayList<Attendee> getAllAttendees(){
         return AttendeeList;
+    }
+
+    public ArrayList<String> getItinerary(Attendee attendee){
+        return attendee.getItinerary();
     }
 
     public void changeSpeaker(String title, Speaker oldSpeaker, Speaker newSpeaker){
