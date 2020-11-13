@@ -1,6 +1,7 @@
 package UseCases;
 
 import Entities.Attendee;
+import Entities.Speaker;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class AttendeeManager implements Serializable {
     ArrayList<Attendee> AttendeeList;
 
     public AttendeeManager(){
-        AttendeeList = new ArrayList<Attendee>();
+        AttendeeList = new ArrayList<>();
     }
 
     public Attendee createAttendee(String name, String username, String password){
@@ -36,6 +37,19 @@ public class AttendeeManager implements Serializable {
 
     public ArrayList<Attendee> getAllAttendees(){
         return AttendeeList;
+    }
+
+    public void changeSpeaker(String title, Speaker oldSpeaker, Speaker newSpeaker){
+        oldSpeaker.removeEvent(title);
+        newSpeaker.addEvent(title);
+    }
+
+    public void signUp(Attendee attendee, String event){
+        attendee.addEvent(event);
+    }
+
+    public void dropOut(Attendee attendee, String event){
+        attendee.removeEvent(event);
     }
 
     /*
