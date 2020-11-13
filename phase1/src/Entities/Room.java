@@ -32,37 +32,19 @@ public class Room {
         this.capacity = capacity;
     }
 
-    public boolean book(String eventName, LocalDateTime start, LocalDateTime end)
-    {
-        for(LocalDateTime[] l : bookings) {
-            if (checkConflict(start, end, l[0], l[1])) {
-                return false;
-            }
-        }
-        LocalDateTime[] dateTime = {start, end};
-        this.bookings.add(dateTime);
-        this.eventNames.add(eventName);
-        return true;
+    public ArrayList<LocalDateTime[]> getBookings() {
+        return bookings;
     }
 
-    private boolean checkConflict(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
-        if (start1.isAfter(start2) && start1.isBefore(end2)) {
-            return true;
-        } else if (end1.isAfter(start2) && end1.isBefore(end2)) {
-            return true;
-        } else if (start1.equals(start2)) {
-            return true;
-        } else if (end1.equals(end2)) {
-            return true;
-        } else {
-            return false;
-        }
+    public void setBookings(ArrayList<LocalDateTime[]> bookings) {
+        this.bookings = bookings;
     }
 
-    public void unbook(String eventName)
-    {
-        int i = eventNames.indexOf(eventName);
-        bookings.remove(i);
-        eventNames.remove(i);
+    public ArrayList<String> getEventNames() {
+        return eventNames;
+    }
+
+    public void setEventNames(ArrayList<String> eventNames) {
+        this.eventNames = eventNames;
     }
 }
