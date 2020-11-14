@@ -39,7 +39,7 @@ public class SignUpSystem {
         //check if username is valid
         if (obj.isPresent()){
             Attendee attendee = obj.get();
-            eventManager.signUP(event, attendee.getName());
+            eventManager.signUP(event, attendee.getUsername());
             attendeeManager.signUp(attendee, event.getTitle());
             return "You have successfully signed up for " + event.getTitle() + " @ " + event.getEventTime();
         }
@@ -55,7 +55,7 @@ public class SignUpSystem {
             return "Incorrect username. Please try again.";
         }
         Attendee attendee = obj.get();
-        eventManager.dropOut(event, attendee.getName());
+        eventManager.dropOut(event, attendee.getUsername());
         attendeeManager.dropOut(attendee, event.getTitle());
         return "You have successfully dropped " + event.getTitle() + " @ " + event.getEventTime();
     }
