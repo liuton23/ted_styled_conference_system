@@ -2,6 +2,7 @@ package Entities;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Event {
@@ -80,11 +81,18 @@ public class Event {
     }
 
     public void removeAttendee(String attendee){
-        // check if removing an object that isn't there cause an error!
         this.attendeeList.remove(attendee);
     }
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
 
-    //testing
+        return String.format(this.title + " runs from " + this.eventTime.get(0).format(formatter) + " to " +
+                this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + " with speaker: " +
+                this.getSpeaker() + ".");
+    }
+
+        //testing
     public static void main(String[] args) {
         Event petConference = new Event("Pet Conference", "Caesar Milan", 2020, "NOVEMBER",
                 16, 12, 0, 100, 500);
@@ -102,5 +110,6 @@ public class Event {
         petConference.removeAttendee("Iva");
         petConference.removeAttendee("Heidi");
         System.out.println(petConference.getAttendeeList());
+        System.out.println(petConference);
     }
 }
