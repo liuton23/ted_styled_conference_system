@@ -33,9 +33,13 @@ public class Controller {
             choices.add("L"); choices.add("R"); choices.add(("E"));
             String chosen = askInput(options, choices, input);
 
+            String username;
+
             switch (chosen){
                 case "R": registerUser(); break;
-                case "L": login(); break;
+                case "L": username = login(); break;
+                case "E":
+                    running = false;
             }
 
             if (!running){
@@ -99,6 +103,30 @@ public class Controller {
             presenter = new Presenter();
         }
     }
-    public static void login(){}
-    public static void registerUser(){}
+    public static String login(){
+        System.out.println("Login");
+        LoginSystem loginSystem = new LoginSystem(attendeeManager);
+        Scanner obj1 = new Scanner(System.in);
+        System.out.println("Username");
+        String username = obj1.nextLine();
+        System.out.println("Password");
+        String password = obj1.nextLine();
+        if (loginSystem.canLogin(username, password)){
+            System.out.println("Logged in: " + username);
+            return username;
+        }
+        return "Incorrect Login!";
+    }
+    public static void registerUser(){
+        System.out.println("Register User");
+        LoginSystem loginSystem = new LoginSystem(attendeeManager);
+        Scanner obj1 = new Scanner(System.in);
+        System.out.println("Username");
+        String username = obj1.nextLine();
+        System.out.println("Password");
+        String password = obj1.nextLine();
+        System.out.println("Are you an organizer?");
+        boolean isOrg = obj1.nextBoolean();
+        loginSystem.registerUser(username, password, isOrg);
+    }
 }
