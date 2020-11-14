@@ -72,14 +72,14 @@ public class MessageManager implements Serializable {
     public static void main(String[] args){
         //tests
         AttendeeManager a = new AttendeeManager();
-        Attendee josh = a.createAttendee("josh", "iamjosh", "4532dgtf", false);
-        Attendee rita = a.createAttendee("rita","ritaishannie", "123456", false);
+        Attendee josh = a.createAttendee("iamjosh", "4532dgtf", false);
+        Attendee rita = a.createAttendee("ritaishannie", "123456", false);
         MessageManager mas = new MessageManager();
         Message m = mas.createMessage("iamjosh","ritaishannie","hello jesus");
         Message newm = mas.reply(m, "iamjosh","hello, rita");
         Message c = mas.reply(newm, "ritaishannie", "I'll go to eaton tomorrow");
         mas.reply(c, "iamjosh", "I'm watching start up.");
-        Attendee org = a.createAttendee("lisa", "lisa231", "iloveme", true);
+        Attendee org = a.createAttendee("lisa231", "iloveme", true);
         ArrayList<String> att = new ArrayList<String>();
         att.add("iamjosh");
         att.add("ritaishannie");
