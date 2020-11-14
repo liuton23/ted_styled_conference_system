@@ -68,4 +68,22 @@ public class MessageSystem {
         }
     }
 
+    public String messageAllAttendees(ArrayList<Event> events, String sender, String text){
+        Optional<Attendee> obj = am.usernameToAttendeeObject(sender);
+        ArrayList<String> allAttendees = new ArrayList<String>();
+        for (Event e: events){
+            allAttendees.addAll(e.getAttendeeList());
+        }
+        if (!obj.isPresent()){
+            return "Incorrect username. Please try again.";
+        }
+        Attendee se = obj.get();
+        if (se.isOrganizer() || se instanceof Speaker){
+            mm.createMessage(allAttendees, sender, text);
+            return "The message has been successfully sent";
+        } else {
+            return "Attendee can not send message to all other attendees.";
+        }
+    }
+
 }
