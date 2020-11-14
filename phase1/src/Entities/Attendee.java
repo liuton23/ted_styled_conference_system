@@ -5,18 +5,13 @@ import java.util.ArrayList;
 public class Attendee {
     private String username;
     private String password;
-    private String name;
     private boolean isOrganizer = false;
     private ArrayList<String> itinerary;
 
-    public Attendee(String name, String username, String password){
+    public Attendee(String username, String password){
         this.username = username;
         this.password = password;
         this.itinerary = new ArrayList<>();
-    }
-
-    public String getName(){
-        return name;
     }
 
     public String getUsername(){

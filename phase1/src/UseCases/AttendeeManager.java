@@ -18,8 +18,8 @@ public class AttendeeManager implements Serializable {
         speakerList = new ArrayList<Speaker>();
     }
 
-    public Attendee createAttendee(String name, String username, String password, Boolean isOrg){
-        Attendee a = new Attendee(name, username, password);
+    public Attendee createAttendee(String username, String password, Boolean isOrg){
+        Attendee a = new Attendee(username, password);
         attendeeList.add(a);
         if ( isOrg ) {
             a.makeOrganizer();
@@ -36,8 +36,8 @@ public class AttendeeManager implements Serializable {
         return false;
     }
 
-    public Speaker createSpeaker(String name, String username, String password){
-        Speaker sp = new Speaker(name, username, password);
+    public Speaker createSpeaker(String username, String password){
+        Speaker sp = new Speaker(username, password);
         speakerList.add(sp);
         return sp;
     }

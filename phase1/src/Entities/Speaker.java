@@ -6,8 +6,8 @@ public class Speaker extends Attendee{
 
     private ArrayList<String> talkList;
 
-    public Speaker(String name, String username, String password){
-        super(name, username, password);
+    public Speaker(String username, String password){
+        super(username, password);
         this.talkList = new ArrayList<String>();
     }
 
