@@ -83,8 +83,15 @@ public class AttendeeManager implements Serializable {
                 return Optional.of(user);
             }
         }
+        for (Attendee user: speakerList) {
+            if (username.equals(user.getUsername())) {
+                return Optional.of(user);
+            }
+        }
         return Optional.empty();
     }
+
+
 
 
     public ArrayList<Attendee> eventToAttendees(Event event){
