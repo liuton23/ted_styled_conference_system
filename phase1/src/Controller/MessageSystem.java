@@ -86,7 +86,6 @@ public class MessageSystem {
             mm.createMessage(allAtt,sender,text);
             return "The message has been successfully sent.";
         }
-
     }
 
     //All the Speaker methods
@@ -106,14 +105,12 @@ public class MessageSystem {
         } else {
                 mm.createMessage(list, sender, text);
                 return "The message has been successfully sent.";
-            }
-
+        }
     }
 
     public String messageEventAttendees(ArrayList<Integer> eventIndexes, String sender, String text){
         Optional<Attendee> obj = am.usernameToAttendeeObject(sender);
         ArrayList<String> list = new ArrayList<String>();
-        Boolean isSpeakerOf = true;
         ArrayList<Integer> error = new ArrayList<Integer>();
 
         if (!obj.isPresent()){
@@ -184,16 +181,15 @@ public class MessageSystem {
         am.createSpeaker("lily","jhienc");
         am.createSpeaker("james","iplayallday");
         RoomManager rm = new RoomManager();
-        rm.addRoom(1,2);
-        em.createEvent("cv workshop","lily",2020, "NOVEMBER",
+        ScheduleSystem sls = new ScheduleSystem(em, am, rm);
+        sls.scheduleEvent("cv workshop","lily",2020, "NOVEMBER",
                 20,14,30,1, 2);
-        //since the other systems have not been finished, i'll directly access use case class here
         SignUpSystem sus = new SignUpSystem();
-        ScheduleSystem sls = new ScheduleSystem();
         sus.signUpEvent(am,em,"ritawon",1);
         sus.signUpEvent(am,em,"liuton23",1);
-        em.createEvent("Harry Porter Fan Conference", "james",2020,"DECEMBER",10,
+        sls.scheduleEvent("Harry Potter Fan Conference", "james",2020,"DECEMBER",10,
                 14,0,1,50);
+        sls.addRoom(1,2);
         System.out.println(sus.viewAllEvents(em));
         sus.signUpEvent(am,em,"ritawon",2);
         ms.messageAttendee("ritawon","liuton23","See u at LCBO!");
