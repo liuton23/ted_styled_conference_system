@@ -8,10 +8,18 @@ import UseCases.EventManager;
 import UseCases.AttendeeManager;
 import UseCases.RoomManager;
 
+import java.util.Optional;
+
 public class ScheduleSystem {
     EventManager eventManager = new EventManager();
     AttendeeManager attendeeManager = new AttendeeManager();
     RoomManager roomManager = new RoomManager();
+
+    public ScheduleSystem(EventManager eventmanager, AttendeeManager attendeeManager, RoomManager roomManager){
+        this.eventManager = eventmanager;
+        this.attendeeManager = attendeeManager;
+        this.roomManager = roomManager;
+    }
     public String scheduleEvent(String title, String speaker, int year, String month, int day, int hour, int minute,
                                 int room, int capacity){
         return eventManager.createEvent(title, speaker, year, month, day, hour, minute, room, capacity);
@@ -23,12 +31,20 @@ public class ScheduleSystem {
         return "Room already exists in System";
     }
     public String changeSpeaker(Event event, String newSpeaker){
-        // need to make a precondition that the strings represent speaker objects
-        if(eventManager.freeSpeakerCheck(event.getEventTime(), newSpeaker)){
-            eventManager.changeSpeaker(event, newSpeaker);
-            attendeeManager.changeSpeaker(event.getTitle(), newSpeaker);
-            return "Speaker changed successfully.";
+        // if the value is not null
+        if(attendeeManager.usernameToAttendeeObject(newSpeaker).isPresent()) {
+            // if object is speaker
+            if (attendeeManager.usernameToAttendeeObject(newSpeaker).get() instanceof Speaker) {
+                // changing speaker
+                if (eventManager.freeSpeakerCheck(event.getEventTime(), newSpeaker)) {
+                    eventManager.changeSpeaker(event, newSpeaker);
+                    attendeeManager.changeSpeaker(event.getTitle(), newSpeaker);
+                    return "Speaker changed successfully.";
+                }
+                return "Speaker is already booked at this time.";
+            }
+            return "This person is not a speaker.";
         }
-        return "Speaker is already booked at this time.";
+        return "This user does not exist.";
     }
 }

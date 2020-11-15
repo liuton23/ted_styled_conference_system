@@ -189,7 +189,7 @@ public class MessageSystem {
                 20,14,30,1, 2);
         //since the other systems have not been finished, i'll directly access use case class here
         SignUpSystem sus = new SignUpSystem();
-        ScheduleSystem sls = new ScheduleSystem();
+        ScheduleSystem sls = new ScheduleSystem(em, am, rm);
         sus.signUpEvent(am,em,"ritawon",1);
         sus.signUpEvent(am,em,"liuton23",1);
         em.createEvent("Harry Porter Fan Conference", "james",2020,"DECEMBER",10,
