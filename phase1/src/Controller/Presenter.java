@@ -35,16 +35,30 @@ public class Presenter {
         System.out.println("Please try again.");
     }
 
-    public void loginMessage(){
+    public void printUsernameMessage(){
         System.out.println("Enter your username:");
     }
 
-    public void passwordMessage() {
+    public void printPasswordMessage() {
         System.out.println("Enter your password");
     }
 
-    public void loginFailMessage(){
+    public void printLoginSucceedMessage(){
+        System.out.println("You have successfully logged in.");
+    }
+
+    public void printLoginFailMessage(){
         System.out.println("Your username or password is incorrect.");
     }
+
+    public void printRegisterSucceedMessage(){
+        System.out.println("You have successfully registered. Please login to continue.");
+    }
+
+    public void printRegisterFailMessage(){
+        System.out.println("Your username or password is invalid.");
+        System.out.println("Please check that username or password is non-empty and username is not already taken.");
+    }
+
 
 }

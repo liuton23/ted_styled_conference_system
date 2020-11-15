@@ -39,9 +39,6 @@ public class Controller {
                     username = login();
                     if (username.isEmpty()){
                         break;
-                    }
-                    else if (username.equals("Incorrect Login!")){
-                    break;
                     }else {
                         accountActivity(username);
                         break;
@@ -216,30 +213,35 @@ public class Controller {
             presenter = new Presenter();
         }
     }
+
     public String login(){
-        System.out.println("Login");
         LoginSystem loginSystem = new LoginSystem(attendeeManager);
         Scanner obj1 = new Scanner(System.in);
-        System.out.println("Username");
+        presenter.printUsernameMessage();
         String username = obj1.nextLine();
-        System.out.println("Password");
+        presenter.printPasswordMessage();
         String password = obj1.nextLine();
         if (loginSystem.canLogin(username, password)){
-            System.out.println("Logged in: " + username);
+            presenter.printLoginSucceedMessage();
             return username;
         }
-        return "Incorrect Login!";
+        presenter.printLoginFailMessage();
+        return "";
     }
+
     public void registerUser(){
-        System.out.println("Register User");
         LoginSystem loginSystem = new LoginSystem(attendeeManager);
         Scanner obj1 = new Scanner(System.in);
-        System.out.println("Username");
+        presenter.printUsernameMessage();
         String username = obj1.nextLine();
-        System.out.println("Password");
+        presenter.printPasswordMessage();
         String password = obj1.nextLine();
-        System.out.println("Are you an organizer?");
+        System.out.println("Are you an organizer?"); //***replace with askInput system***
         boolean isOrg = obj1.nextBoolean();
-        loginSystem.registerUser(username, password, isOrg);
+        if(loginSystem.registerUser(username, password, isOrg)) {
+            presenter.printRegisterSucceedMessage();
+        } else {
+            presenter.printRegisterFailMessage();
+        }
     }
 }
