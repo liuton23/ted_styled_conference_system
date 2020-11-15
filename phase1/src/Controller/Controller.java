@@ -9,20 +9,16 @@ import java.util.*;
 
 public class Controller {
 
-    private static boolean running = true;
-    private static Gateway gateway;
-    private static AttendeeManager attendeeManager;
-    private static EventManager eventManager;
-    private static MessageManager messageManager;
-    private static RoomManager roomManager;
+    private boolean running = true;
+    private Gateway gateway;
+    private AttendeeManager attendeeManager;
+    private EventManager eventManager;
+    private MessageManager messageManager;
+    private RoomManager roomManager;
 
-    private static Presenter presenter;
+    private Presenter presenter;
 
-    public static void main(String[] args){
-        run();
-    }
-
-    public static void run() {
+    public void run() {
         init();
         Scanner input = new Scanner(System.in);
         while (running) {
@@ -38,8 +34,7 @@ public class Controller {
             switch (chosen){
                 case "R": registerUser(); break;
                 case "L": username = login(); break;
-                case "E":
-                    running = false;
+                case "E": running = false;
             }
 
             if (!running){
@@ -48,10 +43,10 @@ public class Controller {
         }
         save();
     }
-    public static void exit(){
+    public void exit(){
         running = false;
     }
-    public static boolean invalidInput(List<String> choices, String chosen) {
+    public boolean invalidInput(List<String> choices, String chosen) {
         for(String choice: choices){
             if(choice.equals(chosen.toUpperCase())){
                 return false;
@@ -61,7 +56,7 @@ public class Controller {
         return true;
     }
 
-    public static String askInput(ArrayList<String> options, ArrayList<String> choices, Scanner input){
+    public String askInput(ArrayList<String> options, ArrayList<String> choices, Scanner input){
         String chosen;
         do{
            presenter.prompt(options);
@@ -70,7 +65,7 @@ public class Controller {
         return chosen;
     }
 
-    public static void save() {
+    public void save() {
         ArrayList<Serializable> listOfObj = new ArrayList<>();
         listOfObj.add(attendeeManager);
         listOfObj.add(eventManager);
@@ -83,7 +78,7 @@ public class Controller {
         }
     }
 
-    public static void init(){
+    public void init(){
         gateway = new Gateway("save.bin");
         ArrayList<Serializable> listOfObj;
         try {
@@ -103,7 +98,7 @@ public class Controller {
             presenter = new Presenter();
         }
     }
-    public static String login(){
+    public String login(){
         System.out.println("Login");
         LoginSystem loginSystem = new LoginSystem(attendeeManager);
         Scanner obj1 = new Scanner(System.in);
@@ -117,7 +112,7 @@ public class Controller {
         }
         return "Incorrect Login!";
     }
-    public static void registerUser(){
+    public void registerUser(){
         System.out.println("Register User");
         LoginSystem loginSystem = new LoginSystem(attendeeManager);
         Scanner obj1 = new Scanner(System.in);

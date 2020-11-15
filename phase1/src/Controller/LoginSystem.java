@@ -8,13 +8,15 @@ public class LoginSystem {
         this.attendeeManager = attendeeManager;
     }
 
-    public boolean canLogin(String username, String password)  {
+    public boolean canLogin(String username, String password) {
         return attendeeManager.inSystem(username, password);
     }
 
-    public String registerUser(String username, String password, boolean isOrg)  {
-        if(attendeeManager.usernameToAttendeeObject(username).isPresent()) {
-            return "Username already taken.";
+    public String registerUser(String username, String password, boolean isOrg) {
+        if (attendeeManager.usernameToAttendeeObject(username).isPresent()) {
+            return "Username is already taken.";
+        } else if (username.trim().isEmpty() || password.trim().isEmpty()){
+            return "Username or password invalid";
         } else {
             attendeeManager.createAttendee(username, password, isOrg);
             return "User registered.";
