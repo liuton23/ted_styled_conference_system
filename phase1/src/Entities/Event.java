@@ -1,11 +1,12 @@
 package Entities;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class Event {
+public class Event implements Serializable {
     private String speaker;
     private String title;
     // two item ArrayList

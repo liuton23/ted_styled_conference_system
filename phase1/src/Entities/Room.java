@@ -1,5 +1,6 @@
 package Entities;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,7 +9,7 @@ import java.util.NoSuchElementException;
 /**
  * Represents a room in the system that can be booked for an event
  */
-public class Room implements Iterable<LocalDateTime[]> {
+public class Room implements Iterable<LocalDateTime[]>, Serializable {
     private int id;
     private int capacity;
     private ArrayList<LocalDateTime[]> bookings;

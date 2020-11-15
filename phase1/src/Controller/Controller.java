@@ -21,12 +21,12 @@ public class Controller {
     public void run() {
         init();
         Scanner input = new Scanner(System.in);
+        presenter.welcomeMessage();
         while (running) {
-            presenter.welcomeMessage();
             ArrayList<String> options = new ArrayList<>();
             ArrayList<String> choices = new ArrayList<>();
             options.add("(L)ogin"); options.add("(R)egister");
-            choices.add("L"); choices.add("R"); choices.add(("E"));
+            choices.add("L"); choices.add("R"); choices.add(("EXIT"));
             String chosen = askInput(options, choices, input);
 
             String username;
@@ -43,14 +43,9 @@ public class Controller {
                         accountActivity(username);
                         break;
                     }
-                case "E": exit();
-            }
-
-            if (!running){
-                break;
+                case "EXIT": exit();
             }
         }
-        save();
     }
 
     private void accountActivity(String username) {
@@ -62,9 +57,11 @@ public class Controller {
             ArrayList<String> choices = new ArrayList<>();
             options.add("(M)essages");
             options.add("(E)vents");
+            options.add("(B)ack");
             choices.add("M");
             choices.add("E");
-            choices.add(("X"));
+            choices.add(("B"));
+            choices.add("EXIT");
             String chosen = askInput(options, choices, input);
 
 
@@ -78,10 +75,10 @@ public class Controller {
                     System.out.println("SignUpSystem");
                     eventActivity(username);
                     break;
-            }
-
-            if (chosen.equals("X")){
-                loggedin = false;
+                case "B":
+                    loggedin = false;
+                    break;
+                case "EXIT": exit();
             }
         }
     }
@@ -95,9 +92,11 @@ public class Controller {
             ArrayList<String> choices = new ArrayList<>();
             options.add("(M)essages");
             options.add("(E)vents");
+            options.add("(B)ack");
             choices.add("M");
             choices.add("E");
-            choices.add(("X"));
+            choices.add(("B"));
+            choices.add("EXIT");
             String chosen = askInput(options, choices, input);
 
 
@@ -105,15 +104,14 @@ public class Controller {
             switch (chosen) {
                 case "M":
                     System.out.println("MessageSystem");
-
                     break;
                 case "E":
                     System.out.println("SignUpSystem");
                     break;
-            }
-
-            if (chosen.equals("X")){
-                messaging = false;
+                case "B":
+                    messaging = false;
+                    break;
+                case "EXIT": exit();
             }
         }
     }
@@ -129,10 +127,12 @@ public class Controller {
             options.add("(V)iew all events");
             options.add("(S)ign up for events");
             options.add("(D)rop out of events");
+            options.add("(B)ack");
             choices.add("V");
             choices.add("S");
             choices.add("D");
-            choices.add(("X"));
+            choices.add(("B"));
+            choices.add("EXIT");
             String chosen = askInput(options, choices, input);
 
             switch (chosen) {
@@ -150,20 +150,22 @@ public class Controller {
                     int index1 = input.nextInt();
                     signUpSystem.dropOutEvent(attendeeManager, eventManager, username, index1);
                     break;
-            }
-
-            if (chosen.equals("X")){
-                activity = false;
+                case "B":
+                    activity = false;
+                    break;
+                case "EXIT": exit();
             }
         }
     }
 
     public void exit(){
-        running = false;
+        save();
+        System.exit(0);
     }
+
     public boolean invalidInput(List<String> choices, String chosen) {
         for(String choice: choices){
-            if(choice.equals(chosen.toUpperCase())){
+            if(choice.equals(chosen)){
                 return false;
             }
         }
@@ -175,22 +177,9 @@ public class Controller {
         String chosen;
         do{
            presenter.prompt(options);
-           chosen = input.nextLine();
+           chosen = input.nextLine().toUpperCase();
         }while(invalidInput(choices, chosen));
         return chosen;
-    }
-
-    public void save() {
-        ArrayList<Serializable> listOfObj = new ArrayList<>();
-        listOfObj.add(attendeeManager);
-        listOfObj.add(eventManager);
-        listOfObj.add(messageManager);
-        listOfObj.add(roomManager);
-        try {
-            gateway.writeToFile(listOfObj);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void init(){
@@ -214,6 +203,18 @@ public class Controller {
         }
     }
 
+    public void save() {
+        ArrayList<Serializable> listOfObj = new ArrayList<>();
+        listOfObj.add(attendeeManager);
+        listOfObj.add(eventManager);
+        listOfObj.add(messageManager);
+        listOfObj.add(roomManager);
+        try {
+            gateway.writeToFile(listOfObj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public String login(){
         LoginSystem loginSystem = new LoginSystem(attendeeManager);
         Scanner obj1 = new Scanner(System.in);

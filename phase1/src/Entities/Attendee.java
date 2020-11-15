@@ -1,8 +1,9 @@
 package Entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Attendee {
+public class Attendee implements Serializable {
     private String username;
     private String password;
     private boolean isOrganizer = false;
