@@ -6,13 +6,25 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * Manages and stores the rooms in the tech conference system
+ */
 public class RoomManager implements Serializable {
     private ArrayList<Room> rooms;
 
+    /**
+     * Constructs a new instance of RoomManager with an empty list of rooms
+     */
     public RoomManager() {
         rooms = new ArrayList<Room>();
     }
 
+    /**
+     * Creates and adds a room to the list of rooms
+     * @param id the id of the new room (id is unique)
+     * @param capacity the capacity of the new room
+     * @return true if room was added (id was available) or false if it was not
+     */
     public boolean addRoom(int id, int capacity) {
         for (Room r : rooms){
             if (r.getId() == id) {
@@ -24,6 +36,11 @@ public class RoomManager implements Serializable {
         return true;
     }
 
+    /**
+     * Takes in an id value and returns the corresponding room
+     * @param id the id of the room to return
+     * @return the Room object
+     */
     public Room idToRoom(int id) {
         Room room = new Room(0,0);
         for (Room r : rooms) {
@@ -35,58 +52,73 @@ public class RoomManager implements Serializable {
         return room;
     }
 
+    /**
+     * Checks if a room can be booked at a given time
+     * @param room the room to check
+     * @param start the start time of the booking
+     * @param end the end time of the booking
+     * @return true if the room can be booked (start and end times don't conflict with an existing
+     * booking or false if it cannot be booked
+     */
     public boolean checkIfRoomAvailable(Room room, LocalDateTime start, LocalDateTime end) {
-        //get old bookings ArrayLists
-        ArrayList<LocalDateTime[]> bookings = room.getBookings();
         //check no conflicts
-        for(LocalDateTime[] l : bookings) {
-            if (checkConflict(start, end, l[0], l[1])) {
+        for(LocalDateTime[] booking : room) {
+            if (checkConflict(start, end, booking)) {
                 return false;
             }
         }
         return true;
     }
 
+    /**
+     * Books a room for a given event and time
+     * @param room the room to book
+     * @param eventName the name of the event
+     * @param start the start time of the booking
+     * @param end the end time of the booking
+     */
     public void book(Room room, String eventName, LocalDateTime start, LocalDateTime end)
     {
-        //get old bookings and eventNames ArrayLists
-        ArrayList<LocalDateTime[]> bookings = room.getBookings();
-        ArrayList<String> eventNames = room.getEventNames();
         //add booking to room
-        LocalDateTime[] dateTime = {start, end};
-        bookings.add(dateTime);
-        eventNames.add(eventName);
-        room.setBookings(bookings);
-        room.setEventNames(eventNames);
+        LocalDateTime[] booking = {start, end};
+        room.addBooking(eventName, booking);
     }
 
-    private boolean checkConflict(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
-        if (start1.isAfter(start2) && start1.isBefore(end2)) {
+    /**
+     * Checks if there is any overlap between start and end and a given booking
+     * @param start the start time
+     * @param end the end time
+     * @param booking the booking to check
+     * @return true if there is a conflict or false if there is not
+     */
+    private boolean checkConflict(LocalDateTime start, LocalDateTime end, LocalDateTime[] booking) {
+        LocalDateTime bookingStart = booking[0]; //start time of booking
+        LocalDateTime bookingEnd = booking[1];  //end time of booking
+
+        //check no overlap
+        if (start.isAfter(bookingStart) && start.isBefore(bookingEnd)) {
             return true;
-        } else if (end1.isAfter(start2) && end1.isBefore(end2)) {
+        } else if (end.isAfter(bookingStart) && end.isBefore(bookingEnd)) {
             return true;
-        } else if (start1.equals(start2)) {
+        } else if (start.equals(bookingStart)) {
             return true;
-        } else if (end1.equals(end2)) {
+        } else if (end.equals(bookingEnd)) {
             return true;
-        } else if (start1.isBefore(start2) && end1.isAfter(end2)){
+        } else if (start.isBefore(bookingStart) && end.isAfter(bookingEnd)){
             return true;
         } else {
             return false;
         }
     }
 
+    /**
+     * Removes a booking for an event from a room
+     * @param room the room to remove a booking from
+     * @param eventName the name of the event to remove the booking for
+     */
     public void unbook(Room room, String eventName)
     {
-        //get old bookings and eventNames ArrayLists
-        ArrayList<LocalDateTime[]> bookings = room.getBookings();
-        ArrayList<String> eventNames = room.getEventNames();
-        //remove the event name it's booking
-        int i = eventNames.indexOf(eventName);
-        bookings.remove(i);
-        eventNames.remove(i);
-        room.setBookings(bookings);
-        room.setEventNames(eventNames);
+        room.removeBooking(eventName);
     }
 
     //testing
