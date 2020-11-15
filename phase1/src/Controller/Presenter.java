@@ -33,12 +33,16 @@ public class Presenter {
         System.out.print("Input: ");
     }
 
-    public void displayMessages(){
-
+    public void displayMessages(String str){
+        System.out.println(str);
     }
-    public void displaySchedule(){
-
+    public void displaySchedule(ArrayList<String> options, String message){
+        System.out.println(message);
+        for (String str: options){
+            System.out.println(str);
+        }
     }
+
     public void displayAllEvents(String s){
         System.out.println(s);
     }

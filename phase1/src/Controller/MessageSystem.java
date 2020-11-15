@@ -203,14 +203,14 @@ public class MessageSystem {
         ScheduleSystem sls = new ScheduleSystem(em, am, rm);
         sls.scheduleEvent("cv workshop","lily",2020, "NOVEMBER",
                 20,14,30,1, 2);
-        SignUpSystem sus = new SignUpSystem();
-        sus.signUpEvent(am,em,"ritawon",1);
-        sus.signUpEvent(am,em,"liuton23",1);
+        SignUpSystem sus = new SignUpSystem(am, em);
+        sus.signUpEvent("ritawon",1);
+        sus.signUpEvent("liuton23",1);
         sls.scheduleEvent("Harry Potter Fan Conference", "james",2020,"DECEMBER",10,
                 14,0,1,50);
         sls.addRoom(1,2);
-        System.out.println(sus.viewAllEvents(em));
-        sus.signUpEvent(am,em,"ritawon",2);
+        System.out.println(sus.viewAllEvents());
+        sus.signUpEvent("ritawon",2);
         ms.messageAttendee("ritawon","liuton23","See u at LCBO!");
         System.out.println(ms.messageEventAttendees(1,
                 "lily","The meeting is gonna be hold online!"));

@@ -12,41 +12,42 @@ import java.util.Comparator;
 import java.util.Optional;
 
 public class SignUpSystem {
-    Comparator<Event> comparator = new byTimeEventComparator();
+    private AttendeeManager attendeeManager;
+    private EventManager eventManager;
+    private Comparator<Event> comparator = new byTimeEventComparator();
 
-    public SignUpSystem(){
-        //this.attendeeManager = new AttendeeManager();
-        //this.eventManager = new EventManager();
+    public SignUpSystem(AttendeeManager attendeeManager, EventManager eventManager){
+        this.attendeeManager = attendeeManager;
+        this.eventManager = eventManager;
     }
 
     public void setComparator(Comparator<Event> comparator){
         this.comparator = comparator;
     }
 
-    public String viewAllEvents(EventManager eventManager){
+    public ArrayList<String> viewAllEvents(){
         ArrayList<Event> eventlist = eventManager.getEvents();
         ArrayList<Event> eventlistclone = getEventListClone(eventlist);
+        ArrayList<String> stringeventlist = new ArrayList<>();
 
         eventlistclone.sort(comparator);
         int index = 1;
         String x = "";
         for (Event event: eventlistclone){
             x += index + ") " + event.getTitle() + " @ " + event.getEventTime() + " with " + event.getSpeaker() + ", ";
+            stringeventlist.add(x);
             index += 1;
         }
-        return x;
+        return stringeventlist;
     }
 
     private ArrayList<Event> getEventListClone(ArrayList<Event> eventList){
         ArrayList<Event> eventlistclone = new ArrayList<>();
-        for (Event event: eventList){
-            eventlistclone.add(event);
-        }
+        eventlistclone.addAll(eventList);
         return eventlistclone;
     }
 
-    public String signUpEvent(AttendeeManager attendeeManager, EventManager eventManager,
-                              String username, int eventIndex){
+    public String signUpEvent(String username, int eventIndex){
         ArrayList<Event> eventList = eventManager.getEvents();
         eventList.sort(comparator);
         Event event = eventList.get(eventIndex-1);
@@ -65,8 +66,7 @@ public class SignUpSystem {
         return "Incorrect username. Please try again.";
     }
 
-    public String dropOutEvent(AttendeeManager attendeeManager, EventManager eventManager,
-                               String username, int eventIndex){
+    public String dropOutEvent(String username, int eventIndex){
         ArrayList<Event> eventList = eventManager.getEvents();
         eventList.sort(comparator);
         Event event = eventList.get(eventIndex-1);
@@ -80,7 +80,7 @@ public class SignUpSystem {
         attendeeManager.dropOut(attendee, event.getTitle());
         return "You have successfully dropped " + event.getTitle() + " @ " + event.getEventTime();
     }
-
+/*
     public static void main(String[] args) {
         AttendeeManager atm = new AttendeeManager();
         EventManager evm = new EventManager();
@@ -102,5 +102,7 @@ public class SignUpSystem {
         System.out.println(sus.signUpEvent(atm,evm, "Bill89", 1));
         System.out.println(sus.dropOutEvent(atm,evm, "Bill89", 1));
     }
+
+ */
 
 }
