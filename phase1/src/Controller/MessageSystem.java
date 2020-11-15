@@ -28,9 +28,9 @@ public class MessageSystem {
     // General message methods (Suitable for all attendees, speakers, and organizers)
 
     public String messageAttendee(String sender, String attendee, String text){
-        Optional<Attendee> obj = am.usernameToAttendeeObject(sender);
+        Optional<Attendee> obj1 = am.usernameToAttendeeObject(sender);
         Optional<Attendee> obj2 = am.usernameToAttendeeObject(attendee);
-        if (!obj.isPresent()){
+        if (!obj1.isPresent()){
             return "Incorrect username. Please try again.";
         } else if (!obj2.isPresent()){
             return "Incorrect username. Please try again.";
@@ -47,6 +47,13 @@ public class MessageSystem {
 
     //All the Organizer methods
 
+    //helper
+    private Boolean checkIsOrganizer(Attendee org){
+        if (org instanceof Speaker){
+            return false;
+        } else return org.isOrganizer();
+    }
+
     public String messageAllSpeakers(String sender, String text){
         Optional<Attendee> obj = am.usernameToAttendeeObject(sender);
         ArrayList<Speaker> listOfSpeakers = am.getAllSpeakers();
@@ -58,10 +65,8 @@ public class MessageSystem {
             return "Incorrect username. Please try again.";
         }
         Attendee org = obj.get();
-        if (org instanceof Speaker){
-            return "A speaker can not message all other speakers";
-        }
-        if (!org.isOrganizer()){
+        // make sure only organizer can use this method
+        if (!checkIsOrganizer(org)){
             return "Only Organizer can message all speakers.";
         } else {
             mm.createMessage(list, sender, text);
@@ -80,8 +85,9 @@ public class MessageSystem {
             allAtt.add(att.getUsername());
         }
         Attendee org = obj.get();
-        if (!org.isOrganizer()){
-            return "Only organizers can message all attendees.";
+        // make sure only organizer can use this method
+        if (!checkIsOrganizer(org)){
+            return "Only Organizer can message all speakers.";
         } else {
             mm.createMessage(allAtt,sender,text);
             return "The message has been successfully sent.";
@@ -92,15 +98,22 @@ public class MessageSystem {
 
     public String messageEventAttendees(int eventIndex, String sender, String text){
         Optional<Attendee> obj = am.usernameToAttendeeObject(sender);
+        int max = em.getEvents().size();
+        // check index
+        if (eventIndex > max){
+            return "Event index out of range!";
+        }
         Event event = em.getEvents().get(eventIndex - 1);
         ArrayList<String> list = em.eventToAttendees(event);
         if (!obj.isPresent()){
             return "Incorrect username. Please try again.";
         }
         Attendee se = obj.get();
+        // check instance, make sure only speaker can use this method
         if (!(se instanceof Speaker)){
-            return "Only speakers can sent messages to all attendees in a specific talk they give";
+            return "Only speakers can sent messages to all attendees in a specific talk they give.";
         } else if (!event.getSpeaker().equals(sender)) {
+            // check whether the speaker speaks in this event
             return "You can not send messages to all attendees from this event.";
         } else {
                 mm.createMessage(list, sender, text);
@@ -117,18 +130,24 @@ public class MessageSystem {
             return "Incorrect username. Please try again.";
         }
         Attendee se = obj.get();
+        //check instance, make sure only speaker can use this method.
         if (!(se instanceof Speaker)){
-            return "Only speakers can sent messages to all attendees of there talks they give";
+            return "Only speakers can sent messages to all attendees of there talks they give.";
         }
-
+        int max = em.getEvents().size();
         for (Integer i : eventIndexes){
             int j = i;
+            //check index
+            if (j > max){
+                return "At least one event index is out of ranges.";
+            }
             Event event = em.getEvents().get(j - 1);
             if (!event.getSpeaker().equals(sender)) {
                 error.add(j);
             }
             list.addAll(em.eventToAttendees(event));
         }
+        //events that the speaker does not speak in
         if (error.size() != 0){
             return "You can not send message to events " + error.toString();
         } else {
@@ -205,5 +224,6 @@ public class MessageSystem {
         evs.add(2);
         System.out.println(ms.messageEventAttendees(evs,"james","Don't be late!"));
         System.out.println(ms.viewReceivedMessage("ritawon"));
+        System.out.println(ms.messageEventAttendees(3,"lily","lol."));
     }
 }
