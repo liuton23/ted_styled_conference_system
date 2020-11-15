@@ -22,10 +22,15 @@ public class Presenter {
      * @param options list of options for the user to choose from
      */
     public void prompt(ArrayList<String> options){
-        System.out.println("Would you like to ");
-        for(String option: options) {
-            System.out.println(option);
+        int width = (options.size() / 4) + 1;
+        System.out.println("Would you like to do:");
+        for(int i = 0; i < options.size(); i++) {
+            System.out.print(options.get(i) + "\t");
+            if( (i + 1) % width == 0){
+                System.out.println();
+            }
         }
+        System.out.print("Input: ");
     }
 
     public void displayMessages(){
@@ -33,6 +38,9 @@ public class Presenter {
     }
     public void displaySchedule(){
 
+    }
+    public void displayAllEvents(String s){
+        System.out.println(s);
     }
 
     /**
