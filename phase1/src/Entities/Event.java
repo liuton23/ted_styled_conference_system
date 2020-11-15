@@ -93,7 +93,7 @@ public class Event implements Serializable {
                 this.getSpeaker() + ".");
     }
 
-        //testing
+    //testing
     public static void main(String[] args) {
         Event petConference = new Event("Pet Conference", "Caesar Milan", 2020, "NOVEMBER",
                 16, 12, 0, 100, 500);

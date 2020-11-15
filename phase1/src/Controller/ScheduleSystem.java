@@ -20,17 +20,19 @@ public class ScheduleSystem {
         this.attendeeManager = attendeeManager;
         this.roomManager = roomManager;
     }
-    public String scheduleEvent(String title, String speaker, int year, String month, int day, int hour, int minute,
+    public int scheduleEvent(String title, String speaker, int year, String month, int day, int hour, int minute,
                                 int room, int capacity){
         return eventManager.createEvent(title, speaker, year, month, day, hour, minute, room, capacity);
     }
-    public String addRoom(int roomId, int capacity){
+    public int addRoom(int roomId, int capacity){
         if(roomManager.addRoom(roomId, capacity)){
-            return "Room successfully added.";
+            //"Room successfully added."
+            return 0;
         }
-        return "Room already exists in System";
+        //"Room already exists in System"
+        return 1;
     }
-    public String changeSpeaker(Event event, String newSpeaker){
+    public int changeSpeaker(Event event, String newSpeaker){
         // if the value is not null
         if(attendeeManager.usernameToAttendeeObject(newSpeaker).isPresent()) {
             // if object is speaker
@@ -39,12 +41,16 @@ public class ScheduleSystem {
                 if (eventManager.freeSpeakerCheck(event.getEventTime(), newSpeaker)) {
                     eventManager.changeSpeaker(event, newSpeaker);
                     attendeeManager.changeSpeaker(event.getTitle(), newSpeaker);
-                    return "Speaker changed successfully.";
+                    //"Speaker changed successfully."
+                    return 0;
                 }
-                return "Speaker is already booked at this time.";
+                // "Speaker is already booked at this time."
+                return 1;
             }
-            return "This person is not a speaker.";
+            //"This person is not a speaker."
+            return 2;
         }
-        return "This user does not exist.";
+        //"This user does not exist."
+        return 3;
     }
 }
