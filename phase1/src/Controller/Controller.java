@@ -31,10 +31,22 @@ public class Controller {
 
             String username;
 
-            switch (chosen){
-                case "R": registerUser(); break;
-                case "L": username = login(); break;
-                case "E": running = false;
+            switch (chosen) {
+                case "R":
+                    registerUser();
+                    break;
+                case "L":
+                    username = login();
+                    if (username.isEmpty()){
+                        break;
+                    }
+                    else if (username.equals("Incorrect Login!")){
+                    break;
+                    }else {
+                        accountActivity(username);
+                        break;
+                    }
+                case "E": exit();
             }
 
             if (!running){
@@ -43,6 +55,112 @@ public class Controller {
         }
         save();
     }
+
+    private void accountActivity(String username) {
+        boolean loggedin = true;
+        while (loggedin) {
+            Scanner input = new Scanner(System.in);
+
+            ArrayList<String> options = new ArrayList<>();
+            ArrayList<String> choices = new ArrayList<>();
+            options.add("(M)essages");
+            options.add("(E)vents");
+            choices.add("M");
+            choices.add("E");
+            choices.add(("X"));
+            String chosen = askInput(options, choices, input);
+
+
+            //String chosen = input.nextLine();
+            switch (chosen) {
+                case "M":
+                    System.out.println("MessageSystem");
+                    messageActivity(username);
+                    break;
+                case "E":
+                    System.out.println("SignUpSystem");
+                    eventActivity(username);
+                    break;
+            }
+
+            if (chosen.equals("X")){
+                loggedin = false;
+            }
+        }
+    }
+
+    private void messageActivity(String username) {
+        boolean messaging = true;
+        while (messaging) {
+            Scanner input = new Scanner(System.in);
+
+            ArrayList<String> options = new ArrayList<>();
+            ArrayList<String> choices = new ArrayList<>();
+            options.add("(M)essages");
+            options.add("(E)vents");
+            choices.add("M");
+            choices.add("E");
+            choices.add(("X"));
+            String chosen = askInput(options, choices, input);
+
+
+            //String chosen = input.nextLine();
+            switch (chosen) {
+                case "M":
+                    System.out.println("MessageSystem");
+
+                    break;
+                case "E":
+                    System.out.println("SignUpSystem");
+                    break;
+            }
+
+            if (chosen.equals("X")){
+                messaging = false;
+            }
+        }
+    }
+
+    private void eventActivity(String username) {
+        SignUpSystem signUpSystem = new SignUpSystem();
+        boolean activity = true;
+        while (activity) {
+            Scanner input = new Scanner(System.in);
+
+            ArrayList<String> options = new ArrayList<>();
+            ArrayList<String> choices = new ArrayList<>();
+            options.add("(V)iew all events");
+            options.add("(S)ign up for events");
+            options.add("(D)rop out of events");
+            choices.add("V");
+            choices.add("S");
+            choices.add("D");
+            choices.add(("X"));
+            String chosen = askInput(options, choices, input);
+
+            switch (chosen) {
+                case "V":
+                    System.out.println("View all events");
+                    signUpSystem.viewAllEvents(eventManager);
+                    break;
+                case "S":
+                    System.out.println("Sign Up");
+                    int index = input.nextInt();
+                    signUpSystem.signUpEvent(attendeeManager, eventManager, username, index);
+                    break;
+                case "D":
+                    System.out.println("Drop out");
+                    int index1 = input.nextInt();
+                    signUpSystem.dropOutEvent(attendeeManager, eventManager, username, index1);
+                    break;
+            }
+
+            if (chosen.equals("X")){
+                activity = false;
+            }
+        }
+    }
+
     public void exit(){
         running = false;
     }
@@ -60,7 +178,7 @@ public class Controller {
         String chosen;
         do{
            presenter.prompt(options);
-           chosen = input.next();
+           chosen = input.nextLine();
         }while(invalidInput(choices, chosen));
         return chosen;
     }
