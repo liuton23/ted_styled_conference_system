@@ -1,5 +1,6 @@
 package Controller;
 
+import Entities.Attendee;
 import Entities.Event;
 import Entities.EventComparators.bySpeakerEventComparator;
 import Entities.EventComparators.byTimeEventComparator;
@@ -60,9 +61,11 @@ public class Controller {
             ArrayList<String> choices = new ArrayList<>();
             options.add("(M)essages");
             options.add("(E)vents");
+            options.add("(I)tinerary");
             options.add("(B)ack");
             choices.add("M");
             choices.add("E");
+            choices.add("I");
             choices.add(("B"));
             choices.add("EXIT");
             String chosen = askInput(options, choices, input);
@@ -78,12 +81,21 @@ public class Controller {
                     System.out.println("SignUpSystem");
                     eventActivity(username);
                     break;
+                case "I":
+                    getItinerary(attendeeManager, username);
+                    break;
                 case "B":
                     loggedin = false;
                     break;
                 case "EXIT": exit();
             }
         }
+    }
+
+    private void getItinerary(AttendeeManager attendeeManager, String user){
+        Optional<Attendee> obj = attendeeManager.usernameToAttendeeObject(user);
+        Attendee attendee = obj.get();
+        presenter.displaySchedule(attendeeManager.getItinerary(attendee), "Your itinerary:");
     }
 
     private void messageActivity(String username) {
