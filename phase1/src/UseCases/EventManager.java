@@ -20,7 +20,7 @@ public class EventManager implements Serializable {
         return events;
     }
 
-    public String createEvent(String title, String speaker, int year, String month, int day, int hour,
+    public int createEvent(String title, String speaker, int year, String month, int day, int hour,
                               int minute, int room, int capacity){
         LocalTime startTime = LocalTime.of(hour, minute);
         LocalTime endTime = startTime.plusHours(1);
@@ -28,17 +28,21 @@ public class EventManager implements Serializable {
         eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, hour, minute));
         eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute));
         if(!freeRoomCheck(eventTime, room)){
-            return "Room is already booked for this timeslot.";
+            //"Room is already booked for this timeslot."
+            return 0 ;
         }
         else if(!freeSpeakerCheck(eventTime, speaker)) {
-            return "Speaker is already booked for this timeslot.";
+            //"Speaker is already booked for this timeslot."
+            return 1;
         }
         else if(!freeTitleCheck(title)){
-            return "This event name has already been taken.";
+            //"This event name has already been taken."
+            return 2;
         }
         else{
             events.add(new Event(title, speaker, year, month, day, hour, minute, room, capacity));
-            return "Event successfully created.";
+            //"Event successfully created."
+            return 3;
         }
     }
 
@@ -110,11 +114,13 @@ public class EventManager implements Serializable {
         event.getAttendeeList().remove(attendee);
     }
 
-    public void changeSpeaker(Event event, String speaker){
+    public boolean changeSpeaker(Event event, String speaker){
         // checking that the corresponding speaker is free at this event time
         if(freeSpeakerCheck(event.getEventTime(), speaker)){
             event.setSpeaker(speaker);
+            return true;
         }
+        return false;
     }
 
     public void cancelEvent(Event event){
