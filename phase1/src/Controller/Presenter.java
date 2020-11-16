@@ -1,5 +1,7 @@
 package Controller;
 
+import Entities.Event;
+
 import java.util.ArrayList;
 
 /**
@@ -45,8 +47,11 @@ public class Presenter {
         }
     }
 
-    public void displayAllEvents(String s){
-        System.out.println(s);
+    public void displayAllEvents(ArrayList<Event> events, String message){
+        System.out.println(message);
+        for (Event e: events){
+            System.out.println(e);
+        }
     }
 
     /**

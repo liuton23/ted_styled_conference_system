@@ -14,9 +14,9 @@ import java.util.Optional;
  * Controls scheduling tasks based on user input.
  */
 public class ScheduleSystem {
-    EventManager eventManager = new EventManager();
-    AttendeeManager attendeeManager = new AttendeeManager();
-    RoomManager roomManager = new RoomManager();
+    private EventManager eventManager = new EventManager();
+    private AttendeeManager attendeeManager = new AttendeeManager();
+    private RoomManager roomManager = new RoomManager();
 
     /**
      * Constructs an instance of ScheduleSystem with the provided EventManger, AttendeeManager, and RoomManager.

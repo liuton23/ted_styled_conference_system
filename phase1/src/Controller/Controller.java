@@ -54,6 +54,7 @@ public class Controller {
 
     private void accountActivity(String username) {
         boolean loggedin = true;
+        boolean isOrg = attendeeManager.usernameToAttendeeObject(username).get().isOrganizer();
         while (loggedin) {
             Scanner input = new Scanner(System.in);
 
@@ -62,6 +63,10 @@ public class Controller {
             options.add("(M)essages");
             options.add("(E)vents");
             options.add("(I)tinerary");
+            if (isOrg){
+                options.add("(S)chedule events");
+                choices.add("S");
+            }
             options.add("(B)ack");
             choices.add("M");
             choices.add("E");
@@ -74,15 +79,18 @@ public class Controller {
             //String chosen = input.nextLine();
             switch (chosen) {
                 case "M":
-                    System.out.println("MessageSystem");
+                    presenter.displayMessages("MessageSystem");
                     messageActivity(username);
                     break;
                 case "E":
-                    System.out.println("SignUpSystem");
+                    presenter.displayMessages("SignUpSystem");
                     eventActivity(username);
                     break;
                 case "I":
                     getItinerary(attendeeManager, username);
+                    break;
+                case "S":
+                    scheduleActivity(username);
                     break;
                 case "B":
                     loggedin = false;
@@ -96,6 +104,80 @@ public class Controller {
         Optional<Attendee> obj = attendeeManager.usernameToAttendeeObject(user);
         Attendee attendee = obj.get();
         presenter.displaySchedule(attendeeManager.getItinerary(attendee), "Your itinerary:");
+    }
+
+    private void scheduleActivity(String username){
+        ScheduleSystem scheduleSystem  = new ScheduleSystem(eventManager,attendeeManager, roomManager);
+        boolean scheduling = true;
+        while (scheduling) {
+            Scanner input = new Scanner(System.in);
+
+            ArrayList<String> options = new ArrayList<>();
+            ArrayList<String> choices = new ArrayList<>();
+            options.add("(S)chedule Event");
+            options.add("(A)dd Room");
+            options.add("(C)hange Speaker");
+            options.add("(B)ack");
+            choices.add("S");
+            choices.add("A");
+            choices.add("C");
+            choices.add(("B"));
+            choices.add("EXIT");
+            String chosen = askInput(options, choices, input);
+
+
+            //String chosen = input.nextLine();
+            switch (chosen) {
+                case "S":
+                    presenter.displayMessages("Schedule Event");
+                    presenter.displayMessages("Enter event title:");
+                    String title = input.nextLine();
+                    presenter.displayMessages("Enter event speaker:");
+                    String speaker = input.nextLine();
+                    presenter.displayMessages("Enter year:");
+                    int year = input.nextInt();
+                    presenter.displayMessages("Enter month:");
+                    String month = input.nextLine();
+                    presenter.displayMessages("Enter day:");
+                    int day = input.nextInt();
+                    presenter.displayMessages("Enter hour:");
+                    int hour = input.nextInt();
+                    presenter.displayMessages("Enter minute:");
+                    int min = input.nextInt();
+                    presenter.displayMessages("Enter room id:");
+                    int roomID = input.nextInt();
+                    presenter.displayMessages("Enter event capacity:");
+                    int cap = input.nextInt();
+                    presenter.printScheduleEventMessage(scheduleSystem.scheduleEvent(title, speaker, year, month, day,
+                            hour, min, roomID, cap));
+                    break;
+                case "A":
+                    presenter.displayMessages("Add Room");
+                    presenter.displayMessages("Enter room ID:");
+                    int roomId = input.nextInt();
+                    presenter.displayMessages("Enter room capacity:");
+                    int roomCapacity = input.nextInt();
+                    presenter.printAddRoomMessage(scheduleSystem.addRoom(roomId,roomCapacity));
+                    break;
+                case "C":
+                    presenter.displayMessages("Change Speaker");
+                    ArrayList<Event> events = new ArrayList<>();
+                    events.addAll(eventManager.getEvents());
+                    events.sort(new bySpeakerEventComparator());
+                    presenter.displayAllEvents(events, "Events sorted by speakers:");
+                    presenter.displayMessages("Enter ID of the event:");
+                    int index = input.nextInt();
+                    presenter.displayMessages("Enter name of new speaker:");
+                    String newSpeaker = input.nextLine();
+                    int message = scheduleSystem.changeSpeaker(events.get(index),newSpeaker);
+                    presenter.printChangeSpeakerMessage(message);
+                    break;
+                case "B":
+                    scheduling = false;
+                    break;
+                case "EXIT": exit();
+            }
+        }
     }
 
     private void messageActivity(String username) {
@@ -228,7 +310,7 @@ public class Controller {
         String chosen;
         do{
            presenter.prompt(options);
-           chosen = input.nextLine().toUpperCase();
+           chosen = input.next().toUpperCase();
         }while(invalidInput(choices, chosen));
         return chosen;
     }
@@ -266,7 +348,7 @@ public class Controller {
             e.printStackTrace();
         }
     }
-    public String login(){
+    private String login(){
         LoginSystem loginSystem = new LoginSystem(attendeeManager);
         Scanner obj1 = new Scanner(System.in);
         presenter.printUsernameMessage();
@@ -281,19 +363,38 @@ public class Controller {
         return "";
     }
 
-    public void registerUser(){
+    private void registerUser(){
         LoginSystem loginSystem = new LoginSystem(attendeeManager);
         Scanner obj1 = new Scanner(System.in);
         presenter.printUsernameMessage();
         String username = obj1.nextLine();
         presenter.printPasswordMessage();
         String password = obj1.nextLine();
-        System.out.println("Are you an organizer?"); //***replace with askInput system***
-        boolean isOrg = obj1.nextBoolean();
-        if(loginSystem.registerUser(username, password, isOrg)) {
-            presenter.printRegisterSucceedMessage();
-        } else {
-            presenter.printRegisterFailMessage();
+        presenter.displayMessages("Are you an organizer?"); //***replace with askInput system***
+        ArrayList<String> options = new ArrayList<>();
+        ArrayList<String> choices = new ArrayList<>();
+        options.add("(Y)es");
+        options.add("(N)o");
+        choices.add("Y"); choices.add("N"); choices.add(("EXIT"));
+        String chosen = askInput(options, choices, obj1);
+        switch (chosen) {
+            case "Y":
+                if(loginSystem.registerUser(username, password, true)) {
+                    presenter.printRegisterSucceedMessage();
+                } else {
+                    presenter.printRegisterFailMessage();
+                }
+                break;
+            case "N":
+                if(loginSystem.registerUser(username, password, false)) {
+                    presenter.printRegisterSucceedMessage();
+                } else {
+                    presenter.printRegisterFailMessage();
+                }
+                break;
+            case "EXIT": exit();
         }
+
+
     }
 }
