@@ -154,6 +154,19 @@ public class Presenter {
                 break;
         }
     }
+    /**
+     * Displays message reflecting whether or not an Attendee was successfully signed up for an event or a message
+     * indicating error.
+     * @param signUpOutput is a boolean value outputted by EventManager.signUp() signalling successful or unsuccessful sign up.
+     */
+    public void printSignUpMessage(boolean signUpOutput){
+        if (signUpOutput){
+            System.out.println("User was successfully signed up.");
+        }
+        else{
+            System.out.println("Event is at capacity: unable to sign up user.");
+        }
+    }
 
     /**
      * Displays message reflecting the situation after messaging an attendee.
