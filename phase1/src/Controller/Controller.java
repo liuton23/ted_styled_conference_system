@@ -187,7 +187,7 @@ public class Controller {
                     int index = input.nextInt();
                     presenter.displayMessages("Enter name of new speaker:");
                     String newSpeaker = input.nextLine();
-                    int message = scheduleSystem.changeSpeaker(events.get(index),newSpeaker);
+                    int message = scheduleSystem.changeSpeaker(events.get(index), newSpeaker);
                     presenter.printChangeSpeakerMessage(message);
                     break;
                 case "B":
