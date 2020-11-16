@@ -5,6 +5,7 @@ import Entities.Event;
 import Entities.EventComparators.bySpeakerEventComparator;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.EventComparators.byTitleEventComparator;
+import Entities.Speaker;
 import UseCases.*;
 //import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
 
@@ -70,6 +71,10 @@ public class Controller {
                 options.add("(S)chedule events");
                 choices.add("S");
             }
+            if (attendeeManager.getAllSpeakers().contains(username)){
+                options.add("(T)alks");
+                choices.add("T");
+            }
             options.add("(B)ack");
             choices.add("M");
             choices.add("E");
@@ -95,6 +100,9 @@ public class Controller {
                 case "S":
                     scheduleActivity(username);
                     break;
+                case "T":
+                    getSpeakingList(attendeeManager, username);
+                    break;
                 case "B":
                     loggedin = false;
                     break;
@@ -107,6 +115,12 @@ public class Controller {
         Optional<Attendee> obj = attendeeManager.usernameToAttendeeObject(user);
         Attendee attendee = obj.get();
         presenter.displaySchedule(attendeeManager.getItinerary(attendee), "Your itinerary:");
+    }
+
+    private void getSpeakingList(AttendeeManager attendeeManager, String user){
+        Optional<Attendee> obj = attendeeManager.usernameToAttendeeObject(user);
+        Speaker speaker =  (Speaker) obj.get();
+        presenter.displaySchedule(attendeeManager.getSpeakingList(speaker), "Your itinerary:");
     }
 
     private void scheduleActivity(String username){

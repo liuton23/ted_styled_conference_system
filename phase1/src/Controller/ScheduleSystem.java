@@ -42,7 +42,7 @@ public class ScheduleSystem {
      * @param hour the dessired starting hour of the event to be created.
      * @param minute the desired starting minute of the event to be created.
      * @param room the id of the desired room of the event to be created.
-     * @param capacity
+     * @param capacity the amount of people that can attend the event.
      * @return an integer signaling the successful creation of an event or a relevant error message.
      */
     public int scheduleEvent(String title, String speaker, int year, String month, int day, int hour, int minute,
