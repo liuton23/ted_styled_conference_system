@@ -177,6 +177,7 @@ public class Presenter {
                 break;
         }
     }
+
     /**
      * Displays message reflecting whether or not an Attendee was successfully signed up for an event or a message
      * indicating error.
@@ -251,7 +252,6 @@ public class Presenter {
      * Displays message reflecting the situation after messaging all attendees from a specific event.
      * @param messageEventAttendees  output from MessageSystem.messageEventAttendees()
      */
-
     public void printMessageEventAttendees(int messageEventAttendees){
         switch (messageEventAttendees) {
             case 1:
@@ -276,7 +276,6 @@ public class Presenter {
      * Displays message reflecting the situation after messaging all attendees from multiple events.
      * @param messageMultipleEventsAttendees output from overloading MessageSystem.messageEventAttendees()
      */
-
     public void printMessageMultipleEventsAttendees(int messageMultipleEventsAttendees){
           switch(messageMultipleEventsAttendees){
               case 1:
@@ -296,6 +295,7 @@ public class Presenter {
                   break;
           }
     }
+
 
     public void displayListOfMessage(ArrayList<String> message) {
         System.out.println(message.toString());
