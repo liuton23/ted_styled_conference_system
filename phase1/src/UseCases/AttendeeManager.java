@@ -94,6 +94,15 @@ public class AttendeeManager implements Serializable {
     }
 
     /**
+     * Method that returns the speaking list of an speaker.
+     * @param speaker a stored attendee.
+     * @return list of events that the speaker will speak at.
+     */
+    public ArrayList<String> getSpeakingList(Speaker speaker) {
+        return speaker.getTalkList();
+    }
+
+    /**
      * Method that replaces the current speak at an event with another speaker.
      * @param title Name of the upcoming event.
      * @param newSpeakerUsername username of the new speaker.
