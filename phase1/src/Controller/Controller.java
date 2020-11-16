@@ -192,8 +192,8 @@ public class Controller {
 
             ArrayList<String> options = new ArrayList<>();
             ArrayList<String> choices = new ArrayList<>();
-            options.add("(M)essage");
-            options.add("(V)iew messages");
+            options.add("(M)essaging users");
+            options.add("(V)iewing messages");
             options.add("(B)ack");
             choices.add("M");
             choices.add("V");
@@ -254,14 +254,12 @@ public class Controller {
                     messageAllAtt(username,ms);
                     break;
                 case "E":
-                    System.out.println("sending message to all attendees in one or multiple events");
-                    ArrayList<Integer> eventIndex = new ArrayList<Integer>();
-                    messageEventAllAtt(username,ms,eventIndex);
-                case "B":
+                    presenter.displayMessages("sending message to all attendees in one or multiple events");
+                    messageEventAllAtt(username,ms);
+                case "(B)":
                     messagingOther = false;
                     break;
-                case "EXIT":
-                    exit();
+                case "EXIT": exit();
             }
         }
 
@@ -271,40 +269,42 @@ public class Controller {
         Scanner obj = new Scanner(System.in);
         presenter.displayMessages("Please input an username");
         String user = obj.nextLine();
-        presenter.displayMessages("Please input the message");
+        presenter.displayMessages("Please input your message");
         String message = obj.nextLine();
         presenter.printMessageAttendee(ms.messageAttendee(username,user,message));
     }
 
     private void messageAllSpeaker(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
-        presenter.displayMessages("Please input the message");
+        presenter.displayMessages("Please input your message");
         String message = obj.nextLine();
         presenter.printMessageAllSpeakers(ms.messageAllSpeakers(username, message));
     }
 
     private void messageAllAtt(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
-        presenter.displayMessages("Please input the message");
+        presenter.displayMessages("Please input your message");
         String message = obj.nextLine();
         presenter.printMessageAllSpeakers(ms.messageAllAttendees(username, message));
     }
 
-    private void messageEventAllAtt(String username, MessageSystem ms, ArrayList<Integer> events){
+    private void messageEventAllAtt(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
-        presenter.displayMessages("Please enter a event number");
+        ArrayList<Integer> events = new ArrayList<Integer>();
+        presenter.displayMessages("Please enter an event number");
         events.add(obj.nextInt());
-        presenter.displayMessages("Do you wish to message to one more event, (Y)es or (N)o");
-        String ans = obj.nextLine();
-        if (ans.equals("Y")){
-            messageEventAllAtt(username, ms, events);
-        } else {
-            presenter.displayMessages("Please enter your message");
-            String message = obj.nextLine();
-            if (events.size() == 1){
-                presenter.printMessageEventAttendees(ms.messageEventAttendees(events.get(0),username,message));
-            } else presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
+        presenter.displayMessages("Please enter another event number if you wish, otherwise enter (0)");
+        int i = obj.nextInt();
+        while (i != 0){
+            events.add(i);
+            presenter.displayMessages("Please enter another event number if you wish, otherwise please enter (0)");
+            i = obj.nextInt();
         }
+        presenter.displayMessages("Please enter your message");
+        String message = obj.nextLine();
+        if (events.size() == 1){
+            presenter.printMessageEventAttendees(ms.messageEventAttendees(events.get(0),username,message));
+        } else presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
     }
 
     private void viewMessages(String username, MessageSystem ms){
@@ -314,14 +314,14 @@ public class Controller {
 
             ArrayList<String> options = new ArrayList<>();
             ArrayList<String> choices = new ArrayList<>();
-            options.add("view (S)ent messages");
-            options.add("view (R)eceived messages");
-            options.add("view messages (F)rom another user");
+            options.add("Viewing (S)ent messages");
+            options.add("Viewing (R)eceived messages");
+            options.add("Viewing messages (F)rom another user");
             options.add("(B)ack");
             choices.add("S");
             choices.add("R");
             choices.add("F");
-            choices.add("(B)");
+            choices.add("B");
             choices.add("EXIT");
             String chosen = askInput(options, choices, input);
 
@@ -330,13 +330,13 @@ public class Controller {
                     presenter.displayMessages("Viewing sent messages");
                     ArrayList<String> messagesS = ms.viewSentMessage(username);
                     if (messagesS.size() == 0){
-                        presenter.displayMessages("There are no sent messages");
+                        presenter.displayMessages("There are no sent messages from you");
                     } else presenter.displayListOfMessage(messagesS);
                     break;
                 case "R":
                     ArrayList<String> messagesR = ms.viewReceivedMessage(username);
                     if (messagesR.size() == 0){
-                        presenter.displayMessages("There are no received messages");
+                        presenter.displayMessages("There are no received messages for you");
                     } else presenter.displayListOfMessage(messagesR);
                     break;
                 case "F":
@@ -363,7 +363,7 @@ public class Controller {
         } else {
             ArrayList<String> messageF = ms.viewAllMessagesFrom(user,username);
             if (messageF.size() == 0){
-                presenter.displayMessages("There are no messages between you and " + user);
+                presenter.displayMessages("There are no messages sent to you from " + user);
             } else presenter.displayListOfMessage(messageF);
         }
     }
