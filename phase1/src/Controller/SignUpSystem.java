@@ -16,15 +16,28 @@ public class SignUpSystem {
     private EventManager eventManager;
     private Comparator<Event> comparator = new byTimeEventComparator();
 
+    /**
+     * Constructor for an instance of SignUpSystem.
+     * @param attendeeManager stored attendeeManager
+     * @param eventManager stored eventManager
+     */
     public SignUpSystem(AttendeeManager attendeeManager, EventManager eventManager){
         this.attendeeManager = attendeeManager;
         this.eventManager = eventManager;
     }
 
+    /**
+     * Method that sets a stored Comparator for sorting events.
+     * @param comparator the Comparator used to sort events.
+     */
     public void setComparator(Comparator<Event> comparator){
         this.comparator = comparator;
     }
 
+    /**
+     * Method that returns a list of all stored events.
+     * @return list of all stored events.
+     */
     public ArrayList<String> viewAllEvents(){
         ArrayList<Event> eventlist = eventManager.getEvents();
         ArrayList<Event> eventlistclone = getEventListClone(eventlist);
@@ -47,6 +60,13 @@ public class SignUpSystem {
         return eventlistclone;
     }
 
+    /**
+     * Method that allows attendees to sign up for events. Changes information stored in the attendeeManager and
+     * eventManager.
+     * @param username username of the attendee.
+     * @param eventIndex index of the selected event from a sorted list of events.
+     * @return status message saying whether or not the attende successfully signed up for an event.
+     */
     public String signUpEvent(String username, int eventIndex){
         ArrayList<Event> eventList = eventManager.getEvents();
         eventList.sort(comparator);
@@ -66,6 +86,13 @@ public class SignUpSystem {
         return "Incorrect username. Please try again.";
     }
 
+    /**
+     * Method that allows attendees to sign up for events. Changes information stored in the attendeeManager and
+     * eventManager.
+     * @param username username of the attendee.
+     * @param eventIndex index of the selected event from a sorted list of events.
+     * @return status message saying whether or not the attende successfully signed up for an event.
+     */
     public String dropOutEvent(String username, int eventIndex){
         ArrayList<Event> eventList = eventManager.getEvents();
         eventList.sort(comparator);
