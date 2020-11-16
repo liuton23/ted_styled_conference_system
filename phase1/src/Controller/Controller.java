@@ -6,9 +6,9 @@ import Entities.EventComparators.bySpeakerEventComparator;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.EventComparators.byTitleEventComparator;
 import UseCases.*;
-import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
+//import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
 
-import java.awt.*;
+//import java.awt.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
@@ -236,7 +236,7 @@ public class Controller {
             choices.add("S");
             choices.add("A");
             choices.add("E");
-            choices.add("(B)");
+            choices.add("B");
             choices.add("EXIT");
             String chosen = askInput(options, choices, input);
 
