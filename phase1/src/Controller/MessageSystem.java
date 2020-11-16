@@ -228,6 +228,20 @@ public class MessageSystem {
         }
     }
 
+    //ViewMessage methods
+
+    public ArrayList<String> viewReceivedMessage(String r){
+        return mm.getReceivedBy(r);
+    }
+
+    public ArrayList<String> viewSentMessage(String r){
+        return mm.getSendBy(r);
+    }
+
+    public ArrayList<String> viewAllMessagesFrom(String s, String r){
+        return mm.getAllMessagesFrom(r,s);
+    }
+
     /*
     test case
     public static void main(String[] args){

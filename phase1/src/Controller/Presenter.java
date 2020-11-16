@@ -297,4 +297,7 @@ public class Presenter {
           }
     }
 
+    public void displayListOfMessage(ArrayList<String> message) {
+        System.out.println(message.toString());
+    }
 }

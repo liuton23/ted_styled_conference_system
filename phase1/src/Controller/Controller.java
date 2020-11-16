@@ -6,10 +6,13 @@ import Entities.EventComparators.bySpeakerEventComparator;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.EventComparators.byTitleEventComparator;
 import UseCases.*;
+import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import java.util.List;
 
 public class Controller {
 
@@ -181,17 +184,18 @@ public class Controller {
     }
 
     private void messageActivity(String username) {
+        MessageSystem ms = new MessageSystem(messageManager,attendeeManager,eventManager);
         boolean messaging = true;
         while (messaging) {
             Scanner input = new Scanner(System.in);
 
             ArrayList<String> options = new ArrayList<>();
             ArrayList<String> choices = new ArrayList<>();
-            options.add("(M)essages");
-            options.add("(E)vents");
+            options.add("(M)essage");
+            options.add("(V)iew messages");
             options.add("(B)ack");
             choices.add("M");
-            choices.add("E");
+            choices.add("V");
             choices.add(("B"));
             choices.add("EXIT");
             String chosen = askInput(options, choices, input);
@@ -200,16 +204,166 @@ public class Controller {
             //String chosen = input.nextLine();
             switch (chosen) {
                 case "M":
-                    System.out.println("MessageSystem");
+                    presenter.displayMessages("MessageSystem");
+                    messageUser(username, ms);
                     break;
-                case "E":
-                    System.out.println("SignUpSystem");
+                case "V":
+                    presenter.displayMessages("MessageBoard");
+                    viewMessages(username, ms);
                     break;
                 case "B":
                     messaging = false;
                     break;
                 case "EXIT": exit();
             }
+        }
+    }
+
+    private void messageUser(String username, MessageSystem ms){
+        boolean messagingOther = true;
+        while (messagingOther) {
+            Scanner input = new Scanner(System.in);
+
+            ArrayList<String> options = new ArrayList<>();
+            ArrayList<String> choices = new ArrayList<>();
+            options.add("Sending to a (U)ser");
+            options.add("Sending to all (S)peakers");
+            options.add("Sending to all (A)ttendees");
+            options.add("Sending to all attendees in one or multiple (E)vents");
+            options.add("(B)ack");
+            choices.add("U");
+            choices.add("S");
+            choices.add("A");
+            choices.add("E");
+            choices.add("(B)");
+            choices.add("EXIT");
+            String chosen = askInput(options, choices, input);
+
+            switch (chosen) {
+                case "U":
+                    presenter.displayMessages("sending message to a user");
+                    messageOneUser(username,ms);
+                    break;
+                case "S":
+                    presenter.displayMessages("sending message to all speakers");
+                    messageAllSpeaker(username,ms);
+                    break;
+                case "A":
+                    presenter.displayMessages("sending message to all attendees");
+                    messageAllAtt(username,ms);
+                    break;
+                case "E":
+                    System.out.println("sending message to all attendees in one or multiple events");
+                    ArrayList<Integer> eventIndex = new ArrayList<Integer>();
+                    messageEventAllAtt(username,ms,eventIndex);
+                case "B":
+                    messagingOther = false;
+                    break;
+                case "EXIT":
+                    exit();
+            }
+        }
+
+    }
+
+    private void messageOneUser(String username, MessageSystem ms){
+        Scanner obj = new Scanner(System.in);
+        presenter.displayMessages("Please input an username");
+        String user = obj.nextLine();
+        presenter.displayMessages("Please input the message");
+        String message = obj.nextLine();
+        presenter.printMessageAttendee(ms.messageAttendee(username,user,message));
+    }
+
+    private void messageAllSpeaker(String username, MessageSystem ms){
+        Scanner obj = new Scanner(System.in);
+        presenter.displayMessages("Please input the message");
+        String message = obj.nextLine();
+        presenter.printMessageAllSpeakers(ms.messageAllSpeakers(username, message));
+    }
+
+    private void messageAllAtt(String username, MessageSystem ms){
+        Scanner obj = new Scanner(System.in);
+        presenter.displayMessages("Please input the message");
+        String message = obj.nextLine();
+        presenter.printMessageAllSpeakers(ms.messageAllAttendees(username, message));
+    }
+
+    private void messageEventAllAtt(String username, MessageSystem ms, ArrayList<Integer> events){
+        Scanner obj = new Scanner(System.in);
+        presenter.displayMessages("Please enter a event number");
+        events.add(obj.nextInt());
+        presenter.displayMessages("Do you wish to message to one more event, (Y)es or (N)o");
+        String ans = obj.nextLine();
+        if (ans.equals("Y")){
+            messageEventAllAtt(username, ms, events);
+        } else {
+            presenter.displayMessages("Please enter your message");
+            String message = obj.nextLine();
+            if (events.size() == 1){
+                presenter.printMessageEventAttendees(ms.messageEventAttendees(events.get(0),username,message));
+            } else presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
+        }
+    }
+
+    private void viewMessages(String username, MessageSystem ms){
+        boolean viewingMessage = true;
+        while (viewingMessage) {
+            Scanner input = new Scanner(System.in);
+
+            ArrayList<String> options = new ArrayList<>();
+            ArrayList<String> choices = new ArrayList<>();
+            options.add("view (S)ent messages");
+            options.add("view (R)eceived messages");
+            options.add("view messages (F)rom another user");
+            options.add("(B)ack");
+            choices.add("S");
+            choices.add("R");
+            choices.add("F");
+            choices.add("(B)");
+            choices.add("EXIT");
+            String chosen = askInput(options, choices, input);
+
+            switch (chosen) {
+                case "S":
+                    presenter.displayMessages("Viewing sent messages");
+                    ArrayList<String> messagesS = ms.viewSentMessage(username);
+                    if (messagesS.size() == 0){
+                        presenter.displayMessages("There are no sent messages");
+                    } else presenter.displayListOfMessage(messagesS);
+                    break;
+                case "R":
+                    ArrayList<String> messagesR = ms.viewReceivedMessage(username);
+                    if (messagesR.size() == 0){
+                        presenter.displayMessages("There are no received messages");
+                    } else presenter.displayListOfMessage(messagesR);
+                    break;
+                case "F":
+                    viewFrom(username,ms);
+                    break;
+                case "B":
+                    viewingMessage = false;
+                    break;
+                case "EXIT":
+                    exit();
+            }
+        }
+    }
+
+
+    private void viewFrom(String username, MessageSystem ms){
+        Scanner obj = new Scanner(System.in);
+        presenter.displayMessages("Please input an username");
+        String user = obj.nextLine();
+        Optional<Attendee> obj1 = attendeeManager.usernameToAttendeeObject(user);
+        if (!obj1.isPresent()){
+            presenter.displayMessages("Incorrect username please try again");
+            viewFrom(username, ms);
+        } else {
+            ArrayList<String> messageF = ms.viewAllMessagesFrom(user,username);
+            if (messageF.size() == 0){
+                presenter.displayMessages("There are no messages between you and " + user);
+            } else presenter.displayListOfMessage(messageF);
         }
     }
 
@@ -290,6 +444,7 @@ public class Controller {
                 exit();
         }
     }
+
 
     public void exit(){
         save();
@@ -394,7 +549,6 @@ public class Controller {
                 break;
             case "EXIT": exit();
         }
-
 
     }
 }
