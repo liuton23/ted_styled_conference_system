@@ -6,14 +6,30 @@ import Entities.Message;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Manage all the messages
+ */
+
 public class MessageManager implements Serializable {
     private ArrayList<Message> messages;
 
     // All the string representation of Attendee is its username
 
+    /**
+     * initiate a new message manager with a new empty message list.
+     */
+
     public MessageManager(){
         messages = new ArrayList<Message>();
     }
+
+    /**
+     * Create a message base on sender, recipient, and message content.
+     * @param recipient username of the recipient
+     * @param sender username of the sender
+     * @param text content of the message
+     * @return an message object
+     */
 
     public Message createMessage(String recipient, String sender, String text){
         Message currMessage = new Message(sender, text);
@@ -21,6 +37,14 @@ public class MessageManager implements Serializable {
         messages.add(currMessage);
         return currMessage;
     }
+
+    /**
+     * Create a message base on sender, multiple recipients, and message content.
+     * @param recipients a list of usernames of the recipients
+     * @param sender username of the sender
+     * @param text content of the message
+     * @return an message object
+     */
     public Message createMessage(ArrayList<String> recipients, String sender, String text) {
         Message currMessage = new Message(sender, text);
         for (String a : recipients) {
@@ -29,6 +53,14 @@ public class MessageManager implements Serializable {
         messages.add(currMessage);
         return currMessage;
     }
+
+    /**
+     * reply a message given sender and content of the message.
+     * @param m message text
+     * @param sender sender's username
+     * @param text content of the message
+     * @return a replied message object
+     */
     public Message reply(Message m, String sender, String text){
         Message message = new Message (sender, text);
         message.setRecipients(m.getSender());
@@ -37,6 +69,11 @@ public class MessageManager implements Serializable {
     }
 
 
+    /**
+     * Return a list of all the messages send by this sender.
+     * @param sender sender's username
+     * @return a list of all the messages send by this sender
+     */
     public ArrayList<String> getSendBy(String sender){
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : messages){
@@ -47,6 +84,11 @@ public class MessageManager implements Serializable {
         return allMessages;
     }
 
+    /**
+     * Return a list of all the messages received by this user
+     * @param recipient recipient's username
+     * @return a list of all the messages received by this user
+     */
     public ArrayList<String> getReceivedBy(String recipient){
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : messages){
@@ -56,6 +98,13 @@ public class MessageManager implements Serializable {
         }
         return allMessages;
     }
+
+    /**
+     * Gets all messages from sender to recipient.
+     * @param recipient recipient's username
+     * @param sender sender's username
+     * @return a list of all messages from sender to recipient
+     */
 
 
     public ArrayList<String> getAllMessagesFrom(String recipient, String sender){
