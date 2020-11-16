@@ -155,4 +155,110 @@ public class Presenter {
         }
     }
 
+    /**
+     * Displays message reflecting the situation after messaging an attendee.
+     * @param messageAttendee output from the MessageSystem.messageAttendee() method
+     */
+
+    public void printMessageAttendee(int messageAttendee){
+        switch (messageAttendee) {
+            case 1:
+                System.out.println("Incorrect username. Please try again.");
+                break;
+            case 2:
+                System.out.println("The message can not be sent to an Organizer.");
+                break;
+            case 3:
+                System.out.println("The message has been successfully sent.");
+                break;
+        }
+    }
+
+    /**
+     * Displays message reflecting the situation after messaging all speakers.
+     * @param messageAllSpeakers  output from MessageSystem.messageAllSpeakers()
+     */
+    public void printMessageAllSpeakers(int messageAllSpeakers){
+        switch (messageAllSpeakers) {
+            case 1:
+                System.out.println("Incorrect username. Please try again.");
+                break;
+            case 2:
+                System.out.println("Only Organizer can message all speakers.");
+                break;
+            case 3:
+                System.out.println("The message has been successfully sent.");
+                break;
+        }
+    }
+
+    /**
+     * Displays message reflecting the situation after messaging all attendees.
+     * @param messageAllAttendees  output from MessageSystem.messageAllAttendees()
+     */
+    public void printMessageAllAttendees(int messageAllAttendees){
+        switch (messageAllAttendees) {
+            case 1:
+                System.out.println("Incorrect username. Please try again.");
+                break;
+            case 2:
+                System.out.println("Only Organizer can message all attendees.");
+                break;
+            case 3:
+                System.out.println("The message has been successfully sent.");
+                break;
+        }
+
+    }
+
+    /**
+     * Displays message reflecting the situation after messaging all attendees from a specific event.
+     * @param messageEventAttendees  output from MessageSystem.messageEventAttendees()
+     */
+
+    public void printMessageEventAttendees(int messageEventAttendees){
+        switch (messageEventAttendees) {
+            case 1:
+                System.out.println("There is no such event.");
+                break;
+            case 2:
+                System.out.println("Incorrect username. Please try again.");
+                break;
+            case 3:
+                System.out.println("Only speakers can sent messages to all attendees of their talks they give.");
+                break;
+            case 4:
+                System.out.println("You do not speak at this event.");
+                break;
+            case 5:
+                System.out.println("The message has been successfully sent.");
+                break;
+        }
+    }
+
+    /**
+     * Displays message reflecting the situation after messaging all attendees from multiple events.
+     * @param messageMultipleEventsAttendees output from overloading MessageSystem.messageEventAttendees()
+     */
+
+    public void printMessageMultipleEventsAttendees(int messageMultipleEventsAttendees){
+          switch(messageMultipleEventsAttendees){
+              case 1:
+                  System.out.println("Event list contains non-existed event.");
+                  break;
+              case 2:
+                  System.out.println("Incorrect username. Please try again.");
+                  break;
+              case 3:
+                  System.out.println("Only speakers can sent messages to all attendees of their talks they give.");
+                  break;
+              case 4:
+                  System.out.println("Event list contains event which you do not speak at.");
+                  break;
+              case 5:
+                  System.out.println("The message has been successfully sent.");
+                  break;
+          }
+    }
+
 }

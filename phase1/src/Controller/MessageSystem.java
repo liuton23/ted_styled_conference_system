@@ -13,11 +13,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * Control all the messages base on user's input
+ */
 public class MessageSystem {
 
     MessageManager mm;
     AttendeeManager am;
     EventManager em;
+
+    /**
+     * Create an instance of MessageSystem
+     * @param mm MessageManager
+     * @param am AttendeeManager
+     * @param em EventManager
+     */
 
     public MessageSystem(MessageManager mm, AttendeeManager am, EventManager em){
         this.mm = mm;
@@ -27,20 +37,31 @@ public class MessageSystem {
 
     // General message methods (Suitable for all attendees, speakers, and organizers)
 
-    public String messageAttendee(String sender, String attendee, String text){
+    /**
+     * This method can let all attendee, speakers and organizers message a specific user which is not an organizer.
+     * @param sender username of the sender
+     * @param attendee username of the attendee's the sender want to send message to
+     * @param text the content of the message
+     * @return integer which will send to presenter and present corresponding message
+     */
+    public int messageAttendee(String sender, String attendee, String text){
         Optional<Attendee> obj1 = am.usernameToAttendeeObject(sender);
         Optional<Attendee> obj2 = am.usernameToAttendeeObject(attendee);
         if (!obj1.isPresent()){
-            return "Incorrect username. Please try again.";
+            return 1;
+            //"Incorrect username. Please try again."
         } else if (!obj2.isPresent()){
-            return "Incorrect username. Please try again.";
+            return 1;
+            //"Incorrect username. Please try again.";
         }
         Attendee recipient = obj2.get();
         if (recipient.isOrganizer()){
-            return "The message can not be sent to an Organizer.";
+            return 2;
+            //"The message can not be sent to an Organizer."
         } else {
             mm.createMessage(attendee, sender, text);
-            return "The message has been successfully sent.";
+            return 3;
+            //"The message has been successfully sent."
         }
     }
 
@@ -48,13 +69,25 @@ public class MessageSystem {
     //All the Organizer methods
 
     //helper
+
+    /**
+     * @param org attendee object
+     * @return true of this attendee is organizer
+     */
     private Boolean checkIsOrganizer(Attendee org){
         if (org instanceof Speaker){
             return false;
         } else return org.isOrganizer();
     }
 
-    public String messageAllSpeakers(String sender, String text){
+    /**
+     * This method will let only organizer sends message to all speakers at once.
+     * @param sender the username of the sender
+     * @param text the content of the message
+     * @return integer which will send to presenter and presents the crresponding messages
+     */
+
+    public int messageAllSpeakers(String sender, String text){
         Optional<Attendee> obj = am.usernameToAttendeeObject(sender);
         ArrayList<Speaker> listOfSpeakers = am.getAllSpeakers();
         ArrayList<String> list = new ArrayList<String>();
@@ -62,22 +95,33 @@ public class MessageSystem {
             list.add(s.getUsername());
         }
         if (!obj.isPresent()){
-            return "Incorrect username. Please try again.";
+            return 1;
+            //"Incorrect username. Please try again."
         }
         Attendee org = obj.get();
         // make sure only organizer can use this method
         if (!checkIsOrganizer(org)){
-            return "Only Organizer can message all speakers.";
+            return 2;
+            //"Only Organizer can message all speakers."
         } else {
             mm.createMessage(list, sender, text);
-            return "The message has been successfully sent.";
+            return 3;
+            //"The message has been successfully sent."
         }
     }
 
-    public String messageAllAttendees(String sender, String text){
+    /**
+     * This method only let organizer sends message to all attendees in the system at once.
+     * @param sender username of sender
+     * @param text the content of the message
+     * @return integer which will send to presenter and presents the crresponding messages
+     */
+
+    public int messageAllAttendees(String sender, String text){
         Optional<Attendee> obj = am.usernameToAttendeeObject(sender);
         if (!obj.isPresent()){
-            return "Incorrect username. Please try again.";
+            return 1;
+            // "Incorrect username. Please try again.";
         }
         ArrayList<String> allAtt = new ArrayList<String>();
         ArrayList<Attendee> allAttObj = am.getAllAttendees();
@@ -87,59 +131,85 @@ public class MessageSystem {
         Attendee org = obj.get();
         // make sure only organizer can use this method
         if (!checkIsOrganizer(org)){
-            return "Only Organizer can message all speakers.";
+            return 2;
+            //"Only Organizer can message all attendees.";
         } else {
             mm.createMessage(allAtt,sender,text);
-            return "The message has been successfully sent.";
+            return 3;
+            //"The message has been successfully sent.";
         }
     }
 
     //All the Speaker methods
 
-    public String messageEventAttendees(int eventIndex, String sender, String text){
+    /**
+     * This method only let speaker send message to a specific event's all attendees.
+     * @param eventIndex the index of an event
+     * @param sender username of the sender
+     * @param text the content of the message
+     * @return integer which will send to presenter and presents the crresponding messages
+     */
+
+    public int messageEventAttendees(int eventIndex, String sender, String text){
         Optional<Attendee> obj = am.usernameToAttendeeObject(sender);
         int max = em.getEvents().size();
         // check index
         if (eventIndex > max){
-            return "Event index out of range!";
+            return 1;
+            //"There is no such event.";
         }
         Event event = em.getEvents().get(eventIndex - 1);
         ArrayList<String> list = em.eventToAttendees(event);
         if (!obj.isPresent()){
-            return "Incorrect username. Please try again.";
+            return 2;
+            //"Incorrect username. Please try again.";
         }
         Attendee se = obj.get();
         // check instance, make sure only speaker can use this method
         if (!(se instanceof Speaker)){
-            return "Only speakers can sent messages to all attendees in a specific talk they give.";
+            return 3;
+            //"Only speakers can sent messages to all attendees of their talks they give.";
         } else if (!event.getSpeaker().equals(sender)) {
             // check whether the speaker speaks in this event
-            return "You can not send messages to all attendees from this event.";
+            return 4;
+            //"You do not speak at this event!";
         } else {
                 mm.createMessage(list, sender, text);
-                return "The message has been successfully sent.";
+                return 5;
+                //"The message has been successfully sent.";
         }
     }
 
-    public String messageEventAttendees(ArrayList<Integer> eventIndexes, String sender, String text){
+    /**
+     * This method only let speaker message all attendees from multiple events they speak at.
+     * @param eventIndexes a list of indexes of events
+     * @param sender username of the sender
+     * @param text the content of the message
+     * @return integer which will send to presenter and presents the crresponding messages
+     */
+
+    public int messageEventAttendees(ArrayList<Integer> eventIndexes, String sender, String text){
         Optional<Attendee> obj = am.usernameToAttendeeObject(sender);
         ArrayList<String> list = new ArrayList<String>();
         ArrayList<Integer> error = new ArrayList<Integer>();
 
         if (!obj.isPresent()){
-            return "Incorrect username. Please try again.";
+            return 2;
+            //"Incorrect username. Please try again.";
         }
         Attendee se = obj.get();
         //check instance, make sure only speaker can use this method.
         if (!(se instanceof Speaker)){
-            return "Only speakers can sent messages to all attendees of there talks they give.";
+            return 3;
+            //"Only speakers can sent messages to all attendees of their talks they give.";
         }
         int max = em.getEvents().size();
         for (Integer i : eventIndexes){
             int j = i;
             //check index
             if (j > max){
-                return "At least one event index is out of ranges.";
+                return 1;
+                //"Event list contains non-existed event.";
             }
             Event event = em.getEvents().get(j - 1);
             if (!event.getSpeaker().equals(sender)) {
@@ -149,45 +219,17 @@ public class MessageSystem {
         }
         //events that the speaker does not speak in
         if (error.size() != 0){
-            return "You can not send message to events " + error.toString();
+            return 4;
+            //"Event list contains event which you do not speak at.";
         } else {
             mm.createMessage(list, sender, text);
-            return "The message has been successfully sent.";
+            return 5;
+            //"The message has been successfully sent.";
         }
     }
 
-    //ViewMessage methods
-
-    public String viewReceivedMessage(String r){
-        Optional<Attendee> obj = am.usernameToAttendeeObject(r);
-        if (!obj.isPresent()){
-            return "Incorrect username. Please try again.";
-        } else {
-            return mm.getReceivedBy(r).toString();
-        }
-    }
-
-    public String viewSentMessage(String r){
-        Optional<Attendee> obj = am.usernameToAttendeeObject(r);
-        if (!obj.isPresent()){
-            return "Incorrect username. Please try again.";
-        } else {
-            return mm.getSendBy(r).toString();
-        }
-    }
-
-    public String viewAllMessagesFrom(String s, String r){
-        Optional<Attendee> obj1 = am.usernameToAttendeeObject(s);
-        Optional<Attendee> obj2 = am.usernameToAttendeeObject(r);
-        if (!obj1.isPresent()){
-            return "Incorrect username. Please try again.";
-        } else if (!obj2.isPresent()){
-            return "Incorrect username. Please try again.";
-        } else {
-            return mm.getAllMessagesFrom(r,s).toString();
-        }
-    }
-
+    /*
+    test case
     public static void main(String[] args){
         AttendeeManager am = new AttendeeManager();
         MessageManager mm = new MessageManager();
@@ -226,4 +268,5 @@ public class MessageSystem {
         System.out.println(ms.viewReceivedMessage("ritawon"));
         System.out.println(ms.messageEventAttendees(3,"lily","lol."));
     }
+     */
 }
