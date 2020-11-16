@@ -47,7 +47,7 @@ public class ScheduleSystem {
      */
     public int scheduleEvent(String title, String speaker, int year, String month, int day, int hour, int minute,
                                 int room, int capacity){
-        return eventManager.createEvent(title, speaker, year, month, day, hour, minute, room, capacity);
+        return eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
     }
 
     /**

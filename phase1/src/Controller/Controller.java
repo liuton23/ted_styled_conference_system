@@ -369,7 +369,7 @@ public class Controller {
     }
 
     private void eventActivity(String username) {
-        SignUpSystem signUpSystem = new SignUpSystem(attendeeManager, eventManager);
+        SignUpSystem signUpSystem = new SignUpSystem(attendeeManager, eventManager, roomManager);
         boolean activity = true;
         while (activity) {
             Scanner input = new Scanner(System.in);

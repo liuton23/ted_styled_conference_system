@@ -30,9 +30,8 @@ public class Event implements Serializable {
      * @param hour the starting hour of the event.
      * @param minute the starting minute of the event.
      * @param room the room id of the room where the event is taking place.
-     * @param capacity the capacity of the room where the event is taking place.
      */
-    public Event(String title, String speaker, int year, String month, int day, int hour, int minute, int room, int capacity){
+    public Event(String title, String speaker, int year, String month, int day, int hour, int minute, int room){
         LocalTime startTime = LocalTime.of(hour, minute);
         LocalTime endTime = startTime.plusHours(1);
         this.title = title;
@@ -41,7 +40,6 @@ public class Event implements Serializable {
         this.eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, hour, minute, 0));
         this.eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute, 0));
         this.room = room;
-        this.capacity = capacity;
         this.attendeeList = new ArrayList<String>();
     }
 
@@ -127,10 +125,6 @@ public class Event implements Serializable {
         this.room = newRoom;
     }
 
-    public void setCapacity(int newCapacity){
-        this.capacity = newCapacity;
-    }
-
     /**
      * This method adds an Attendee's username to the event's list of attendee usernames.
      * @param attendee the username of an attendee that is to be added to this event.
@@ -163,7 +157,7 @@ public class Event implements Serializable {
     //testing
     public static void main(String[] args) {
         Event petConference = new Event("Pet Conference", "Caesar Milan", 2020, "NOVEMBER",
-                16, 12, 0, 100, 500);
+                16, 12, 0, 100);
         System.out.println(petConference.getTitle());
         System.out.println(petConference.getSpeaker());
         System.out.println(petConference.getEventTime());
