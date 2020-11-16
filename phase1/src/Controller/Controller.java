@@ -149,7 +149,7 @@ public class Controller {
             choices.add(("B"));
             choices.add("EXIT");
             String chosen = askInput(options, choices, input);
-            int index = input.nextInt();
+            int index;
 
             switch (chosen) {
                 case "V":
@@ -158,10 +158,14 @@ public class Controller {
                     break;
                 case "S":
                     System.out.println("Sign Up");
+                    System.out.print("Event ID of event you'd like to sign up for:");
+                    index = input.nextInt();
                     presenter.displayMessages(signUpSystem.signUpEvent(username, index));
                     break;
                 case "D":
                     System.out.println("Drop out");
+                    System.out.print("Event ID of event you'd like to drop up for:");
+                    index = input.nextInt();
                     presenter.displayMessages(signUpSystem.dropOutEvent(username, index));
                     break;
                 case "B":
