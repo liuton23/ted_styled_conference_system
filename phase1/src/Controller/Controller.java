@@ -235,18 +235,18 @@ public class Controller {
 
             switch (chosen) {
                 case "V":
-                    System.out.println("View all events");
+                    presenter.displayMessages("View all events");
                     viewAllEvents(signUpSystem);
                     break;
                 case "S":
-                    System.out.println("Sign Up");
-                    System.out.print("Event ID of event you'd like to sign up for:");
+                    presenter.displayMessages("Sign Up");
+                    presenter.displayMessages("Event ID of event you'd like to sign up for:");
                     index = input.nextInt();
-                    presenter.displayMessages(signUpSystem.signUpEvent(username, index));
+                    presenter.printSignUpMessage(signUpSystem.signUpEvent(username, index));
                     break;
                 case "D":
-                    System.out.println("Drop out");
-                    System.out.print("Event ID of event you'd like to drop up for:");
+                    presenter.displayMessages("Drop out");
+                    presenter.displayMessages("Event ID of event you'd like to drop up for:");
                     index = input.nextInt();
                     presenter.displayMessages(signUpSystem.dropOutEvent(username, index));
                     break;

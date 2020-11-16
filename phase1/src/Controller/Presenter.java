@@ -37,9 +37,20 @@ public class Presenter {
         System.out.print("Input: ");
     }
 
+    /**
+     * Displays input message.
+     * @param str input message.
+     */
     public void displayMessages(String str){
         System.out.println(str);
     }
+
+
+    /**
+     * Displays an initial message then displays a list of Strings one at a time.
+     * @param options list of String options
+     * @param message initial message
+     */
     public void displaySchedule(ArrayList<String> options, String message){
         System.out.println(message);
         for (String str: options){
@@ -47,6 +58,11 @@ public class Presenter {
         }
     }
 
+    /**
+     * Displays an initial message then displays a String representation of events one at a time.
+     * @param events list of events
+     * @param message initial message
+     */
     public void displayAllEvents(ArrayList<Event> events, String message){
         System.out.println(message);
         for (Event e: events){

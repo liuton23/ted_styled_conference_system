@@ -84,7 +84,7 @@ public class MessageSystem {
      * This method will let only organizer sends message to all speakers at once.
      * @param sender the username of the sender
      * @param text the content of the message
-     * @return integer which will send to presenter and presents the crresponding messages
+     * @return integer which will send to presenter and presents the corresponding messages
      */
 
     public int messageAllSpeakers(String sender, String text){

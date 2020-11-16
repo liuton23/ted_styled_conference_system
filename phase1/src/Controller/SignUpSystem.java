@@ -65,25 +65,21 @@ public class SignUpSystem {
      * eventManager.
      * @param username username of the attendee.
      * @param eventIndex index of the selected event from a sorted list of events.
-     * @return status message saying whether or not the attende successfully signed up for an event.
+     * @return boolean value that will be sent to presenter to display corresponding message.
      */
-    public String signUpEvent(String username, int eventIndex){
+    public boolean signUpEvent(String username, int eventIndex){
         ArrayList<Event> eventList = eventManager.getEvents();
         eventList.sort(comparator);
         Event event = eventList.get(eventIndex-1);
-        //check if space available
-        if (event.getAttendeeList().size() >= event.getCapacity()){
-            return "Sorry! This event is at capacity. Please select another event";
-        }
         Optional<Attendee> obj = attendeeManager.usernameToAttendeeObject(username);
         //check if username is valid
+        boolean signup = false;
         if (obj.isPresent()){
             Attendee attendee = obj.get();
-            eventManager.signUP(event, attendee.getUsername());
+            signup = eventManager.signUP(event, attendee.getUsername());
             attendeeManager.signUp(attendee, event.getTitle());
-            return "You have successfully signed up for " + event.getTitle() + " @ " + event.getEventTime();
         }
-        return "Incorrect username. Please try again.";
+        return signup;
     }
 
     /**
@@ -91,7 +87,7 @@ public class SignUpSystem {
      * eventManager.
      * @param username username of the attendee.
      * @param eventIndex index of the selected event from a sorted list of events.
-     * @return status message saying whether or not the attende successfully signed up for an event.
+     * @return status message saying whether or not the attendee successfully signed up for an event.
      */
     public String dropOutEvent(String username, int eventIndex){
         ArrayList<Event> eventList = eventManager.getEvents();
