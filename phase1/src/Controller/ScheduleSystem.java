@@ -3,6 +3,7 @@ package Controller;
 
 import Entities.Attendee;
 import Entities.Event;
+import Entities.Room;
 import Entities.Speaker;
 import UseCases.EventManager;
 import UseCases.AttendeeManager;
@@ -69,29 +70,57 @@ public class ScheduleSystem {
      * 1) the string provided is a Speaker
      * 2) the Speaker is available at the time of the event
      * and reports successful completion or an error message through an integer return value (0 being successful change).
-     * @param event the event whose speaker is to be changed.
+     * @param eventName the name of the event whose speaker is to be changed.
      * @param newSpeaker the new desired speaker.
      * @return an integer signalling successful speaker change or a relevant error message.
      */
-    public int changeSpeaker(Event event, String newSpeaker){
-        // if the value is not null
-        if(attendeeManager.usernameToAttendeeObject(newSpeaker).isPresent()) {
-            // if object is speaker
-            if (attendeeManager.usernameToAttendeeObject(newSpeaker).get() instanceof Speaker) {
-                // changing speaker
-                if (eventManager.freeSpeakerCheck(event.getEventTime(), newSpeaker)) {
-                    eventManager.changeSpeaker(event, newSpeaker);
-                    attendeeManager.changeSpeaker(event.getTitle(), newSpeaker);
-                    //"Speaker changed successfully."
-                    return 0;
+    public int changeSpeaker(String eventName, String newSpeaker) {
+        if (!eventManager.nameToEvent(eventName).isPresent()) {
+            // event name does not correspond to an event.
+            return 4;
+        } else {
+            Event eventObject = eventManager.nameToEvent(eventName).get();
+            // if the value is not null
+            if (attendeeManager.usernameToAttendeeObject(newSpeaker).isPresent()) {
+                // if object is speaker
+                if (attendeeManager.usernameToAttendeeObject(newSpeaker).get() instanceof Speaker) {
+                    // changing speaker
+                    if (eventManager.freeSpeakerCheck(eventObject.getEventTime(), newSpeaker)) {
+                        eventManager.changeSpeaker(eventObject, newSpeaker);
+                        attendeeManager.changeSpeaker(eventObject.getTitle(), newSpeaker);
+                        //"Speaker changed successfully."
+                        return 0;
+                    }
+                    // "Speaker is already booked at this time."
+                    return 1;
                 }
-                // "Speaker is already booked at this time."
-                return 1;
+                //"This person is not a speaker."
+                return 2;
             }
-            //"This person is not a speaker."
-            return 2;
+            //"This user does not exist."
+            return 3;
         }
-        //"This user does not exist."
-        return 3;
+    }
+
+    public int cancelEvent(String eventName) {
+        if (!eventManager.nameToEvent(eventName).isPresent()) {
+            // event name does not correspond to an event.
+            return 0;
+        } else {
+            Event eventObject = eventManager.nameToEvent(eventName).get();
+            for (String attendeeName : eventObject.getAttendeeList()) {
+                Attendee attendee = attendeeManager.usernameToAttendeeObject(attendeeName).get();
+                attendee.removeEvent(eventName);
+            }
+            //this will change in phase 2 when we can have a variable number of speakers
+            String speakerName = eventObject.getSpeaker();
+            Speaker speaker = (Speaker) attendeeManager.usernameToAttendeeObject(speakerName).get();
+            speaker.removeTalk(eventName);
+            Room room = roomManager.idToRoom(eventObject.getRoom());
+            room.removeBooking(eventName);
+            eventManager.getEvents().remove(eventObject);
+            //event removed successfully.
+            return 1;
+        }
     }
 }

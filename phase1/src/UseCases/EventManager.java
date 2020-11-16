@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * Manages and stores events in this tech conference system.
@@ -141,6 +142,14 @@ public class EventManager implements Serializable {
             }
         }
         return true;
+    }
+    public Optional<Event> nameToEvent(String eventName){
+        for (Event event: this.getEvents()) {
+            if(event.getTitle().equals(eventName)){
+                return Optional.of(event);
+            }
+        }
+        return Optional.empty();
     }
 
     /**

@@ -139,6 +139,9 @@ public class Presenter {
             case 3:
                 System.out.println("This user does not exist.");
                 break;
+            case 4:
+                System.out.println("This event name does not correspond to an event in the system.");
+                break;
         }
     }
 
