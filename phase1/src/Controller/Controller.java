@@ -5,6 +5,7 @@ import Entities.Event;
 import Entities.EventComparators.bySpeakerEventComparator;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.EventComparators.byTitleEventComparator;
+import Entities.Speaker;
 import UseCases.*;
 import Entities.Speaker;
 //import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
@@ -72,6 +73,7 @@ public class Controller {
     private void accountActivity(String username) {
         boolean loggedin = true;
         boolean isOrg = attendeeManager.usernameToAttendeeObject(username).get().isOrganizer();
+        boolean isSpeaker = attendeeManager.usernameToAttendeeObject(username).get() instanceof Speaker;
         while (loggedin) {
             Scanner input = new Scanner(System.in);
 
@@ -93,7 +95,6 @@ public class Controller {
             choices.add(("B"));
             choices.add("EXIT");
             String chosen = askInput(options, choices, input);
-
 
             //String chosen = input.nextLine();
             switch (chosen) {
@@ -289,7 +290,7 @@ public class Controller {
                 case "E":
                     presenter.displayMessages("sending message to all attendees in one or multiple events");
                     messageEventAllAtt(username,ms);
-                case "(B)":
+                case "B":
                     messagingOther = false;
                     break;
                 case "EXIT": exit();
@@ -333,7 +334,7 @@ public class Controller {
         Scanner obj = new Scanner(System.in);
         presenter.displayMessages("Please input your message");
         String message = obj.nextLine();
-        presenter.printMessageAllSpeakers(ms.messageAllAttendees(username, message));
+        presenter.printMessageAllAttendees(ms.messageAllAttendees(username, message));
     }
 
     /**
@@ -352,6 +353,7 @@ public class Controller {
             events.add(i);
             presenter.displayMessages("Please enter another event number if you wish, otherwise please enter (0)");
             i = obj.nextInt();
+
         }
         presenter.displayMessages("Please enter your message");
         String message = obj.nextLine();

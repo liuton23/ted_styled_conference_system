@@ -67,6 +67,7 @@ public class MessageManager implements Serializable {
         messages.add(message);
         return message;
     }
+    //This is not used, might delete later
 
 
     /**
@@ -78,7 +79,8 @@ public class MessageManager implements Serializable {
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : messages){
             if (m.getSender().equals(sender)){
-                allMessages.add(m.getText());
+                allMessages.add("To " + recipientsBuilder(m.getRecipients()) + ": " + m.getText() +
+                        " @ " + m.getMessageTime().toString());
             }
         }
         return allMessages;
@@ -93,7 +95,8 @@ public class MessageManager implements Serializable {
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : messages){
             if (m.getRecipients().contains(recipient)){
-                allMessages.add(m.getText());
+                allMessages.add("From " + m.getSender() + ": " + m.getText() + " @ " +
+                        m.getMessageTime().toString());
             }
         }
         return allMessages;
@@ -106,23 +109,43 @@ public class MessageManager implements Serializable {
      * @return a list of all messages from sender to recipient
      */
 
-
     public ArrayList<String> getAllMessagesFrom(String recipient, String sender){
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : messages){
             if (m.getSender().equals(sender) && m.getRecipients().contains(recipient)){
-                allMessages.add(m.getText());
+                allMessages.add(m.getText() + " @ " + m.getMessageTime().toString());
             }
         }
         return allMessages;
     }
 
 
+    /**
+     * Private helper function
+     * @param list list of strings
+     * @return a string representation of this list.
+     */
+    private String recipientsBuilder(ArrayList<String> list){
+        /* Pre-condition, we use this method under the condition that list is non-empty, so we don't need
+        * empty list check */
+        String x = "";
+        int max = list.size();
+        if (list.size() == 1){
+            return list.get(0);
+        } else {
+            for (int i = 0; i < max - 2; i++){
+                x += list.get(i) + ", ";
+            }
+            return x + list.get(max - 2) + " and " + list.get(max - 1);
+        }
+    }
+
+    /* testing
     public static void main(String[] args){
-        //tests
         AttendeeManager a = new AttendeeManager();
         Attendee josh = a.createAttendee("iamjosh", "4532dgtf", false);
         Attendee rita = a.createAttendee("ritaishannie", "123456", false);
+        Attendee bob = a.createAttendee("Bob", "98321", false);
         MessageManager mas = new MessageManager();
         Message m = mas.createMessage("iamjosh","ritaishannie","hello jesus");
         Message newm = mas.reply(m, "iamjosh","hello, rita");
@@ -132,10 +155,13 @@ public class MessageManager implements Serializable {
         ArrayList<String> att = new ArrayList<String>();
         att.add("iamjosh");
         att.add("ritaishannie");
+        att.add("Bob");
         Message meeting = mas.createMessage(att,"lisa231","meeting starts in 10mins!!");
         mas.reply(meeting,"ritaishannie","Got it!");
         System.out.println(mas.getReceivedBy("ritaishannie"));
-        System.out.println(mas.getSendBy("ritaishannie"));
+        System.out.println(mas.getSendBy("lisa231"));
         System.out.println(mas.getAllMessagesFrom("ritaishannie","iamjosh"));
     }
+
+     */
 }
