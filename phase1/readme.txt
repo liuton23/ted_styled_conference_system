@@ -17,8 +17,9 @@ Enter “e” or “E” to access the event planning system.
 Enter “i” or “I” to view the events that the user currently has planned.
 Enter “b” or “B” to return to the login page.
 
-If the user is an organizer, an additional option is available:
-Enter “s” or “S” access the scheduling system.
+If the user is an organizer, additional options are available:
+Enter “s” or “S” to access the scheduling system.
+Enter “c” or “C” to create a speaker account.
 
 If the user is a speaker, an additional option is available:
 Enter “t” or “T” to view a list of upcoming events that the speaker will speak at.
@@ -48,7 +49,8 @@ Enter “b” or “B” to return to the account activities.
 
 
 The scheduling system. Allows organisers to create events and add rooms.
-Enter “s” or “s” to create a new event. Follow the prompts.
+Enter “s” or “s” to create a new event. Follow the prompts. Note: months need to be spelled out fully using all capitol
+letters. e.g. NOVEMBER
 Enter “a” or “A” to Add a room. Note: rooms need to be created before they can be used.
 Enter “c” or “C” to change speakers at an event. Follow the prompts.
 Enter “b” or “B” to return to the account activities.
