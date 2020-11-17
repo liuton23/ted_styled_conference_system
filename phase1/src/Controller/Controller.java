@@ -150,8 +150,6 @@ public class Controller {
             choices.add("EXIT");
             String chosen = askInput(options, choices, input);
 
-
-            //String chosen = input.nextLine();
             switch (chosen) {
                 case "S":
                     presenter.displayMessages("Schedule Event");
@@ -228,7 +226,6 @@ public class Controller {
             String chosen = askInput(options, choices, input);
 
 
-            //String chosen = input.nextLine();
             switch (chosen) {
                 case "M":
                     presenter.displayMessages("MessageSystem");
