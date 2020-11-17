@@ -83,6 +83,8 @@ public class Controller {
             if (isOrg){
                 options.add("(S)chedule events");
                 choices.add("S");
+                options.add("(C)reate speaker account");
+                choices.add("C");
             }
             options.add("(B)ack");
             choices.add("M");
@@ -108,6 +110,9 @@ public class Controller {
                     break;
                 case "S":
                     scheduleActivity(username);
+                    break;
+                case "C":
+                    createSpeaker();
                     break;
                 case "B":
                     loggedin = false;
@@ -652,5 +657,22 @@ public class Controller {
             case "EXIT": exit();
         }
 
+    }
+
+    /**
+     * Speaker registration. Cannot choose a username that is already taken.
+     */
+    private void createSpeaker(){
+        LoginSystem loginSystem = new LoginSystem(attendeeManager);
+        Scanner obj1 = new Scanner(System.in);
+        presenter.printUsernameMessage();
+        String username = obj1.nextLine();
+        presenter.printPasswordMessage();
+        String password = obj1.nextLine();
+        if (loginSystem.registerSpeaker(username, password)){
+            presenter.printRegisterSucceedMessage();
+        } else {
+            presenter.printRegisterFailMessage();
+        }
     }
 }
