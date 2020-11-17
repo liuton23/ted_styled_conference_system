@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Optional;
 
+/**
+ * Controls sign-ups and drop-outs for events based on user input.
+ */
 public class SignUpSystem {
     private AttendeeManager attendeeManager;
     private EventManager eventManager;
