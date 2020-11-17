@@ -6,24 +6,31 @@ import Entities.EventComparators.byTimeEventComparator;
 import Entities.EventComparators.byTitleEventComparator;
 import UseCases.AttendeeManager;
 import UseCases.EventManager;
+import UseCases.RoomManager;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Optional;
 
+/**
+ * Controls sign-ups and drop-outs for events based on user input.
+ */
 public class SignUpSystem {
     private AttendeeManager attendeeManager;
     private EventManager eventManager;
+    private RoomManager roomManager;
     private Comparator<Event> comparator = new byTimeEventComparator();
 
     /**
      * Constructor for an instance of SignUpSystem.
      * @param attendeeManager stored attendeeManager
      * @param eventManager stored eventManager
+     * @param roomManager stored roomManager
      */
-    public SignUpSystem(AttendeeManager attendeeManager, EventManager eventManager){
+    public SignUpSystem(AttendeeManager attendeeManager, EventManager eventManager, RoomManager roomManager){
         this.attendeeManager = attendeeManager;
         this.eventManager = eventManager;
+        this.roomManager = roomManager;
     }
 
     /**
@@ -71,15 +78,19 @@ public class SignUpSystem {
         ArrayList<Event> eventList = eventManager.getEvents();
         eventList.sort(comparator);
         Event event = eventList.get(eventIndex-1);
+        Room room = roomManager.idToRoom(event.getRoom());
         Optional<Attendee> obj = attendeeManager.usernameToAttendeeObject(username);
         //check if username is valid
-        boolean signup = false;
         if (obj.isPresent()){
             Attendee attendee = obj.get();
-            signup = eventManager.signUP(event, attendee.getUsername());
-            attendeeManager.signUp(attendee, event.getTitle());
+            //checking that there is space at the event
+            if(event.getAttendeeList().size() < room.getCapacity()) {
+                eventManager.signUp(event, attendee.getUsername());
+                attendeeManager.signUp(attendee, event.getTitle());
+                return true;
+            }
         }
-        return signup;
+        return false;
     }
 
     /**

@@ -3,6 +3,9 @@ package Entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * An instance of this class represent an registered attendee at the tech conference.
+ */
 public class Attendee implements Serializable {
     private String username;
     private String password;

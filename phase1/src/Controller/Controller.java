@@ -53,7 +53,7 @@ public class Controller {
                     break;
                 case "L":
                     username = login();
-                    if(username.isEmpty()){
+                    if (username.isEmpty()){
                         break;
                     }else {
                         accountActivity(username);
@@ -83,6 +83,8 @@ public class Controller {
             if (isOrg){
                 options.add("(S)chedule events");
                 choices.add("S");
+                options.add("(C)reate speaker account");
+                choices.add("C");
             }
             options.add("(B)ack");
             choices.add("M");
@@ -108,6 +110,9 @@ public class Controller {
                     break;
                 case "S":
                     scheduleActivity(username);
+                    break;
+                case "C":
+                    createSpeaker();
                     break;
                 case "B":
                     loggedin = false;
@@ -172,7 +177,7 @@ public class Controller {
                     presenter.displayMessages("Enter event capacity:");
                     int cap = input.nextInt();
                     presenter.printScheduleEventMessage(scheduleSystem.scheduleEvent(title, speaker, year, month, day,
-                            hour, min, roomID, cap));
+                            hour, min, roomID));
                     break;
                 case "A":
                     presenter.displayMessages("Add Room");
@@ -193,7 +198,7 @@ public class Controller {
                     presenter.displayMessages("Enter name of new speaker:");
                     String newSpeaker = input.nextLine();
                     String eventName = events.get(index).getTitle();
-                    int message = scheduleSystem.changeSpeaker(events.get(index),newSpeaker);
+                    int message = scheduleSystem.changeSpeaker(eventName,newSpeaker);
                     presenter.printChangeSpeakerMessage(message);
                     break;
                 case "B":
@@ -432,7 +437,7 @@ public class Controller {
      * @param username username of <code>Attendee</code>.
      */
     private void eventActivity(String username) {
-        SignUpSystem signUpSystem = new SignUpSystem(attendeeManager, eventManager);
+        SignUpSystem signUpSystem = new SignUpSystem(attendeeManager, eventManager, roomManager);
         boolean activity = true;
         while (activity) {
             Scanner input = new Scanner(System.in);
@@ -649,5 +654,22 @@ public class Controller {
             case "EXIT": exit();
         }
 
+    }
+
+    /**
+     * Speaker registration. Cannot choose a username that is already taken.
+     */
+    private void createSpeaker(){
+        LoginSystem loginSystem = new LoginSystem(attendeeManager);
+        Scanner obj1 = new Scanner(System.in);
+        presenter.printUsernameMessage();
+        String username = obj1.nextLine();
+        presenter.printPasswordMessage();
+        String password = obj1.nextLine();
+        if (loginSystem.registerSpeaker(username, password)){
+            presenter.printRegisterSucceedMessage();
+        } else {
+            presenter.printRegisterFailMessage();
+        }
     }
 }

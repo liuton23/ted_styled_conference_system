@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * Manages and stores events in this tech conference system.
@@ -43,11 +44,10 @@ public class EventManager implements Serializable {
      * @param hour the hour the event starts.
      * @param minute the minute the event starts.
      * @param room the room id of the desired room where the event takes place.
-     * @param capacity
      * @return an integer signifying whether the event was successfully created or an error message.
      */
     public int createEvent(String title, String speaker, int year, String month, int day, int hour,
-                              int minute, int room, int capacity){
+                              int minute, int room){
         LocalTime startTime = LocalTime.of(hour, minute);
         LocalTime endTime = startTime.plusHours(1);
         ArrayList<LocalDateTime> eventTime = new ArrayList<LocalDateTime>();
@@ -66,7 +66,7 @@ public class EventManager implements Serializable {
             return 2;
         }
         else{
-            events.add(new Event(title, speaker, year, month, day, hour, minute, room, capacity));
+            events.add(new Event(title, speaker, year, month, day, hour, minute, room));
             //"Event successfully created."
             return 3;
         }
@@ -142,6 +142,14 @@ public class EventManager implements Serializable {
         }
         return true;
     }
+    public Optional<Event> nameToEvent(String eventName){
+        for (Event event: this.getEvents()) {
+            if(event.getTitle().equals(eventName)){
+                return Optional.of(event);
+            }
+        }
+        return Optional.empty();
+    }
 
     /**
      * This method returns a list of attendee usernames corresponding to the Attendees attending the specified event.
@@ -157,16 +165,10 @@ public class EventManager implements Serializable {
      * successful sign up (0) or that the event is full(1).
      * @param event the event an Attendee is attempting to be signed up for.
      * @param attendee the Attendee attempting to be signed up for the given event.
-     * @return a boolean signifying a successful sign up (true) or the event being at capacity (false).
      */
-    public boolean signUP(Event event, String attendee){
-        if(event.getAttendeeList().size() < event.getCapacity()){
-            event.addAttendee(attendee);
-            // Attendee successfully signed up
-            return true;
-        }
-        // Could not add attendee, event is full.
-        return false;
+
+    public void signUp(Event event, String attendee){
+        event.addAttendee(attendee);
     }
 
     /**
@@ -204,20 +206,20 @@ public class EventManager implements Serializable {
     public static void main(String[] args) {
         EventManager eventManager = new EventManager();
         eventManager.createEvent("Pet Conference", "Caesar Milan", 2020, "NOVEMBER",
-                16, 12, 0, 100, 500);
+                16, 12, 0, 100);
         eventManager.createEvent("Fan Expo", "Karen Gillan", 2015, "AUGUST",
-                20, 2, 0, 500, 1000);
+                20, 2, 0, 500);
         System.out.println(eventManager.getEvents().get(0).getTitle());
         System.out.println(eventManager.getEvents().get(1).getTitle());
         eventManager.changeSpeaker(eventManager.events.get(1), "Matt Smith");
         System.out.println(eventManager.events.get(1).getSpeaker());
         System.out.println(eventManager.createEvent("Dog Show", "Caesar Milan", 2020, "NOVEMBER",
-                16, 11, 30, 200, 200));
+                16, 11, 30, 200));
         System.out.println(eventManager.events.size());
         System.out.println(eventManager.createEvent("Fan Expo", "Stan Lee", 2020, "NOVEMBER",
-                16, 11, 30, 210, 200));
+                16, 11, 30, 210));
         System.out.println(eventManager.createEvent("Garden Lover's", "The Green Thumb", 2015, "AUGUST",
-                20, 2, 10, 500, 1000));
+                20, 2, 10, 500));
         eventManager.cancelEvent(eventManager.events.get(0));
         System.out.println(eventManager.events.size());
     }

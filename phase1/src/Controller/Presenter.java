@@ -42,7 +42,27 @@ public class Presenter {
      * @param str input message.
      */
     public void displayMessages(String str){
-        System.out.println(str);
+        switch (str){
+            case "M":
+                System.out.println("MessageSystem");
+            case "E":
+                System.out.println("SignUpSystem");
+            case "S":
+                System.out.print("Schedule Event");
+                System.out.println("Enter event title:");
+            case "requestSpeaker":
+                System.out.println("Enter speaker username:");
+            case "requestYear":
+                System.out.println("Enter starting year of the event:");
+            case "requestMonth":
+                System.out.println("Enter starting month of event:");
+            case "requestDay":
+                System.out.println("Enter starting day of event:");
+            case "requestMinute":
+                System.out.println("Enter starting minute of the event:");
+            case "requestRoom":
+                System.out.println("Enter room id of event room:");
+        }
     }
 
 

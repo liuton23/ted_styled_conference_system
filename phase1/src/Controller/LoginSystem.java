@@ -42,4 +42,21 @@ public class LoginSystem {
             return true;
         }
     }
+
+    /**
+     * Register a new speaker if there is no existing account with the same username.
+     * @param username speaker account username.
+     * @param password speaker account password
+     * @return true iff the account was successfully registered.
+     */
+    public boolean registerSpeaker(String username, String password){
+        if (attendeeManager.usernameToAttendeeObject(username).isPresent()){
+            return false;
+        } else if (username.trim().isEmpty() || password.trim().isEmpty()){
+            return false;
+        } else {
+            attendeeManager.createSpeaker(username, password);
+            return true;
+        }
+    }
 }

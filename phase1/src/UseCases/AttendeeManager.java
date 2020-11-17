@@ -8,6 +8,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * Manages and stores attendees and speakers in this tech conference system.
+ */
 public class AttendeeManager implements Serializable {
 
     ArrayList<Attendee> attendeeList;
