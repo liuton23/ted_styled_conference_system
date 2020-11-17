@@ -91,6 +91,17 @@ public class Presenter {
     }
 
     /**
+     * Method which displays user's messages from a list
+     * @param messages a list of messages to be displayed
+     */
+
+    public void displayListOfMessage(ArrayList<String> messages) {
+        for (String m: messages) {
+            System.out.println(m);
+        }
+    }
+
+    /**
      * Displays a message when input is invalid.
      */
     public void invalidInput(){
@@ -317,10 +328,5 @@ public class Presenter {
                   System.out.println("The message has been successfully sent.");
                   break;
           }
-    }
-
-
-    public void displayListOfMessage(ArrayList<String> message) {
-        System.out.println(message.toString());
     }
 }
