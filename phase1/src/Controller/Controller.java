@@ -84,6 +84,10 @@ public class Controller {
                 options.add("(S)chedule events");
                 choices.add("S");
             }
+            if (attendeeManager.usernameToAttendeeObject(username).get() instanceof Speaker){
+                options.add("(T)alks");
+                choices.add("T");
+            }
             options.add("(B)ack");
             choices.add("M");
             choices.add("E");
@@ -109,6 +113,9 @@ public class Controller {
                 case "S":
                     scheduleActivity(username);
                     break;
+                case "T":
+                    getTalkList(attendeeManager, username);
+                    break;
                 case "B":
                     loggedin = false;
                     break;
@@ -126,6 +133,17 @@ public class Controller {
         Optional<Attendee> obj = attendeeManager.usernameToAttendeeObject(user);
         Attendee attendee = obj.get();
         presenter.displaySchedule(attendeeManager.getItinerary(attendee), "Your itinerary:");
+    }
+
+    /**
+     * Displays a schedule of all the events <code>Attendee</code> with username <code>user</code> will speak at.
+     * @param attendeeManager gets the schedule.
+     * @param user username of <code>Attendee</code> to which the schedule belongs.
+     */
+    private void getTalkList(AttendeeManager attendeeManager, String user){
+        Optional<Attendee> obj = attendeeManager.usernameToAttendeeObject(user);
+        Speaker speaker = (Speaker) obj.get();
+        presenter.displaySchedule(attendeeManager.getSpeakingList(speaker), "Your upcoming talks:");
     }
 
     /**
