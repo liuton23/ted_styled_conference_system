@@ -28,18 +28,24 @@ Messaging system. Allows the user to message other attendees, organizers, and sp
 Enter “m” or “M” to message other users. Follow the prompts.
 Enter “v” or “V” to view messages. Follow the prompts.
 
-After entering the MessagingUser option, you will see 5 options.
-Enter “u” or “U” if you want to message a specific user. Note that every type of user can use this option but you can not send a message to an organizer. Your message will be rejected if the recipient is an organizer.
-Enter “s” or “S” if you want to message all the speakers in the system. Note that only an organizer can use this option. Your message will be rejected if you are not an organizer.
-Enter “a” or “A” if you want to message all the attendees in the system. Note that only an organizer can use this option. Your message will be rejected if you are not an organizer.
-Enter “e” or “E” if you want to message to all attendees from one or multiple events. Note that only speakers can use this option. Your message will be rejected if you are not a speaker.
+After entering the MessagingUser option, if the user is an attendee:
+Enter “u” or “U” if you want to message a specific user. Note that no users can send a message to an organizer.
 Enter “b” or “B” if you want to return to the main Message page.
 
-After entering the ViewingMessage option, you will see 3 options
+If the user is an Organizer, additional message options are:
+Enter “s” or “S” if you want to message all the speakers in the system.
+Enter “a” or “A” if you want to message all the attendees in the system.
+
+If the user is a Speaker, additional message option is:
+Enter “e” or “E” if you want to message to all attendees from one or multiple events.
+
+
+After entering the ViewingMessage option, options are:
 Enter “s” or “S” if you want to view sent messages by you.
 Enter “r”  or “R” if you want to view received messages for you.
 Enter “f”  or “F” if you want to view messages sent from a specific user to you.
 Enter “b” or “B” if you want to return to the main Message page
+
 
 Event planning system. Allows users to view all events, and sign-up/drop-out of events.
 Enter “v” or “V” to view all events. Enter “T” to sort events by time, “N” to sort events by name, or “S” to sort events by speaker.
