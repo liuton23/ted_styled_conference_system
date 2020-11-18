@@ -74,7 +74,7 @@ public class Controller {
 
             switch (chosen) {
                 case "M":
-                    messageActivity(username);
+                    messageActivity(username, isOrg, isSpeaker);
                     break;
                 case "E":
                     eventActivity(username);
@@ -182,14 +182,14 @@ public class Controller {
      * Messager menu to view and send messages.
      * @param username username of <code>Attendee</code>.
      */
-    private void messageActivity(String username) {
+    private void messageActivity(String username, Boolean isOrg, Boolean isSpeaker) {
         MessageSystem ms = new MessageSystem(messageManager,attendeeManager,eventManager);
         boolean messaging = true;
         while (messaging) {
             String chosen = askMenuInput(5);
             switch (chosen) {
                 case "M":
-                    messageUser(username, ms);
+                    messageUser(username, ms, isOrg, isSpeaker);
                     break;
                 case "V":
                     viewMessages(username, ms);
@@ -206,10 +206,16 @@ public class Controller {
      * @param username username of the attendee that is messaging.
      * @param ms system that manages sending messages.
      */
-    private void messageUser(String username, MessageSystem ms){
+    private void messageUser(String username, MessageSystem ms, Boolean isOrg, Boolean isSpeaker){
         boolean messagingOther = true;
         while (messagingOther) {
-            String chosen = askMenuInput(6);
+            String chosen;
+            if (isSpeaker) {
+                chosen = askMenuInput(11);
+            } else if (isOrg) {
+                chosen =askMenuInput(10);
+            } else
+                chosen = askMenuInput(6);
 
             switch (chosen) {
                 case "U":
@@ -520,9 +526,6 @@ public class Controller {
                 break;
             case 6:
                 choices.add("U");
-                choices.add("S");
-                choices.add("A");
-                choices.add("E");
                 choices.add("B");
                 break;
             case 7:
@@ -541,6 +544,17 @@ public class Controller {
                 choices.add("T");
                 choices.add("N");
                 choices.add("S");
+                break;
+            case 10:
+                choices.add("U");
+                choices.add("S");
+                choices.add("A");
+                choices.add("B");
+                break;
+            case 11:
+                choices.add("U");
+                choices.add("E");
+                choices.add("B");
                 break;
         }
         return choices;
@@ -568,7 +582,7 @@ public class Controller {
                 presenter.mainMessageMenu();
                 break;
             case 6:
-                presenter.sendMessageMenu();
+                presenter.sendMessageMenuAtt();
                 break;
             case 7:
                 presenter.viewMessageMenu();
@@ -578,6 +592,12 @@ public class Controller {
                 break;
             case 9:
                 presenter.viewEventsMenu();
+                break;
+            case 10:
+                presenter.sendOrgMessageOrg();
+                break;
+            case 11:
+                presenter.sendMessageMenuSpeaker();
                 break;
         }
     }

@@ -103,13 +103,33 @@ public class Presenter {
     }
 
     /**
-     * Displays the send message menu.
+     * Displays the send message menu for attendee.
      */
-    public void sendMessageMenu(){
+    public void sendMessageMenuAtt(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Sending to a (U)ser");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    /**
+     * Displays the send message menu for organizer.
+     */
+    public void sendOrgMessageOrg(){
         ArrayList<String> options = new ArrayList<>();
         options.add("Sending to a (U)ser");
         options.add("Sending to all (S)peakers");
         options.add("Sending to all (A)ttendees");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    /**
+     * Displays the send message menu for speaker.
+     */
+    public void sendMessageMenuSpeaker(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Sending to a (U)ser");
         options.add("Sending to all attendees in one or multiple (E)vents");
         options.add("(B)ack");
         prompt(options);
@@ -126,6 +146,8 @@ public class Presenter {
         options.add("(B)ack");
         prompt(options);
     }
+
+
 
     /**
      * Displays the event menu.
@@ -149,6 +171,7 @@ public class Presenter {
         options.add("Sort events by (S)peaker");
         prompt(options);
     }
+
 
     //DISPLAY METHODS
 
