@@ -595,7 +595,7 @@ public class Controller {
      * from the save file.
      */
     public void init(){
-        gateway = new Gateway("save.bin");
+        gateway = new Gateway("save.txt");
         ArrayList<Serializable> listOfObj;
         try {
             listOfObj = gateway.readFromFile(4);
