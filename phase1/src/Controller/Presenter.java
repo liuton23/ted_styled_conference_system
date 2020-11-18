@@ -272,7 +272,7 @@ public class Presenter {
      * @param changeSpeakerOutput output of the ScheduleSystem.changeSpeaker() method.
      */
     public void printChangeSpeakerMessage(int changeSpeakerOutput){
-        switch (changeSpeakerOutput){
+        switch (changeSpeakerOutput) {
             case 0:
                 System.out.println("Speaker changed successfully.");
                 break;
@@ -287,6 +287,9 @@ public class Presenter {
                 break;
             case 4:
                 System.out.println("This event name does not correspond to an event in the system.");
+                break;
+            case 5:
+                System.out.println("The username provided does not match a speaker in the system.");
                 break;
         }
     }
@@ -308,6 +311,12 @@ public class Presenter {
                 break;
             case 3:
                 System.out.println("Event successfully created.");
+                break;
+            case 4:
+                System.out.println("The username provided does not match a speaker in the system.");
+                break;
+            case 5:
+                System.out.println("This room is not in the system.");
                 break;
         }
     }
