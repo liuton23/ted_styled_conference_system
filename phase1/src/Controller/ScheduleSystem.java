@@ -55,6 +55,8 @@ public class ScheduleSystem {
             return 5;
         }
         else {
+            Speaker sp = (Speaker) attendeeManager.usernameToAttendeeObject(speaker).get();
+            attendeeManager.addEventToSpeakerList(sp, title);
             return eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
         }
     }
@@ -124,15 +126,15 @@ public class ScheduleSystem {
             Event eventObject = eventManager.nameToEvent(eventName).get();
             for (String attendeeName : eventObject.getAttendeeList()) {
                 Attendee attendee = attendeeManager.usernameToAttendeeObject(attendeeName).get();
-                attendee.removeEvent(eventName);
+                attendeeManager.dropOut(attendee, eventName);
             }
             //this will change in phase 2 when we can have a variable number of speakers
             String speakerName = eventObject.getSpeaker();
-            Speaker speaker = (Speaker) attendeeManager.usernameToAttendeeObject(speakerName).get();
-            speaker.removeTalk(eventName);
+            Speaker sp = (Speaker) attendeeManager.usernameToAttendeeObject(speakerName).get();
+            attendeeManager.removeEventFromSpeakerList(sp,eventName);
             Room room = roomManager.idToRoom(eventObject.getRoom());
             room.removeBooking(eventName);
-            eventManager.getEvents().remove(eventObject);
+            eventManager.cancelEvent(eventObject);
             //event removed successfully.
             return 1;
         }

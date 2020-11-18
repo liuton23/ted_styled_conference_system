@@ -102,6 +102,25 @@ public class AttendeeManager implements Serializable {
     }
 
     /**
+     * Add talk to talk list
+     * @param sp speaker
+     * @param event event name
+     */
+    public void addEventToSpeakerList(Speaker sp, String event){
+        sp.addTalk(event);
+    }
+
+    /**
+     * remove talk from speaker list
+     * @param sp speaker
+     * @param event event name
+     */
+    public void removeEventFromSpeakerList(Speaker sp, String event){
+        sp.removeTalk(event);
+    }
+
+
+    /**
      * Method that returns the itinerary of an attendee.
      * @param attendee a stored attendee.
      * @return list of events that the attendee will attend.

@@ -105,7 +105,8 @@ public class Controller {
         Attendee attendee = obj.get();
         if (isSpeaker){
             Speaker sp = (Speaker) attendee;
-            presenter.displaySchedule(attendeeManager.getSpeakingList(sp), "itinerary");
+            presenter.displaySchedule(attendeeManager.getSpeakingList(sp), "speakItinerary");
+            presenter.displaySchedule(attendeeManager.getItinerary(sp), "speakItinerary");
         } else presenter.displaySchedule(attendeeManager.getItinerary(attendee), "itinerary");
     }
 

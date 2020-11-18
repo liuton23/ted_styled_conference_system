@@ -264,7 +264,10 @@ public class Presenter {
                 System.out.println("Sort events by speaker");
                 break;
             case "itinerary":
-                System.out.println("Your itinerary:");
+                System.out.println("Your itinerary of event(s) you are attending:");
+                break;
+            case "speakItinerary":
+                System.out.println("Your itinerary of event(s) you speaks at:");
                 break;
         }
         for (String str: options){
