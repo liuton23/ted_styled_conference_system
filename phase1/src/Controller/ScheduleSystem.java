@@ -46,7 +46,17 @@ public class ScheduleSystem {
      */
     public int scheduleEvent(String title, String speaker, int year, String month, int day, int hour, int minute,
                                 int room){
-        return eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
+        if(!attendeeManager.registeredSpeaker(speaker)){
+            //the username provided does not belong to a speaker in the system.
+            return 4;
+        }
+        else if(!roomManager.checkRoomInSystem(room)){
+            //This room is not in the system.
+            return 5;
+        }
+        else {
+            return eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
+        }
     }
 
     /**
@@ -77,7 +87,12 @@ public class ScheduleSystem {
         if (!eventManager.nameToEvent(eventName).isPresent()) {
             // event name does not correspond to an event.
             return 4;
-        } else {
+        }
+        else if (!attendeeManager.registeredSpeaker(newSpeaker)){
+            // not a registered speaker
+            return 5;
+        }
+        else {
             Event eventObject = eventManager.nameToEvent(eventName).get();
             // if the value is not null
             if (attendeeManager.usernameToAttendeeObject(newSpeaker).isPresent()) {
