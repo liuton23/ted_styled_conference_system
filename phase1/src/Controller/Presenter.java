@@ -191,6 +191,31 @@ public class Presenter {
                 break;
             case "requestAddRoom":
                 System.out.println("Add Room:");
+                break;
+            case "requestCapacity":
+                System.out.println("Enter room capacity:");
+                break;
+            case "changeSpeaker":
+                System.out.println("Change Speaker");
+                break;
+            case "sortBySpeaker":
+                System.out.println("Events sorted by speaker:");
+                break;
+            case "viewEvents":
+                System.out.println("View all events");
+                break;
+            case "signUp":
+                System.out.println("Sign up");
+                break;
+            case "requestEventId":
+                System.out.println("Input the ID of the event you would like to sign up for:");
+                break;
+            case "dropOut":
+                System.out.println("Drop out");
+                break;
+            case "requestEventIdDropOut":
+                System.out.println("Event ID of event you'd like to drop out of:");
+                break;
         }
     }
 
@@ -338,6 +363,14 @@ public class Presenter {
      */
     public void printRegisterSucceedMessage(){
         System.out.println("You have successfully registered. Please login to continue.");
+    }
+
+    /**
+     * Displays that the organizer successfully added a speaker to the system.
+     */
+
+    public void printSpeakerCreatedMessage(){
+        System.out.println("The speaker was successfully added to the system.");
     }
 
     /**
