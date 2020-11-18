@@ -127,7 +127,7 @@ public class Controller {
                     save();
                     break;
                 case "A":
-                    presenter.displayMessages("Add Room");
+                    presenter.displayMessages("requestAddRoom");
                     presenter.displayMessages("Enter room ID:");
                     int roomId = input.nextInt();
                     presenter.displayMessages("Enter room capacity:");
@@ -140,9 +140,9 @@ public class Controller {
                     ArrayList<Event> events = new ArrayList<>(eventManager.getEvents());
                     events.sort(new bySpeakerEventComparator());
                     presenter.displayAllEvents(events, "Events sorted by speakers:");
-                    presenter.displayMessages("Enter ID of the event:");
+                    presenter.displayMessages("requestRoom");
                     int index = input.nextInt();
-                    presenter.displayMessages("Enter name of new speaker:");
+                    presenter.displayMessages("requestSpeaker");
                     String newSpeaker = input.nextLine();
                     String eventName = events.get(index).getTitle();
                     int message = scheduleSystem.changeSpeaker(eventName,newSpeaker);
@@ -192,15 +192,11 @@ public class Controller {
         boolean messaging = true;
         while (messaging) {
             String chosen = askMenuInput(5);
-
-
             switch (chosen) {
                 case "M":
-                    presenter.displayMessages("MessageSystem");
                     messageUser(username, ms);
                     break;
                 case "V":
-                    presenter.displayMessages("MessageBoard");
                     viewMessages(username, ms);
                     break;
                 case "B":
@@ -222,22 +218,18 @@ public class Controller {
 
             switch (chosen) {
                 case "U":
-                    presenter.displayMessages("sending message to a user");
                     messageOneUser(username,ms);
                     save();
                     break;
                 case "S":
-                    presenter.displayMessages("sending message to all speakers");
                     messageAllSpeaker(username,ms);
                     save();
                     break;
                 case "A":
-                    presenter.displayMessages("sending message to all attendees");
                     messageAllAtt(username,ms);
                     save();
                     break;
                 case "E":
-                    presenter.displayMessages("sending message to all attendees in one or multiple events");
                     messageEventAllAtt(username,ms);
                     save();
                 case "B":
@@ -255,9 +247,9 @@ public class Controller {
      */
     private void messageOneUser(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
-        presenter.displayMessages("Please input an username");
+        presenter.printPleaseInputUsername();
         String user = obj.nextLine();
-        presenter.displayMessages("Please input your message");
+        presenter.printInputMessagePlz();
         String message = obj.nextLine();
         presenter.printMessageAttendee(ms.messageAttendee(username,user,message));
     }
@@ -269,7 +261,7 @@ public class Controller {
      */
     private void messageAllSpeaker(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
-        presenter.displayMessages("Please input your message");
+        presenter.printPleaseInputUsername();
         String message = obj.nextLine();
         presenter.printMessageAllSpeakers(ms.messageAllSpeakers(username, message));
     }
@@ -281,7 +273,7 @@ public class Controller {
      */
     private void messageAllAtt(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
-        presenter.displayMessages("Please input your message");
+        presenter.printInputMessagePlz();
         String message = obj.nextLine();
         presenter.printMessageAllAttendees(ms.messageAllAttendees(username, message));
     }
@@ -294,22 +286,24 @@ public class Controller {
     private void messageEventAllAtt(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
         ArrayList<Integer> events = new ArrayList<>();
-        presenter.displayMessages("Please enter an event number");
+        presenter.printInputEventNum();
         events.add(obj.nextInt());
-        presenter.displayMessages("Please enter another event number if you wish, otherwise enter (0)");
+        presenter.printInputEventNumOrZero();
         int i = obj.nextInt();
         while (i != 0){
             events.add(i);
-            presenter.displayMessages("Please enter another event number if you wish, otherwise please enter (0)");
+            presenter.printInputEventNumOrZero();
             i = obj.nextInt();
 
         }
-        presenter.displayMessages("Please enter your message");
+        presenter.printInputMessagePlz();
         String message = obj.nextLine();
         if (ms.messageEventAttendees(events,username,message) == 4){
             ArrayList<Integer> error = ms.viewEventsNotSpeak(events,username);
-            presenter.displayMessages("You do not speak at event number " + ms.eventDisplayBuilder(error));
-        } else presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
+            presenter.display( presenter.udoNotSpeakAt() + ms.eventDisplayBuilder(error));
+        } else if (events.size() == 1){
+            presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
+        } else presenter.printMessageEventAttendees(ms.messageEventAttendees(events,username,message));
     }
 
     /**
@@ -325,16 +319,15 @@ public class Controller {
 
             switch (chosen) {
                 case "S":
-                    presenter.displayMessages("Viewing sent messages");
                     ArrayList<String> messagesS = ms.viewSentMessage(username);
                     if (messagesS.size() == 0){
-                        presenter.displayMessages("There are no sent messages from you");
+                        presenter.printNoSentForU();
                     } else presenter.displayListOfMessage(messagesS);
                     break;
                 case "R":
                     ArrayList<String> messagesR = ms.viewReceivedMessage(username);
                     if (messagesR.size() == 0){
-                        presenter.displayMessages("There are no received messages for you");
+                        presenter.printNoRecForU();
                     } else presenter.displayListOfMessage(messagesR);
                     break;
                 case "F":
@@ -355,16 +348,16 @@ public class Controller {
      */
     private void viewFrom(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
-        presenter.displayMessages("Please input an username");
+        presenter.printPleaseInputUsername();
         String user = obj.nextLine();
         Optional<Attendee> obj1 = attendeeManager.usernameToAttendeeObject(user);
         if (!obj1.isPresent()){
-            presenter.displayMessages("Incorrect username please try again");
+            presenter.printIncorrectUsername();
             viewFrom(username, ms);
         } else {
             ArrayList<String> messageF = ms.viewAllMessagesFrom(user,username);
             if (messageF.size() == 0){
-                presenter.displayMessages("There are no messages sent to you from " + user);
+                presenter.display(presenter.thereAreNoMessForUFrom() + user);
             } else presenter.displayListOfMessage(messageF);
         }
     }
