@@ -20,6 +20,10 @@ public class Presenter {
         System.out.println("Note that terminating the program without using the above method may not save your " +
                 "information.");
     }
+
+    /**
+     * Displays a generic message.
+     */
     public void display(String s){
         System.out.println(s);
     }
@@ -40,6 +44,10 @@ public class Presenter {
         System.out.print("Input: ");
     }
     //MENU METHODS
+
+    /**
+     * Displays the login menu.
+     */
     public void loginMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("(L)ogin");
@@ -47,6 +55,9 @@ public class Presenter {
         prompt(options);
     }
 
+    /**
+     * Displays the main menu for attendees.
+     */
     public void basicMenu1(){
         ArrayList<String> options = new ArrayList<>();
         options.add("(M)essages");
@@ -56,6 +67,9 @@ public class Presenter {
         prompt(options);
     }
 
+    /**
+     * Displays the main menu for organizers.
+     */
     public void basicMenu2(){
         ArrayList<String> options = new ArrayList<>();
         options.add("(M)essages");
@@ -67,6 +81,9 @@ public class Presenter {
         prompt(options);
     }
 
+    /**
+     * Displays an organizer only menu.
+     */
     public void organizerMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("(S)chedule Event");
@@ -76,6 +93,9 @@ public class Presenter {
         prompt(options);
     }
 
+    /**
+     * Displays the main message menu.
+     */
     public void mainMessageMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("(M)essaging users");
@@ -84,6 +104,9 @@ public class Presenter {
         prompt(options);
     }
 
+    /**
+     * Displays the send message menu.
+     */
     public void sendMessageMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("Sending to a (U)ser");
@@ -94,6 +117,9 @@ public class Presenter {
         prompt(options);
     }
 
+    /**
+     * Displays the view message menu.
+     */
     public void viewMessageMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("Viewing (S)ent messages");
@@ -103,6 +129,9 @@ public class Presenter {
         prompt(options);
     }
 
+    /**
+     * Displays the event menu.
+     */
     public void eventMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("(V)iew all events");
@@ -112,6 +141,9 @@ public class Presenter {
         prompt(options);
     }
 
+    /**
+     * Displays the view events menu.
+     */
     public void viewEventsMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("Sort events by (T)ime");

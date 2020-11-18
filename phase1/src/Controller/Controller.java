@@ -97,7 +97,6 @@ public class Controller {
                 case "B":
                     loggedin = false;
                     break;
-                case "EXIT": exit();
             }
         }
     }
@@ -153,7 +152,6 @@ public class Controller {
                 case "B":
                     scheduling = false;
                     break;
-                case "EXIT": exit();
             }
         }
     }
@@ -208,7 +206,6 @@ public class Controller {
                 case "B":
                     messaging = false;
                     break;
-                case "EXIT": exit();
             }
         }
     }
@@ -242,7 +239,6 @@ public class Controller {
                 case "B":
                     messagingOther = false;
                     break;
-                case "EXIT": exit();
             }
         }
 
@@ -343,8 +339,6 @@ public class Controller {
                 case "B":
                     viewingMessage = false;
                     break;
-                case "EXIT":
-                    exit();
             }
         }
     }
@@ -404,7 +398,6 @@ public class Controller {
                 case "B":
                     activity = false;
                     break;
-                case "EXIT": exit();
             }
         }
     }
@@ -432,8 +425,6 @@ public class Controller {
                 presenter.displaySchedule(sus.viewAllEvents(), "Sort events by speaker");
 
                 break;
-            case "EXIT":
-                exit();
         }
     }
 
@@ -446,7 +437,8 @@ public class Controller {
     }
 
     /**
-     * Checks if <code>chosen</code> is a valid input in <code>choices</code>.
+     * Checks if <code>chosen</code> is a valid input in <code>choices</code>. If input is "EXIT", <code>exit</code>
+     * will be called.
      * @param choices list of choices that are valid. Must be uppercase.
      * @param chosen input the user entered.
      * @return true iff <code>chosen</code> is an invalid input. False if it is valid.
@@ -479,21 +471,33 @@ public class Controller {
         return chosen;
     }
 
+    /**
+     * Asks the user yes or no and receives input.
+     * @return  true if the user inputs Y/YES/T/True and false if the user inputs N/NO/F/FALSE.
+     */
     public boolean askBooleanInput(){
         Scanner input = new Scanner(System.in);
         ArrayList<String> choices = new ArrayList<>();
         choices.add("Y"); choices.add("N");
+        choices.add("T"); choices.add("TRUE");
         choices.add("YES"); choices.add("NO");
+        choices.add("F"); choices.add("FALSE");
         String chosen;
         do{
             presenter.display("Yes or No?");
             chosen = input.next().toUpperCase();
         }while(invalidInput(choices, chosen));
-        return chosen.equals("Y") || chosen.equals("YES");
+        return chosen.equals("Y") || chosen.equals("YES") || chosen.equals("T") || chosen.equals("TRUE");
     }
-    public ArrayList<String> chooseMenuOptions(int i){
+
+    /**
+     * Chooses which options are valid input options for a menu given <code>menu_id</code>.
+     * @param menu_id determines which menu is needed.
+     * @return list of valid options for a menu.
+     */
+    public ArrayList<String> chooseMenuOptions(int menu_id){
         ArrayList<String> choices = new ArrayList<>();
-        switch (i){
+        switch (menu_id){
             case 1:
                 choices.add("L");
                 choices.add("R");
@@ -546,8 +550,12 @@ public class Controller {
         return choices;
     }
 
-    public void chooseMenuPrompt(int i){
-        switch (i){
+    /**
+     * Displays a menu given <code>menu_id</code>.
+     * @param menu_id determines which menu is needed.
+     */
+    public void chooseMenuPrompt(int menu_id){
+        switch (menu_id){
             case 1:
                 presenter.loginMenu();
                 break;
@@ -649,11 +657,6 @@ public class Controller {
         presenter.printPasswordMessage();
         String password = obj1.nextLine();
         presenter.display("Are you an organizer?"); //***replace with askInput system***
-        ArrayList<String> options = new ArrayList<>();
-        ArrayList<String> choices = new ArrayList<>();
-        options.add("(Y)es");
-        options.add("(N)o");
-        choices.add("Y"); choices.add("N"); choices.add(("EXIT"));
         boolean chosen = askBooleanInput();
         if(loginSystem.registerUser(username, password, chosen)){
             presenter.printRegisterSucceedMessage();
