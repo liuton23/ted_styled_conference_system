@@ -357,8 +357,9 @@ public class Controller {
         }
         presenter.displayMessages("Please enter your message");
         String message = obj.nextLine();
-        if (events.size() == 1){
-            presenter.printMessageEventAttendees(ms.messageEventAttendees(events.get(0),username,message));
+        if (ms.messageEventAttendees(events,username,message) == 4){
+            ArrayList<Integer> error = ms.viewEventsNotSpeak(events,username);
+            presenter.displayMessages("You do not speak at event number " + ms.eventDisplayBuilder(error));
         } else presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
     }
 

@@ -201,6 +201,34 @@ public class MessageSystem {
         }
     }
 
+
+    //helper method for display
+
+    public ArrayList<Integer> viewEventsNotSpeak (ArrayList<Integer> eventIndex, String user){
+        ArrayList<Integer> error = new ArrayList<Integer>();
+        for (Integer i: eventIndex){
+            Event event = em.getEvents().get(i - 1);
+            if (!event.getSpeaker().equals(user)) {
+                error.add(i);
+            }
+        }
+        return error;
+    }
+
+    public String eventDisplayBuilder(ArrayList<Integer> eventIndex){
+        String x = "";
+        int max = eventIndex.size();
+        if (max == 1){
+            return eventIndex.get(0).toString();
+        } else {
+            for (int i = 0; i < max - 2; i++) {
+                x += eventIndex.get(i).toString() + ", ";
+            }
+            return x + eventIndex.get(max - 2).toString() + " and " + eventIndex.get(max - 1).toString();
+        }
+    }
+
+
     //ViewMessage methods
 
     public ArrayList<String> viewReceivedMessage(String r){

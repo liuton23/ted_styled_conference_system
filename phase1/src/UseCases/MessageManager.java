@@ -130,17 +130,22 @@ public class MessageManager implements Serializable {
         * empty list check */
         String x = "";
         int max = list.size();
-        if (list.size() == 1){
+        if (max == 1){
             return list.get(0);
-        } else {
+        } else if (max <= 4){
             for (int i = 0; i < max - 2; i++){
                 x += list.get(i) + ", ";
             }
             return x + list.get(max - 2) + " and " + list.get(max - 1);
+        } else {
+            for (int i = 0; i < 2; i++){
+                x += list.get(i) + ", ";
+            }
+            return x + "..., " + list.get(max - 2) + " and " + list.get(max - 1);
         }
     }
 
-    /* testing
+
     public static void main(String[] args){
         AttendeeManager a = new AttendeeManager();
         Attendee josh = a.createAttendee("iamjosh", "4532dgtf", false);
@@ -152,10 +157,13 @@ public class MessageManager implements Serializable {
         Message c = mas.reply(newm, "ritaishannie", "I'll go to eaton tomorrow");
         mas.reply(c, "iamjosh", "I'm watching start up.");
         Attendee org = a.createAttendee("lisa231", "iloveme", true);
+        Attendee sam = a.createAttendee("sam","76gtej", false);
+        Attendee go = a.createAttendee("gosh", "kihojsbc", false);
         ArrayList<String> att = new ArrayList<String>();
         att.add("iamjosh");
         att.add("ritaishannie");
         att.add("Bob");
+        att.add("sam");
         Message meeting = mas.createMessage(att,"lisa231","meeting starts in 10mins!!");
         mas.reply(meeting,"ritaishannie","Got it!");
         System.out.println(mas.getReceivedBy("ritaishannie"));
@@ -163,5 +171,4 @@ public class MessageManager implements Serializable {
         System.out.println(mas.getAllMessagesFrom("ritaishannie","iamjosh"));
     }
 
-     */
 }
