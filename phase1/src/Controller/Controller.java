@@ -8,9 +8,6 @@ import Entities.EventComparators.byTitleEventComparator;
 import Entities.Speaker;
 import UseCases.*;
 import Entities.Speaker;
-//import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
-
-//import java.awt.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
@@ -23,7 +20,6 @@ import java.util.List;
  */
 public class Controller {
 
-    private boolean running = true;
     private Gateway gateway;
     private AttendeeManager attendeeManager;
     private EventManager eventManager;
@@ -37,14 +33,10 @@ public class Controller {
      */
     public void run() {
         init();
-        Scanner input = new Scanner(System.in);
         presenter.welcomeMessage();
+        boolean running = true;
         while (running) {
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("(L)ogin"); options.add("(R)egister");
-            choices.add("L"); choices.add("R"); choices.add(("EXIT"));
-            String chosen = askInput(options, choices, input);
+            String chosen = askMenuInput(1);
 
             String username;
 
@@ -54,13 +46,12 @@ public class Controller {
                     break;
                 case "L":
                     username = login();
-                    if (username.isEmpty()){
-                        break;
-                    }else {
+                    if (!username.isEmpty()) {
                         accountActivity(username);
-                        break;
                     }
-                case "EXIT": exit();
+                    break;
+                case "EXIT":
+                    running = false;
             }
         }
     }
@@ -75,28 +66,14 @@ public class Controller {
         boolean isOrg = attendeeManager.usernameToAttendeeObject(username).get().isOrganizer();
         boolean isSpeaker = attendeeManager.usernameToAttendeeObject(username).get() instanceof Speaker;
         while (loggedin) {
-            Scanner input = new Scanner(System.in);
 
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("(M)essages");
-            options.add("(E)vents");
-            options.add("(I)tinerary");
+            String chosen;
             if (isOrg){
-                options.add("(S)chedule events");
-                choices.add("S");
-                options.add("(C)reate speaker account");
-                choices.add("C");
+                chosen = askMenuInput(3);
+            }else{
+                chosen = askMenuInput(2);
             }
-            options.add("(B)ack");
-            choices.add("M");
-            choices.add("E");
-            choices.add("I");
-            choices.add(("B"));
-            choices.add("EXIT");
-            String chosen = askInput(options, choices, input);
 
-            //String chosen = input.nextLine();
             switch (chosen) {
                 case "M":
                     presenter.displayMessages("MessageSystem");
@@ -110,7 +87,7 @@ public class Controller {
                     getItinerary(attendeeManager, username);
                     break;
                 case "S":
-                    scheduleActivity(username);
+                    scheduleActivity();
                     break;
                 case "C":
                     createSpeaker();
@@ -118,7 +95,6 @@ public class Controller {
                 case "B":
                     loggedin = false;
                     break;
-                case "EXIT": exit();
             }
         }
     }
@@ -137,24 +113,13 @@ public class Controller {
     /**
      * Organizer only menu to schedule events, add rooms and change speakers.
      */
-    private void scheduleActivity(String username){
+    private void scheduleActivity(){
         ScheduleSystem scheduleSystem  = new ScheduleSystem(eventManager,attendeeManager, roomManager);
         boolean scheduling = true;
         while (scheduling) {
             Scanner input = new Scanner(System.in);
 
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("(S)chedule Event");
-            options.add("(A)dd Room");
-            options.add("(C)hange Speaker");
-            options.add("(B)ack");
-            choices.add("S");
-            choices.add("A");
-            choices.add("C");
-            choices.add(("B"));
-            choices.add("EXIT");
-            String chosen = askInput(options, choices, input);
+            String chosen = askMenuInput(4);
 
             switch (chosen) {
                 case "S":
@@ -162,7 +127,7 @@ public class Controller {
                     save();
                     break;
                 case "A":
-                    presenter.displayMessages("Add Room");
+                    presenter.displayMessages("requestAddRoom");
                     presenter.displayMessages("Enter room ID:");
                     int roomId = input.nextInt();
                     presenter.displayMessages("Enter room capacity:");
@@ -172,13 +137,12 @@ public class Controller {
                     break;
                 case "C":
                     presenter.displayMessages("Change Speaker");
-                    ArrayList<Event> events = new ArrayList<>();
-                    events.addAll(eventManager.getEvents());
+                    ArrayList<Event> events = new ArrayList<>(eventManager.getEvents());
                     events.sort(new bySpeakerEventComparator());
                     presenter.displayAllEvents(events, "Events sorted by speakers:");
-                    presenter.displayMessages("Enter ID of the event:");
+                    presenter.displayMessages("requestRoom");
                     int index = input.nextInt();
-                    presenter.displayMessages("Enter name of new speaker:");
+                    presenter.displayMessages("requestSpeaker");
                     String newSpeaker = input.nextLine();
                     String eventName = events.get(index).getTitle();
                     int message = scheduleSystem.changeSpeaker(eventName,newSpeaker);
@@ -188,7 +152,6 @@ public class Controller {
                 case "B":
                     scheduling = false;
                     break;
-                case "EXIT": exit();
             }
         }
     }
@@ -228,33 +191,17 @@ public class Controller {
         MessageSystem ms = new MessageSystem(messageManager,attendeeManager,eventManager);
         boolean messaging = true;
         while (messaging) {
-            Scanner input = new Scanner(System.in);
-
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("(M)essaging users");
-            options.add("(V)iewing messages");
-            options.add("(B)ack");
-            choices.add("M");
-            choices.add("V");
-            choices.add(("B"));
-            choices.add("EXIT");
-            String chosen = askInput(options, choices, input);
-
-
+            String chosen = askMenuInput(5);
             switch (chosen) {
                 case "M":
-                    presenter.displayMessages("MessageSystem");
                     messageUser(username, ms);
                     break;
                 case "V":
-                    presenter.displayMessages("MessageBoard");
                     viewMessages(username, ms);
                     break;
                 case "B":
                     messaging = false;
                     break;
-                case "EXIT": exit();
             }
         }
     }
@@ -267,47 +214,27 @@ public class Controller {
     private void messageUser(String username, MessageSystem ms){
         boolean messagingOther = true;
         while (messagingOther) {
-            Scanner input = new Scanner(System.in);
-
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("Sending to a (U)ser");
-            options.add("Sending to all (S)peakers");
-            options.add("Sending to all (A)ttendees");
-            options.add("Sending to all attendees in one or multiple (E)vents");
-            options.add("(B)ack");
-            choices.add("U");
-            choices.add("S");
-            choices.add("A");
-            choices.add("E");
-            choices.add("B");
-            choices.add("EXIT");
-            String chosen = askInput(options, choices, input);
+            String chosen = askMenuInput(6);
 
             switch (chosen) {
                 case "U":
-                    presenter.displayMessages("sending message to a user");
                     messageOneUser(username,ms);
                     save();
                     break;
                 case "S":
-                    presenter.displayMessages("sending message to all speakers");
                     messageAllSpeaker(username,ms);
                     save();
                     break;
                 case "A":
-                    presenter.displayMessages("sending message to all attendees");
                     messageAllAtt(username,ms);
                     save();
                     break;
                 case "E":
-                    presenter.displayMessages("sending message to all attendees in one or multiple events");
                     messageEventAllAtt(username,ms);
                     save();
                 case "B":
                     messagingOther = false;
                     break;
-                case "EXIT": exit();
             }
         }
 
@@ -320,9 +247,9 @@ public class Controller {
      */
     private void messageOneUser(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
-        presenter.displayMessages("Please input an username");
+        presenter.printPleaseInputUsername();
         String user = obj.nextLine();
-        presenter.displayMessages("Please input your message");
+        presenter.printInputMessagePlz();
         String message = obj.nextLine();
         presenter.printMessageAttendee(ms.messageAttendee(username,user,message));
     }
@@ -334,7 +261,7 @@ public class Controller {
      */
     private void messageAllSpeaker(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
-        presenter.displayMessages("Please input your message");
+        presenter.printPleaseInputUsername();
         String message = obj.nextLine();
         presenter.printMessageAllSpeakers(ms.messageAllSpeakers(username, message));
     }
@@ -346,7 +273,7 @@ public class Controller {
      */
     private void messageAllAtt(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
-        presenter.displayMessages("Please input your message");
+        presenter.printInputMessagePlz();
         String message = obj.nextLine();
         presenter.printMessageAllAttendees(ms.messageAllAttendees(username, message));
     }
@@ -359,22 +286,24 @@ public class Controller {
     private void messageEventAllAtt(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
         ArrayList<Integer> events = new ArrayList<>();
-        presenter.displayMessages("Please enter an event number");
+        presenter.printInputEventNum();
         events.add(obj.nextInt());
-        presenter.displayMessages("Please enter another event number if you wish, otherwise enter (0)");
+        presenter.printInputEventNumOrZero();
         int i = obj.nextInt();
         while (i != 0){
             events.add(i);
-            presenter.displayMessages("Please enter another event number if you wish, otherwise please enter (0)");
+            presenter.printInputEventNumOrZero();
             i = obj.nextInt();
 
         }
-        presenter.displayMessages("Please enter your message");
+        presenter.printInputMessagePlz();
         String message = obj.nextLine();
         if (ms.messageEventAttendees(events,username,message) == 4){
             ArrayList<Integer> error = ms.viewEventsNotSpeak(events,username);
-            presenter.displayMessages("You do not speak at event number " + ms.eventDisplayBuilder(error));
-        } else presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
+            presenter.display( presenter.udoNotSpeakAt() + ms.eventDisplayBuilder(error));
+        } else if (events.size() == 1){
+            presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
+        } else presenter.printMessageEventAttendees(ms.messageEventAttendees(events,username,message));
     }
 
     /**
@@ -386,33 +315,19 @@ public class Controller {
     private void viewMessages(String username, MessageSystem ms){
         boolean viewingMessage = true;
         while (viewingMessage) {
-            Scanner input = new Scanner(System.in);
-
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("Viewing (S)ent messages");
-            options.add("Viewing (R)eceived messages");
-            options.add("Viewing messages (F)rom another user");
-            options.add("(B)ack");
-            choices.add("S");
-            choices.add("R");
-            choices.add("F");
-            choices.add("B");
-            choices.add("EXIT");
-            String chosen = askInput(options, choices, input);
+            String chosen = askMenuInput(7);
 
             switch (chosen) {
                 case "S":
-                    presenter.displayMessages("Viewing sent messages");
                     ArrayList<String> messagesS = ms.viewSentMessage(username);
                     if (messagesS.size() == 0){
-                        presenter.displayMessages("There are no sent messages from you");
+                        presenter.printNoSentForU();
                     } else presenter.displayListOfMessage(messagesS);
                     break;
                 case "R":
                     ArrayList<String> messagesR = ms.viewReceivedMessage(username);
                     if (messagesR.size() == 0){
-                        presenter.displayMessages("There are no received messages for you");
+                        presenter.printNoRecForU();
                     } else presenter.displayListOfMessage(messagesR);
                     break;
                 case "F":
@@ -421,8 +336,6 @@ public class Controller {
                 case "B":
                     viewingMessage = false;
                     break;
-                case "EXIT":
-                    exit();
             }
         }
     }
@@ -435,16 +348,16 @@ public class Controller {
      */
     private void viewFrom(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
-        presenter.displayMessages("Please input an username");
+        presenter.printPleaseInputUsername();
         String user = obj.nextLine();
         Optional<Attendee> obj1 = attendeeManager.usernameToAttendeeObject(user);
         if (!obj1.isPresent()){
-            presenter.displayMessages("Incorrect username please try again");
+            presenter.printIncorrectUsername();
             viewFrom(username, ms);
         } else {
             ArrayList<String> messageF = ms.viewAllMessagesFrom(user,username);
             if (messageF.size() == 0){
-                presenter.displayMessages("There are no messages sent to you from " + user);
+                presenter.display(presenter.thereAreNoMessForUFrom() + user);
             } else presenter.displayListOfMessage(messageF);
         }
     }
@@ -459,18 +372,7 @@ public class Controller {
         while (activity) {
             Scanner input = new Scanner(System.in);
 
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("(V)iew all events");
-            options.add("(S)ign up for events");
-            options.add("(D)rop out of events");
-            options.add("(B)ack");
-            choices.add("V");
-            choices.add("S");
-            choices.add("D");
-            choices.add(("B"));
-            choices.add("EXIT");
-            String chosen = askInput(options, choices, input);
+            String chosen = askMenuInput(8);
             int index;
 
             switch (chosen) {
@@ -495,7 +397,6 @@ public class Controller {
                 case "B":
                     activity = false;
                     break;
-                case "EXIT": exit();
             }
         }
     }
@@ -505,18 +406,7 @@ public class Controller {
      * @param sus system that manages event sign up.
      */
     private void viewAllEvents(SignUpSystem sus){
-        Scanner input = new Scanner(System.in);
-
-        ArrayList<String> options = new ArrayList<>();
-        ArrayList<String> choices = new ArrayList<>();
-        options.add("Sort events by (T)ime");
-        options.add("Sort events by (N)ame");
-        options.add("Sort events by (S)peaker");
-        choices.add("T");
-        choices.add("N");
-        choices.add("S");
-        choices.add("EXIT");
-        String chosen = askInput(options, choices, input);
+        String chosen = askMenuInput(9);
 
         switch (chosen) {
             case "T":
@@ -532,8 +422,6 @@ public class Controller {
                 presenter.displaySchedule(sus.viewAllEvents(), "Sort events by speaker");
 
                 break;
-            case "EXIT":
-                exit();
         }
     }
 
@@ -546,7 +434,8 @@ public class Controller {
     }
 
     /**
-     * Checks if <code>chosen</code> is a valid input in <code>choices</code>.
+     * Checks if <code>chosen</code> is a valid input in <code>choices</code>. If input is "EXIT", <code>exit</code>
+     * will be called.
      * @param choices list of choices that are valid. Must be uppercase.
      * @param chosen input the user entered.
      * @return true iff <code>chosen</code> is an invalid input. False if it is valid.
@@ -555,6 +444,8 @@ public class Controller {
         for(String choice: choices){
             if(choice.equals(chosen)){
                 return false;
+            }else if(chosen.equals("EXIT")){
+                exit();
             }
         }
         presenter.invalidInput();
@@ -563,27 +454,141 @@ public class Controller {
 
     /**
      * Asks the user for input and checks its validity.
-     * @param options human-readable options for the user to choose from.
-     * @param choices list of valid inputs.
-     * @param input scanner that is used to receive the input.
+     * @param i the menu id.
      * @return Uppercase String that is valid input from user.
      */
-    public String askInput(ArrayList<String> options, ArrayList<String> choices, Scanner input){
+    public String askMenuInput(int i){
+        Scanner input = new Scanner(System.in);
+        ArrayList<String> choices = chooseMenuOptions(i);
         String chosen;
         do{
-           presenter.prompt(options);
-           chosen = input.next().toUpperCase();
+           chooseMenuPrompt(i);
+           chosen = input.nextLine().toUpperCase();
         }while(invalidInput(choices, chosen));
         return chosen;
     }
 
+    /**
+     * Asks the user yes or no and receives input.
+     * @return  true if the user inputs Y/YES/T/True and false if the user inputs N/NO/F/FALSE.
+     */
+    public boolean askBooleanInput(){
+        Scanner input = new Scanner(System.in);
+        ArrayList<String> choices = new ArrayList<>();
+        choices.add("Y"); choices.add("N");
+        choices.add("T"); choices.add("TRUE");
+        choices.add("YES"); choices.add("NO");
+        choices.add("F"); choices.add("FALSE");
+        String chosen;
+        do{
+            presenter.display("Yes or No?");
+            chosen = input.next().toUpperCase();
+        }while(invalidInput(choices, chosen));
+        return chosen.equals("Y") || chosen.equals("YES") || chosen.equals("T") || chosen.equals("TRUE");
+    }
+
+    /**
+     * Chooses which options are valid input options for a menu given <code>menu_id</code>.
+     * @param menu_id determines which menu is needed.
+     * @return list of valid options for a menu.
+     */
+    public ArrayList<String> chooseMenuOptions(int menu_id){
+        ArrayList<String> choices = new ArrayList<>();
+        switch (menu_id){
+            case 1:
+                choices.add("L");
+                choices.add("R");
+                break;
+            case 3:
+                choices.add("C");
+                choices.add("S");
+            case 2:
+                choices.add("M");
+                choices.add("E");
+                choices.add("I");
+                choices.add(("B"));
+                break;
+            case 4:
+                choices.add("S");
+                choices.add("A");
+                choices.add("C");
+                choices.add(("B"));
+                break;
+            case 5:
+                choices.add("M");
+                choices.add("V");
+                choices.add(("B"));
+                break;
+            case 6:
+                choices.add("U");
+                choices.add("S");
+                choices.add("A");
+                choices.add("E");
+                choices.add("B");
+                break;
+            case 7:
+                choices.add("S");
+                choices.add("R");
+                choices.add("F");
+                choices.add("B");
+                break;
+            case 8:
+                choices.add("V");
+                choices.add("S");
+                choices.add("D");
+                choices.add(("B"));
+                break;
+            case 9:
+                choices.add("T");
+                choices.add("N");
+                choices.add("S");
+                break;
+        }
+        return choices;
+    }
+
+    /**
+     * Displays a menu given <code>menu_id</code>.
+     * @param menu_id determines which menu is needed.
+     */
+    public void chooseMenuPrompt(int menu_id){
+        switch (menu_id){
+            case 1:
+                presenter.loginMenu();
+                break;
+            case 2:
+                presenter.basicMenu1();
+                break;
+            case 3:
+                presenter.basicMenu2();
+                break;
+            case 4:
+                presenter.organizerMenu();
+                break;
+            case 5:
+                presenter.mainMessageMenu();
+                break;
+            case 6:
+                presenter.sendMessageMenu();
+                break;
+            case 7:
+                presenter.viewMessageMenu();
+                break;
+            case 8:
+                presenter.eventMenu();
+                break;
+            case 9:
+                presenter.viewEventsMenu();
+                break;
+        }
+    }
     /**
      * Initializes the use case classes. If the program has not been run before, or the save file has been corrupted,
      * moved, or missing, then new use case classes will be instantiated. Otherwise, the use case classes will be loaded
      * from the save file.
      */
     public void init(){
-        gateway = new Gateway("save.bin");
+        gateway = new Gateway("save.txt");
         ArrayList<Serializable> listOfObj;
         try {
             listOfObj = gateway.readFromFile(4);
@@ -648,29 +653,12 @@ public class Controller {
         String username = obj1.nextLine();
         presenter.printPasswordMessage();
         String password = obj1.nextLine();
-        presenter.displayMessages("Are you an organizer?"); //***replace with askInput system***
-        ArrayList<String> options = new ArrayList<>();
-        ArrayList<String> choices = new ArrayList<>();
-        options.add("(Y)es");
-        options.add("(N)o");
-        choices.add("Y"); choices.add("N"); choices.add(("EXIT"));
-        String chosen = askInput(options, choices, obj1);
-        switch (chosen) {
-            case "Y":
-                if(loginSystem.registerUser(username, password, true)) {
-                    presenter.printRegisterSucceedMessage();
-                } else {
-                    presenter.printRegisterFailMessage();
-                }
-                break;
-            case "N":
-                if(loginSystem.registerUser(username, password, false)) {
-                    presenter.printRegisterSucceedMessage();
-                } else {
-                    presenter.printRegisterFailMessage();
-                }
-                break;
-            case "EXIT": exit();
+        presenter.display("Are you an organizer?"); //***replace with askInput system***
+        boolean chosen = askBooleanInput();
+        if(loginSystem.registerUser(username, password, chosen)){
+            presenter.printRegisterSucceedMessage();
+        }else{
+            presenter.printRegisterFailMessage();
         }
 
     }

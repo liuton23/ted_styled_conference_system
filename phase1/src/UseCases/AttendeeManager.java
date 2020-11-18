@@ -53,6 +53,20 @@ public class AttendeeManager implements Serializable {
     }
 
     /**
+     * This method returns a boolean whether the given username belongs to a speaker in the system.
+     * @param username the username to be checked.
+     * @return a boolean reflecting if the username belongs to a speaker in the system.
+     */
+    public boolean registeredSpeaker(String username){
+        for (Speaker speaker: this.getAllSpeakers()) {
+            if(speaker.getUsername().equals(username)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Method that checks if a given username and password matches an account stored in an instance of
      * AttendeeManager.
      * @param username Username of user account.

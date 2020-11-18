@@ -22,19 +22,134 @@ public class Presenter {
     }
 
     /**
+     * Displays a generic message.
+     */
+    public void display(String s){
+        System.out.println(s);
+    }
+
+    /**
      * Displays <code>options</code> for the user.
      * @param options list of options for the user to choose from
      */
     public void prompt(ArrayList<String> options){
         int width = (options.size() / 4) + 1;
-        System.out.println("Would you like to do:");
+        System.out.println("What would you like to do:");
         for(int i = 0; i < options.size(); i++) {
-            System.out.print(options.get(i) + "\t");
+            System.out.print(options.get(i) + "\t \t \t");
             if( (i + 1) % width == 0){
                 System.out.println();
             }
         }
         System.out.print("Input: ");
+    }
+    //MENU METHODS
+
+    /**
+     * Displays the login menu.
+     */
+    public void loginMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("(L)ogin");
+        options.add("(R)egister");
+        prompt(options);
+    }
+
+    /**
+     * Displays the main menu for attendees.
+     */
+    public void basicMenu1(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("(M)essages");
+        options.add("(E)vents");
+        options.add("(I)tinerary");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    /**
+     * Displays the main menu for organizers.
+     */
+    public void basicMenu2(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("(M)essages");
+        options.add("(E)vents");
+        options.add("(I)tinerary");
+        options.add("(S)chedule events");
+        options.add("(C)reate speaker account");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    /**
+     * Displays an organizer only menu.
+     */
+    public void organizerMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("(S)chedule Event");
+        options.add("(A)dd Room");
+        options.add("(C)hange Speaker");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    /**
+     * Displays the main message menu.
+     */
+    public void mainMessageMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("(M)essaging users");
+        options.add("(V)iewing messages");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    /**
+     * Displays the send message menu.
+     */
+    public void sendMessageMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Sending to a (U)ser");
+        options.add("Sending to all (S)peakers");
+        options.add("Sending to all (A)ttendees");
+        options.add("Sending to all attendees in one or multiple (E)vents");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    /**
+     * Displays the view message menu.
+     */
+    public void viewMessageMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Viewing (S)ent messages");
+        options.add("Viewing (R)eceived messages");
+        options.add("Viewing messages (F)rom another user");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    /**
+     * Displays the event menu.
+     */
+    public void eventMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("(V)iew all events");
+        options.add("(S)ign up for events");
+        options.add("(D)rop out of events");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    /**
+     * Displays the view events menu.
+     */
+    public void viewEventsMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Sort events by (T)ime");
+        options.add("Sort events by (N)ame");
+        options.add("Sort events by (S)peaker");
+        prompt(options);
     }
 
     /**
@@ -45,25 +160,65 @@ public class Presenter {
         switch (str){
             case "M":
                 System.out.println("MessageSystem");
+                break;
             case "E":
                 System.out.println("SignUpSystem");
+                break;
             case "S":
-                System.out.print("Schedule Event");
+                System.out.println("Schedule Event");
                 System.out.println("Enter event title:");
+                break;
             case "requestSpeaker":
                 System.out.println("Enter speaker username:");
+                break;
             case "requestYear":
                 System.out.println("Enter starting year of the event:");
+                break;
             case "requestMonth":
-                System.out.println("Enter starting month of event:");
+                System.out.println("Enter starting month of event (ex. October):");
+                break;
             case "requestDay":
                 System.out.println("Enter starting day of event:");
+                break;
+            case "requestHour":
+                System.out.println("Enter starting hour of the event:");
+                break;
             case "requestMinute":
                 System.out.println("Enter starting minute of the event:");
+                break;
             case "requestRoom":
                 System.out.println("Enter room id of event room:");
+                break;
+            case "requestAddRoom":
+                System.out.println("Add Room:");
+                break;
+            case "requestCapacity":
+                System.out.println("Enter room capacity:");
+                break;
+            case "changeSpeaker":
+                System.out.println("Change Speaker");
+                break;
+            case "sortBySpeaker":
+                System.out.println("Events sorted by speaker:");
+                break;
+            case "viewEvents":
+                System.out.println("View all events");
+                break;
+            case "signUp":
+                System.out.println("Sign up");
+                break;
+            case "requestEventId":
+                System.out.println("Input the ID of the event you would like to sign up for:");
+                break;
+            case "dropOut":
+                System.out.println("Drop out");
+                break;
+            case "requestEventIdDropOut":
+                System.out.println("Event ID of event you'd like to drop out of:");
+                break;
         }
     }
+
 
 
     /**
@@ -117,6 +272,72 @@ public class Presenter {
     }
 
     /**
+     * Prompts user to input other user's username when message others
+     */
+    public void printPleaseInputUsername(){
+        System.out.println("Please input an username");
+    }
+
+    /**
+     * Prompts user when input username is incorrect
+     */
+    public void printIncorrectUsername(){
+        System.out.println("Incorrect username please try again");
+    }
+
+    /**
+     * Prompts user to input message
+     */
+    public void printInputMessagePlz(){
+        System.out.println("Please input your message");
+    }
+
+    /**
+     * Prompts user to input event number
+     */
+    public void printInputEventNum(){
+        System.out.println("Please enter an event number");
+    }
+
+    /**
+     * Prompts user to input event number or zero if no more event
+     */
+    public void printInputEventNumOrZero(){
+        System.out.println("Please enter another event number " +
+                "if you wish, otherwise please enter (0)");
+    }
+
+    /**
+     * Prompts user when there are no sent messages for this user
+     */
+    public void printNoSentForU(){
+        System.out.println("There are no sent messages from you");
+    }
+
+    /**
+     * Prompts user when there are no received messages for this user
+     */
+    public void printNoRecForU(){
+        System.out.println("There are no received messages for you");
+    }
+
+    /**
+     * string of message below
+     * @return "You do not speak at event number "
+     */
+    public String udoNotSpeakAt(){
+        return "You do not speak at event number ";
+    }
+
+    /**
+     * string of message below
+     * @return "There are no messages sent to you from "
+     */
+    public String thereAreNoMessForUFrom(){
+        return "There are no messages sent to you from ";
+    }
+
+    /**
      * Prompts user for password.
      */
     public void printPasswordMessage() {
@@ -145,6 +366,14 @@ public class Presenter {
     }
 
     /**
+     * Displays that the organizer successfully added a speaker to the system.
+     */
+
+    public void printSpeakerCreatedMessage(){
+        System.out.println("The speaker was successfully added to the system.");
+    }
+
+    /**
      * Displays failed registration message.
      */
     public void printRegisterFailMessage(){
@@ -157,7 +386,7 @@ public class Presenter {
      * @param changeSpeakerOutput output of the ScheduleSystem.changeSpeaker() method.
      */
     public void printChangeSpeakerMessage(int changeSpeakerOutput){
-        switch (changeSpeakerOutput){
+        switch (changeSpeakerOutput) {
             case 0:
                 System.out.println("Speaker changed successfully.");
                 break;
@@ -172,6 +401,9 @@ public class Presenter {
                 break;
             case 4:
                 System.out.println("This event name does not correspond to an event in the system.");
+                break;
+            case 5:
+                System.out.println("The username provided does not match a speaker in the system.");
                 break;
         }
     }
@@ -193,6 +425,12 @@ public class Presenter {
                 break;
             case 3:
                 System.out.println("Event successfully created.");
+                break;
+            case 4:
+                System.out.println("The username provided does not match a speaker in the system.");
+                break;
+            case 5:
+                System.out.println("This room is not in the system.");
                 break;
         }
     }
@@ -321,9 +559,7 @@ public class Presenter {
               case 3:
                   System.out.println("Only speakers can sent messages to all attendees of their talks they give.");
                   break;
-              case 4:
-                  System.out.println("Event list contains event which you do not speak at.");
-                  break;
+              //case 4: is depends on which event the speaker do no speak in.
               case 5:
                   System.out.println("The message has been successfully sent.");
                   break;

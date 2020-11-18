@@ -131,37 +131,6 @@ public class MessageSystem {
     //All the Speaker methods
 
     /**
-     * This method only let speaker send message to a specific event's all attendees.
-     * @param eventIndex the index of an event
-     * @param sender username of the sender
-     * @param text the content of the message
-     * @return integer which will send to presenter and presents the corresponding messages
-     */
-
-    public int messageEventAttendees(int eventIndex, String sender, String text){
-        Optional<Attendee> obj = am.usernameToAttendeeObject(sender);
-        int max = em.getEvents().size();
-        // check index
-        if (eventIndex > max){
-            return 1; //"There is no such event."
-        }
-        Event event = em.getEvents().get(eventIndex - 1);
-        ArrayList<String> list = em.eventToAttendees(event);
-        if (!obj.isPresent()){
-            return 2; //"Incorrect username. Please try again."
-        }
-        Attendee se = obj.get();
-        if (!(se instanceof Speaker)){
-            return 3; //"Only speakers can sent messages to all attendees of their talks they give.";
-        } else if (!event.getSpeaker().equals(sender)) {
-            return 4; //"You do not speak at this event!";
-        } else {
-                mm.createMessage(list, sender, text);
-                return 5; //"The message has been successfully sent.";
-        }
-    }
-
-    /**
      * This method only let speaker message all attendees from multiple events they speak at.
      * @param eventIndexes a list of indexes of events
      * @param sender username of the sender
@@ -192,7 +161,7 @@ public class MessageSystem {
                 error.add(j);
             }
             list.addAll(em.eventToAttendees(event));
-        } //events that the speaker does not speak in
+        }
         if (error.size() != 0){
             return 4; //"Event list contains event which you do not speak at.";
         } else {
@@ -204,6 +173,13 @@ public class MessageSystem {
 
     //helper method for display
 
+
+    /**
+     * This method helps to get a list of events where the speaker do not speak at.
+     * @param eventIndex a list of input events
+     * @param user the username of the speaker
+     * @return a list of events that this speaker do not speak at.
+     */
     public ArrayList<Integer> viewEventsNotSpeak (ArrayList<Integer> eventIndex, String user){
         ArrayList<Integer> error = new ArrayList<Integer>();
         for (Integer i: eventIndex){
@@ -215,6 +191,12 @@ public class MessageSystem {
         return error;
     }
 
+    /**
+     * This method helps controller to present a list of events which speaker can not send message to
+     * since the speaker only sends message to the events they speaks at.
+     * @param eventIndex a list of events the speaker do not speak at
+     * @return a string of representation of error events.
+     */
     public String eventDisplayBuilder(ArrayList<Integer> eventIndex){
         String x = "";
         int max = eventIndex.size();
@@ -231,14 +213,30 @@ public class MessageSystem {
 
     //ViewMessage methods
 
+    /**
+     * This method get all the received message from user r
+     * @param r username
+     * @return a list of received message for user r
+     */
     public ArrayList<String> viewReceivedMessage(String r){
         return mm.getReceivedBy(r);
     }
 
+    /**
+     * This method get all the received message from user r
+     * @param r username
+     * @return a list of sent message by this user r
+     */
     public ArrayList<String> viewSentMessage(String r){
         return mm.getSendBy(r);
     }
 
+    /**
+     * This method gets all the message sent from s to r
+     * @param s sender's username
+     * @param r recipient's username
+     * @return a list of all the message sent from s to r
+     */
     public ArrayList<String> viewAllMessagesFrom(String s, String r){
         return mm.getAllMessagesFrom(r,s);
     }
