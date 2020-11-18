@@ -160,23 +160,35 @@ public class Presenter {
         switch (str){
             case "M":
                 System.out.println("MessageSystem");
+                break;
             case "E":
                 System.out.println("SignUpSystem");
+                break;
             case "S":
-                System.out.print("Schedule Event");
+                System.out.println("Schedule Event");
                 System.out.println("Enter event title:");
+                break;
             case "requestSpeaker":
                 System.out.println("Enter speaker username:");
+                break;
             case "requestYear":
                 System.out.println("Enter starting year of the event:");
+                break;
             case "requestMonth":
-                System.out.println("Enter starting month of event:");
+                System.out.println("Enter starting month of event (ex. October):");
+                break;
             case "requestDay":
                 System.out.println("Enter starting day of event:");
+                break;
+            case "requestHour":
+                System.out.println("Enter starting hour of the event:");
+                break;
             case "requestMinute":
                 System.out.println("Enter starting minute of the event:");
+                break;
             case "requestRoom":
                 System.out.println("Enter room id of event room:");
+                break;
         }
     }
 
