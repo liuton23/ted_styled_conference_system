@@ -67,6 +67,14 @@ public class RoomManager implements Serializable {
     }
 
     /**
+     * This method returns an ArrayList of all registered rooms at the event.
+     * @return Arraylist<Room> list of room objects.
+     */
+    public ArrayList<Room> getRooms(){
+        return this.rooms;
+    }
+
+    /**
      * Checks if a room can be booked at a given time
      * @param room the room to check
      * @param start the start time of the booking

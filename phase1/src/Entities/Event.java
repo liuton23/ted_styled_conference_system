@@ -145,8 +145,8 @@ public class Event implements Serializable {
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
 
-        return String.format(this.title + " runs from " + this.eventTime.get(0).format(formatter) + " to " +
-                this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + " with speaker: " +
+        return String.format(this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
+                this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + " with : " +
                 this.getSpeaker() + ".");
     }
 

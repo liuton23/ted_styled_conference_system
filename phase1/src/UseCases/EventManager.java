@@ -1,5 +1,6 @@
 package UseCases;
 
+import Entities.Attendee;
 import Entities.Event;
 
 
@@ -103,7 +104,7 @@ public class EventManager implements Serializable {
     }
 
     /**
-     * This method checks the availability of the speaker whose username is provided at the time that is provided.
+     * This method checks the availability of the speaker whose username is provided.
      * @param eventTime the time the speaker's availability is being checked.
      * @param speaker the username of the speaker whose availability is being checked.
      * @return a boolean value where true signals the speaker is free at the specified time and false if they are not.
@@ -222,5 +223,7 @@ public class EventManager implements Serializable {
                 20, 2, 10, 500));
         eventManager.cancelEvent(eventManager.events.get(0));
         System.out.println(eventManager.events.size());
+        Attendee Ana = new Attendee("Ana", "Heidi");
+
     }
 }

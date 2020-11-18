@@ -140,7 +140,7 @@ public class Controller {
                     int index = input.nextInt();
                     presenter.displayMessages("requestSpeaker");
                     String newSpeaker = input.nextLine();
-                    String eventName = events.get(index).getTitle();
+                    String eventName = events.get(index - 1).getTitle();
                     int message = scheduleSystem.changeSpeaker(eventName,newSpeaker);
                     presenter.printChangeSpeakerMessage(message);
                     save();
@@ -164,8 +164,8 @@ public class Controller {
         String speaker = input.nextLine();
         presenter.displayMessages("requestYear");
         int year = Integer.parseInt(input.nextLine());
-        presenter.displayMessages("requestMonth"); //Must be all CAPITAL FULLY SPELLED OUT
-        String month = input.nextLine();
+        presenter.displayMessages("requestMonth");
+        String month = input.nextLine().toUpperCase();
         presenter.displayMessages("requestDay");
         int day = Integer.parseInt(input.nextLine());
         presenter.displayMessages("requestHour");
