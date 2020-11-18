@@ -189,8 +189,11 @@ public class Presenter {
             case "requestRoom":
                 System.out.println("Enter room id of event room:");
                 break;
+            case "requestAddRoom":
+                System.out.println("Add Room:");
         }
     }
+
 
 
     /**
@@ -241,6 +244,72 @@ public class Presenter {
      */
     public void printUsernameMessage(){
         System.out.println("Enter your username:");
+    }
+
+    /**
+     * Prompts user to input other user's username when message others
+     */
+    public void printPleaseInputUsername(){
+        System.out.println("Please input an username");
+    }
+
+    /**
+     * Prompts user when input username is incorrect
+     */
+    public void printIncorrectUsername(){
+        System.out.println("Incorrect username please try again");
+    }
+
+    /**
+     * Prompts user to input message
+     */
+    public void printInputMessagePlz(){
+        System.out.println("Please input your message");
+    }
+
+    /**
+     * Prompts user to input event number
+     */
+    public void printInputEventNum(){
+        System.out.println("Please enter an event number");
+    }
+
+    /**
+     * Prompts user to input event number or zero if no more event
+     */
+    public void printInputEventNumOrZero(){
+        System.out.println("Please enter another event number " +
+                "if you wish, otherwise please enter (0)");
+    }
+
+    /**
+     * Prompts user when there are no sent messages for this user
+     */
+    public void printNoSentForU(){
+        System.out.println("There are no sent messages from you");
+    }
+
+    /**
+     * Prompts user when there are no received messages for this user
+     */
+    public void printNoRecForU(){
+        System.out.println("There are no received messages for you");
+    }
+
+    /**
+     * string of message below
+     * @return "You do not speak at event number "
+     */
+    public String udoNotSpeakAt(){
+        return "You do not speak at event number ";
+    }
+
+    /**
+     * string of message below
+     * @return "There are no messages sent to you from "
+     */
+    public String thereAreNoMessForUFrom(){
+        return "There are no messages sent to you from ";
     }
 
     /**
@@ -457,9 +526,7 @@ public class Presenter {
               case 3:
                   System.out.println("Only speakers can sent messages to all attendees of their talks they give.");
                   break;
-              case 4:
-                  System.out.println("Event list contains event which you do not speak at.");
-                  break;
+              //case 4: is depends on which event the speaker do no speak in.
               case 5:
                   System.out.println("The message has been successfully sent.");
                   break;
