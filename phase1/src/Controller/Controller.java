@@ -158,27 +158,7 @@ public class Controller {
 
             switch (chosen) {
                 case "S":
-                    presenter.displayMessages("Schedule Event");
-                    presenter.displayMessages("Enter event title:");
-                    String title = input.nextLine();
-                    presenter.displayMessages("Enter event speaker:");
-                    String speaker = input.nextLine();
-                    presenter.displayMessages("Enter year:");
-                    int year = input.nextInt();
-                    presenter.displayMessages("Enter month:");
-                    String month = input.nextLine();
-                    presenter.displayMessages("Enter day:");
-                    int day = input.nextInt();
-                    presenter.displayMessages("Enter hour:");
-                    int hour = input.nextInt();
-                    presenter.displayMessages("Enter minute:");
-                    int min = input.nextInt();
-                    presenter.displayMessages("Enter room id:");
-                    int roomID = input.nextInt();
-                    presenter.displayMessages("Enter event capacity:");
-                    int cap = input.nextInt();
-                    presenter.printScheduleEventMessage(scheduleSystem.scheduleEvent(title, speaker, year, month, day,
-                            hour, min, roomID));
+                    scheduleEvent(scheduleSystem);
                     break;
                 case "A":
                     presenter.displayMessages("Add Room");
@@ -208,6 +188,33 @@ public class Controller {
                 case "EXIT": exit();
             }
         }
+    }
+
+    /**
+     * Method for organizers to schedule new events.
+     * @param scheduleSystem
+     */
+    private void scheduleEvent(ScheduleSystem scheduleSystem){
+        Scanner input = new Scanner(System.in);
+        presenter.displayMessages("Schedule Event");
+        presenter.displayMessages("Enter event title:");
+        String title = input.nextLine();
+        presenter.displayMessages("Enter event speaker:");
+        String speaker = input.nextLine();
+        presenter.displayMessages("Enter year:");
+        int year = input.nextInt();
+        presenter.displayMessages("Enter month:"); //Must be all CAPITAL FULLY SPELLED OUT
+        String month = input.nextLine();
+        presenter.displayMessages("Enter day:");
+        int day = input.nextInt();
+        presenter.displayMessages("Enter hour:");
+        int hour = input.nextInt();
+        presenter.displayMessages("Enter minute:");
+        int min = input.nextInt();
+        presenter.displayMessages("Enter room id:");
+        int roomID = input.nextInt();
+        presenter.printScheduleEventMessage(scheduleSystem.scheduleEvent(title, speaker, year, month, day,
+                hour, min, roomID));
     }
 
     /**
