@@ -214,7 +214,14 @@ public class Presenter {
      * @param message initial message
      */
     public void displayAllEvents(ArrayList<Event> events, String message){
-        System.out.println(message);
+        switch(message){
+            case "time":
+                System.out.println("Sort events by time");
+            case "name":
+                System.out.println("Sort events by name");
+            case "speaker":
+                System.out.println("Sort events by speaker");
+        }
         for (Event e: events){
             System.out.println(e);
         }
@@ -532,4 +539,6 @@ public class Presenter {
                   break;
           }
     }
+
+
 }

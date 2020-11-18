@@ -83,7 +83,7 @@ public class Message implements Serializable {
     }
 
 
-
+/*
     public static void main(String[] args) {
         Message m = new Message("felix", "I like cat");
         System.out.println(m.getSender());
@@ -93,6 +93,6 @@ public class Message implements Serializable {
         System.out.println(m.getMessageTime());
     }
 
-
+*/
 
 }

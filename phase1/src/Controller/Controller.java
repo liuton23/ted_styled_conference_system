@@ -411,16 +411,15 @@ public class Controller {
         switch (chosen) {
             case "T":
                 sus.setComparator(new byTimeEventComparator());
-                presenter.displaySchedule(sus.viewAllEvents(), "Sort events by time");
+                presenter.displaySchedule(sus.viewAllEvents(), "time");
                 break;
             case "N":
                 sus.setComparator(new byTitleEventComparator());
-                presenter.displaySchedule(sus.viewAllEvents(), "Sort events by name");
+                presenter.displaySchedule(sus.viewAllEvents(), "name");
                 break;
             case "S":
                 sus.setComparator(new bySpeakerEventComparator());
-                presenter.displaySchedule(sus.viewAllEvents(), "Sort events by speaker");
-
+                presenter.displaySchedule(sus.viewAllEvents(), "speaker");
                 break;
         }
     }
