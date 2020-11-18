@@ -138,6 +138,16 @@ public class AttendeeManager implements Serializable {
     }
 
     /**
+     * @param org attendee object
+     * @return true of this attendee is organizer
+     */
+    public Boolean checkIsOrganizer(Attendee org){
+        if (org instanceof Speaker){
+            return false;
+        } else return org.isOrganizer();
+    }
+
+    /**
      * Method that allows an attendee to add an event to his/her itinerary.
      * @param attendee a stored attendee.
      * @param event name of an upcoming event.

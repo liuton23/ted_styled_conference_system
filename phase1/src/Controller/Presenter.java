@@ -256,10 +256,16 @@ public class Presenter {
         switch(way){
             case "time":
                 System.out.println("Sort events by time");
+                break;
             case "name":
                 System.out.println("Sort events by name");
+                break;
             case "speaker":
                 System.out.println("Sort events by speaker");
+                break;
+            case "itinerary":
+                System.out.println("Your itinerary:");
+                break;
         }
         for (String str: options){
             System.out.println(str);
@@ -274,10 +280,13 @@ public class Presenter {
         switch(way){
             case "time":
                 System.out.println("Events sorted by time");
+                break;
             case "name":
                 System.out.println("Events sorted by name");
+                break;
             case "speaker":
                 System.out.println("Events sorted by speaker");
+                break;
         }
         for (Event e: events){
             System.out.println(e);
@@ -615,6 +624,5 @@ public class Presenter {
                   break;
           }
     }
-
 
 }

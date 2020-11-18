@@ -61,7 +61,7 @@ public class Controller {
      */
     private void accountActivity(String username) {
         boolean loggedin = true;
-        boolean isOrg = attendeeManager.usernameToAttendeeObject(username).get().isOrganizer();
+        boolean isOrg = attendeeManager.checkIsOrganizer(attendeeManager.usernameToAttendeeObject(username).get());
         boolean isSpeaker = attendeeManager.usernameToAttendeeObject(username).get() instanceof Speaker;
         while (loggedin) {
 
@@ -80,7 +80,7 @@ public class Controller {
                     eventActivity(username);
                     break;
                 case "I":
-                    getItinerary(attendeeManager, username);
+                    getItinerary(attendeeManager, username, isSpeaker);
                     break;
                 case "S":
                     scheduleActivity();
@@ -100,10 +100,13 @@ public class Controller {
      * @param attendeeManager gets the schedule.
      * @param user username of <code>Attendee</code> to which the schedule belongs.
      */
-    private void getItinerary(AttendeeManager attendeeManager, String user){
+    private void getItinerary(AttendeeManager attendeeManager, String user, Boolean isSpeaker){
         Optional<Attendee> obj = attendeeManager.usernameToAttendeeObject(user);
         Attendee attendee = obj.get();
-        presenter.displaySchedule(attendeeManager.getItinerary(attendee), "Your itinerary:");
+        if (isSpeaker){
+            Speaker sp = (Speaker) attendee;
+            presenter.displaySchedule(attendeeManager.getSpeakingList(sp), "itinerary");
+        } else presenter.displaySchedule(attendeeManager.getItinerary(attendee), "itinerary");
     }
 
     /**
