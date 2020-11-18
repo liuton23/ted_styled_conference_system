@@ -8,9 +8,6 @@ import Entities.EventComparators.byTitleEventComparator;
 import Entities.Speaker;
 import UseCases.*;
 import Entities.Speaker;
-//import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
-
-//import java.awt.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
@@ -23,7 +20,6 @@ import java.util.List;
  */
 public class Controller {
 
-    private boolean running = true;
     private Gateway gateway;
     private AttendeeManager attendeeManager;
     private EventManager eventManager;
@@ -38,6 +34,7 @@ public class Controller {
     public void run() {
         init();
         presenter.welcomeMessage();
+        boolean running = true;
         while (running) {
             String chosen = askMenuInput(1);
 
@@ -49,12 +46,12 @@ public class Controller {
                     break;
                 case "L":
                     username = login();
-                    if (username.isEmpty()){
-                        break;
-                    }else {
+                    if (!username.isEmpty()) {
                         accountActivity(username);
-                        break;
                     }
+                    break;
+                case "EXIT":
+                    running = false;
             }
         }
     }
@@ -90,7 +87,7 @@ public class Controller {
                     getItinerary(attendeeManager, username);
                     break;
                 case "S":
-                    scheduleActivity(username);
+                    scheduleActivity();
                     break;
                 case "C":
                     createSpeaker();
@@ -116,7 +113,7 @@ public class Controller {
     /**
      * Organizer only menu to schedule events, add rooms and change speakers.
      */
-    private void scheduleActivity(String username){
+    private void scheduleActivity(){
         ScheduleSystem scheduleSystem  = new ScheduleSystem(eventManager,attendeeManager, roomManager);
         boolean scheduling = true;
         while (scheduling) {
@@ -140,8 +137,7 @@ public class Controller {
                     break;
                 case "C":
                     presenter.displayMessages("Change Speaker");
-                    ArrayList<Event> events = new ArrayList<>();
-                    events.addAll(eventManager.getEvents());
+                    ArrayList<Event> events = new ArrayList<>(eventManager.getEvents());
                     events.sort(new bySpeakerEventComparator());
                     presenter.displayAllEvents(events, "Events sorted by speakers:");
                     presenter.displayMessages("Enter ID of the event:");
@@ -417,8 +413,6 @@ public class Controller {
      * @param sus system that manages event sign up.
      */
     private void viewAllEvents(SignUpSystem sus){
-        Scanner input = new Scanner(System.in);
-
         String chosen = askMenuInput(9);
 
         switch (chosen) {
