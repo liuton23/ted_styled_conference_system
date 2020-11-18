@@ -159,6 +159,7 @@ public class Controller {
             switch (chosen) {
                 case "S":
                     scheduleEvent(scheduleSystem);
+                    save();
                     break;
                 case "A":
                     presenter.displayMessages("Add Room");
@@ -167,6 +168,7 @@ public class Controller {
                     presenter.displayMessages("Enter room capacity:");
                     int roomCapacity = input.nextInt();
                     presenter.printAddRoomMessage(scheduleSystem.addRoom(roomId,roomCapacity));
+                    save();
                     break;
                 case "C":
                     presenter.displayMessages("Change Speaker");
@@ -181,6 +183,7 @@ public class Controller {
                     String eventName = events.get(index).getTitle();
                     int message = scheduleSystem.changeSpeaker(eventName,newSpeaker);
                     presenter.printChangeSpeakerMessage(message);
+                    save();
                     break;
                 case "B":
                     scheduling = false;
@@ -192,7 +195,7 @@ public class Controller {
 
     /**
      * Method for organizers to schedule new events.
-     * @param scheduleSystem
+     * @param scheduleSystem ScheduleSystem created in parent method.
      */
     private void scheduleEvent(ScheduleSystem scheduleSystem){
         Scanner input = new Scanner(System.in);
@@ -285,18 +288,22 @@ public class Controller {
                 case "U":
                     presenter.displayMessages("sending message to a user");
                     messageOneUser(username,ms);
+                    save();
                     break;
                 case "S":
                     presenter.displayMessages("sending message to all speakers");
                     messageAllSpeaker(username,ms);
+                    save();
                     break;
                 case "A":
                     presenter.displayMessages("sending message to all attendees");
                     messageAllAtt(username,ms);
+                    save();
                     break;
                 case "E":
                     presenter.displayMessages("sending message to all attendees in one or multiple events");
                     messageEventAllAtt(username,ms);
+                    save();
                 case "B":
                     messagingOther = false;
                     break;
@@ -476,12 +483,14 @@ public class Controller {
                     presenter.displayMessages("Event ID of event you'd like to sign up for:");
                     index = input.nextInt();
                     presenter.printSignUpMessage(signUpSystem.signUpEvent(username, index));
+                    save();
                     break;
                 case "D":
                     presenter.displayMessages("Drop out");
                     presenter.displayMessages("Event ID of event you'd like to drop up for:");
                     index = input.nextInt();
                     presenter.displayMessages(signUpSystem.dropOutEvent(username, index));
+                    save();
                     break;
                 case "B":
                     activity = false;
