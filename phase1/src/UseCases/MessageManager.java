@@ -66,8 +66,7 @@ public class MessageManager implements Serializable {
         message.setRecipients(m.getSender());
         messages.add(message);
         return message;
-    }
-    //This is not used, might delete later
+    } //This is not used for phase 1, but may be useful in phase 2
 
 
     /**
@@ -145,7 +144,7 @@ public class MessageManager implements Serializable {
         }
     }
 
-
+/*
     public static void main(String[] args){
         AttendeeManager a = new AttendeeManager();
         Attendee josh = a.createAttendee("iamjosh", "4532dgtf", false);
@@ -170,5 +169,7 @@ public class MessageManager implements Serializable {
         System.out.println(mas.getSendBy("lisa231"));
         System.out.println(mas.getAllMessagesFrom("ritaishannie","iamjosh"));
     }
+
+ */
 
 }
