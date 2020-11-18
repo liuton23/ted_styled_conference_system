@@ -35,10 +35,18 @@ public class Room implements Iterable<LocalDateTime[]>, Serializable {
         return id;
     }
 
+    /**
+     * Getter for the capacity of the room.
+     * @return capacity of the room.
+     */
     public int getCapacity(){
         return capacity;
     }
 
+    /**
+     * Setter for the capacity of the room.
+     * @param capacity updated room capacity.
+     */
     public void setCapacity(int capacity){
         this.capacity = capacity;
     }

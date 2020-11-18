@@ -61,6 +61,11 @@ public class SignUpSystem {
         return stringeventlist;
     }
 
+    /**
+     * Creates a copy of the list of events.
+     * @param eventList original list of events.
+     * @return copy list of events.
+     */
     private ArrayList<Event> getEventListClone(ArrayList<Event> eventList){
         ArrayList<Event> eventlistclone = new ArrayList<>();
         eventlistclone.addAll(eventList);
