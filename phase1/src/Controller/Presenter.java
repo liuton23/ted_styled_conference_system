@@ -501,12 +501,14 @@ public class Presenter {
      * indicating error.
      * @param signUpOutput is a boolean value outputted by EventManager.signUp() signalling successful or unsuccessful sign up.
      */
-    public void printSignUpMessage(boolean signUpOutput){
-        if (signUpOutput){
+    public void printSignUpMessage(int signUpOutput){
+        if (signUpOutput == 2){
             System.out.println("User was successfully signed up.");
         }
-        else{
+        else if (signUpOutput == 3){
             System.out.println("Event is at capacity: unable to sign up user.");
+        } else {
+            System.out.println("There are no such event");
         }
     }
 

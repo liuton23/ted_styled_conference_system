@@ -79,9 +79,12 @@ public class SignUpSystem {
      * @param eventIndex index of the selected event from a sorted list of events.
      * @return boolean value that will be sent to presenter to display corresponding message.
      */
-    public boolean signUpEvent(String username, int eventIndex){
+    public int signUpEvent(String username, int eventIndex){
         ArrayList<Event> eventList = eventManager.getEvents();
         eventList.sort(comparator);
+        if (eventIndex > eventList.size()){
+            return 1;
+        }
         Event event = eventList.get(eventIndex-1);
         Room room = roomManager.idToRoom(event.getRoom());
         Optional<Attendee> obj = attendeeManager.usernameToAttendeeObject(username);
@@ -92,10 +95,10 @@ public class SignUpSystem {
             if(event.getAttendeeList().size() < room.getCapacity()) {
                 eventManager.signUp(event, attendee.getUsername());
                 attendeeManager.signUp(attendee, event.getTitle());
-                return true;
+                return 2;
             }
         }
-        return false;
+        return 3;
     }
 
     /**
