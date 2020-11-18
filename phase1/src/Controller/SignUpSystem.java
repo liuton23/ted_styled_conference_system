@@ -52,8 +52,8 @@ public class SignUpSystem {
 
         eventlistclone.sort(comparator);
         int index = 1;
-        String x = "";
         for (Event event: eventlistclone){
+            String x = "";
             x += index + ") " + event.getTitle() + " @ " + event.getEventTime() + " with " + event.getSpeaker() + ", ";
             stringeventlist.add(x);
             index += 1;

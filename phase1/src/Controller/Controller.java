@@ -126,7 +126,7 @@ public class Controller {
                     presenter.displayMessages("requestAddRoom");
                     presenter.displayMessages("requestRoom");
                     int roomId = input.nextInt();
-                    presenter.displayMessages("requestCapacity:");
+                    presenter.displayMessages("requestCapacity");
                     int roomCapacity = input.nextInt();
                     presenter.printAddRoomMessage(scheduleSystem.addRoom(roomId,roomCapacity));
                     save();
@@ -135,7 +135,7 @@ public class Controller {
                     presenter.displayMessages("changeSpeaker");
                     ArrayList<Event> events = new ArrayList<>(eventManager.getEvents());
                     events.sort(new bySpeakerEventComparator());
-                    presenter.displayAllEvents(events);
+                    presenter.displayAllEvents(events, "speaker");
                     presenter.displayMessages("requestRoom");
                     int index = input.nextInt();
                     presenter.displayMessages("requestSpeaker");
@@ -282,23 +282,28 @@ public class Controller {
         Scanner obj = new Scanner(System.in);
         ArrayList<Integer> events = new ArrayList<>();
         presenter.printInputEventNum();
-        events.add(obj.nextInt());
+        events.add(Integer.parseInt(obj.nextLine()));
         presenter.printInputEventNumOrZero();
-        int i = obj.nextInt();
+        int i = Integer.parseInt(obj.nextLine());
         while (i != 0){
             events.add(i);
             presenter.printInputEventNumOrZero();
-            i = obj.nextInt();
-
+            i = Integer.parseInt(obj.nextLine());
         }
         presenter.printInputMessagePlz();
+        /*String message = obj.nextLine();
+        if (events.size() == 1){
+            presenter.printMessageEventAttendees(ms.messageEventAttendees(events,username,message));
+        } else presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
+        */
         String message = obj.nextLine();
         if (ms.messageEventAttendees(events,username,message) == 4){
             ArrayList<Integer> error = ms.viewEventsNotSpeak(events,username);
             presenter.display( presenter.udoNotSpeakAt() + ms.eventDisplayBuilder(error));
         } else if (events.size() == 1){
             presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
-        } else presenter.printMessageEventAttendees(ms.messageEventAttendees(events,username,message));
+        }
+        else presenter.printMessageEventAttendees(ms.messageEventAttendees(events,username,message));
     }
 
     /**
@@ -647,7 +652,7 @@ public class Controller {
         String username = obj1.nextLine();
         presenter.printPasswordMessage();
         String password = obj1.nextLine();
-        presenter.display("Are you an organizer?"); //***replace with askInput system***
+        presenter.printAreUAOrg(); //***replace with askInput system***
         boolean chosen = askBooleanInput();
         if(loginSystem.registerUser(username, password, chosen)){
             presenter.printRegisterSucceedMessage();
@@ -663,12 +668,12 @@ public class Controller {
     private void createSpeaker(){
         LoginSystem loginSystem = new LoginSystem(attendeeManager);
         Scanner obj1 = new Scanner(System.in);
-        presenter.printUsernameMessage();
+        presenter.displayMessages("requestSpeaker");
         String username = obj1.nextLine();
-        presenter.printPasswordMessage();
+        presenter.displayMessages("enterSpeakerPswd");
         String password = obj1.nextLine();
         if (loginSystem.registerSpeaker(username, password)){
-            presenter.printRegisterSucceedMessage();
+            presenter.printSpeakerCreatedMessage();
         } else {
             presenter.printRegisterFailMessage();
         }

@@ -150,6 +150,8 @@ public class Presenter {
         prompt(options);
     }
 
+    //DISPLAY METHODS
+
     /**
      * Displays input message.
      * @param str input message.
@@ -214,6 +216,9 @@ public class Presenter {
             case "requestEventIdDropOut":
                 System.out.println("Event ID of event you'd like to drop out of:");
                 break;
+            case "enterSpeakerPswd":
+                System.out.println("Enter Speaker Password:");
+                break;
         }
     }
 
@@ -242,8 +247,15 @@ public class Presenter {
      * Displays an initial message then displays a list of Strings one at a time by speakers
      * @param events list of events
      */
-    public void displayAllEvents(ArrayList<Event> events){
-        System.out.println("Events sorted by speakers:");
+    public void displayAllEvents(ArrayList<Event> events, String way){
+        switch(way){
+            case "time":
+                System.out.println("Events sorted by time");
+            case "name":
+                System.out.println("Events sorted by name");
+            case "speaker":
+                System.out.println("Events sorted by speaker");
+        }
         for (Event e: events){
             System.out.println(e);
         }
@@ -375,6 +387,13 @@ public class Presenter {
 
     public void printSpeakerCreatedMessage(){
         System.out.println("The speaker was successfully added to the system.");
+    }
+
+    /**
+     * Displays that "Are u an organizer".
+     */
+    public void printAreUAOrg(){
+        System.out.println("Are you an organizer?");
     }
 
     /**
@@ -563,7 +582,9 @@ public class Presenter {
               case 3:
                   System.out.println("Only speakers can sent messages to all attendees of their talks they give.");
                   break;
-              //case 4: is depends on which event the speaker do no speak in.
+              case 4:
+                  System.out.println("Events you entered contains event which you do not speak at.");
+                  break;
               case 5:
                   System.out.println("The message has been successfully sent.");
                   break;
