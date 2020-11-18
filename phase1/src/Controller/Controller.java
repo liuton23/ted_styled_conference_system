@@ -7,7 +7,6 @@ import Entities.EventComparators.byTimeEventComparator;
 import Entities.EventComparators.byTitleEventComparator;
 import Entities.Speaker;
 import UseCases.*;
-import Entities.Speaker;
 //import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
 
 //import java.awt.*;
@@ -37,14 +36,9 @@ public class Controller {
      */
     public void run() {
         init();
-        Scanner input = new Scanner(System.in);
         presenter.welcomeMessage();
         while (running) {
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("(L)ogin"); options.add("(R)egister");
-            choices.add("L"); choices.add("R"); choices.add(("EXIT"));
-            String chosen = askInput(options, choices, input);
+            String chosen = askMenuInput(1);
 
             String username;
 
@@ -60,7 +54,6 @@ public class Controller {
                         accountActivity(username);
                         break;
                     }
-                case "EXIT": exit();
             }
         }
     }
@@ -75,28 +68,14 @@ public class Controller {
         boolean isOrg = attendeeManager.usernameToAttendeeObject(username).get().isOrganizer();
         boolean isSpeaker = attendeeManager.usernameToAttendeeObject(username).get() instanceof Speaker;
         while (loggedin) {
-            Scanner input = new Scanner(System.in);
 
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("(M)essages");
-            options.add("(E)vents");
-            options.add("(I)tinerary");
+            String chosen;
             if (isOrg){
-                options.add("(S)chedule events");
-                choices.add("S");
-                options.add("(C)reate speaker account");
-                choices.add("C");
+                chosen = askMenuInput(3);
+            }else{
+                chosen = askMenuInput(2);
             }
-            options.add("(B)ack");
-            choices.add("M");
-            choices.add("E");
-            choices.add("I");
-            choices.add(("B"));
-            choices.add("EXIT");
-            String chosen = askInput(options, choices, input);
 
-            //String chosen = input.nextLine();
             switch (chosen) {
                 case "M":
                     presenter.displayMessages("MessageSystem");
@@ -143,18 +122,7 @@ public class Controller {
         while (scheduling) {
             Scanner input = new Scanner(System.in);
 
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("(S)chedule Event");
-            options.add("(A)dd Room");
-            options.add("(C)hange Speaker");
-            options.add("(B)ack");
-            choices.add("S");
-            choices.add("A");
-            choices.add("C");
-            choices.add(("B"));
-            choices.add("EXIT");
-            String chosen = askInput(options, choices, input);
+            String chosen = askMenuInput(4);
 
             switch (chosen) {
                 case "S":
@@ -192,7 +160,7 @@ public class Controller {
 
     /**
      * Method for organizers to schedule new events.
-     * @param scheduleSystem
+     * @param scheduleSystem system that manages scheduling events.
      */
     private void scheduleEvent(ScheduleSystem scheduleSystem){
         Scanner input = new Scanner(System.in);
@@ -225,18 +193,7 @@ public class Controller {
         MessageSystem ms = new MessageSystem(messageManager,attendeeManager,eventManager);
         boolean messaging = true;
         while (messaging) {
-            Scanner input = new Scanner(System.in);
-
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("(M)essaging users");
-            options.add("(V)iewing messages");
-            options.add("(B)ack");
-            choices.add("M");
-            choices.add("V");
-            choices.add(("B"));
-            choices.add("EXIT");
-            String chosen = askInput(options, choices, input);
+            String chosen = askMenuInput(5);
 
 
             switch (chosen) {
@@ -264,22 +221,7 @@ public class Controller {
     private void messageUser(String username, MessageSystem ms){
         boolean messagingOther = true;
         while (messagingOther) {
-            Scanner input = new Scanner(System.in);
-
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("Sending to a (U)ser");
-            options.add("Sending to all (S)peakers");
-            options.add("Sending to all (A)ttendees");
-            options.add("Sending to all attendees in one or multiple (E)vents");
-            options.add("(B)ack");
-            choices.add("U");
-            choices.add("S");
-            choices.add("A");
-            choices.add("E");
-            choices.add("B");
-            choices.add("EXIT");
-            String chosen = askInput(options, choices, input);
+            String chosen = askMenuInput(6);
 
             switch (chosen) {
                 case "U":
@@ -379,20 +321,7 @@ public class Controller {
     private void viewMessages(String username, MessageSystem ms){
         boolean viewingMessage = true;
         while (viewingMessage) {
-            Scanner input = new Scanner(System.in);
-
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("Viewing (S)ent messages");
-            options.add("Viewing (R)eceived messages");
-            options.add("Viewing messages (F)rom another user");
-            options.add("(B)ack");
-            choices.add("S");
-            choices.add("R");
-            choices.add("F");
-            choices.add("B");
-            choices.add("EXIT");
-            String chosen = askInput(options, choices, input);
+            String chosen = askMenuInput(7);
 
             switch (chosen) {
                 case "S":
@@ -452,18 +381,7 @@ public class Controller {
         while (activity) {
             Scanner input = new Scanner(System.in);
 
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> choices = new ArrayList<>();
-            options.add("(V)iew all events");
-            options.add("(S)ign up for events");
-            options.add("(D)rop out of events");
-            options.add("(B)ack");
-            choices.add("V");
-            choices.add("S");
-            choices.add("D");
-            choices.add(("B"));
-            choices.add("EXIT");
-            String chosen = askInput(options, choices, input);
+            String chosen = askMenuInput(8);
             int index;
 
             switch (chosen) {
@@ -498,16 +416,7 @@ public class Controller {
     private void viewAllEvents(SignUpSystem sus){
         Scanner input = new Scanner(System.in);
 
-        ArrayList<String> options = new ArrayList<>();
-        ArrayList<String> choices = new ArrayList<>();
-        options.add("Sort events by (T)ime");
-        options.add("Sort events by (N)ame");
-        options.add("Sort events by (S)peaker");
-        choices.add("T");
-        choices.add("N");
-        choices.add("S");
-        choices.add("EXIT");
-        String chosen = askInput(options, choices, input);
+        String chosen = askMenuInput(9);
 
         switch (chosen) {
             case "T":
@@ -546,6 +455,8 @@ public class Controller {
         for(String choice: choices){
             if(choice.equals(chosen)){
                 return false;
+            }else if(chosen.equals("EXIT")){
+                exit();
             }
         }
         presenter.invalidInput();
@@ -554,20 +465,118 @@ public class Controller {
 
     /**
      * Asks the user for input and checks its validity.
-     * @param options human-readable options for the user to choose from.
-     * @param choices list of valid inputs.
-     * @param input scanner that is used to receive the input.
+     * @param i the menu id.
      * @return Uppercase String that is valid input from user.
      */
-    public String askInput(ArrayList<String> options, ArrayList<String> choices, Scanner input){
+    public String askMenuInput(int i){
+        Scanner input = new Scanner(System.in);
+        ArrayList<String> choices = chooseMenuOptions(i);
         String chosen;
         do{
-           presenter.prompt(options);
-           chosen = input.next().toUpperCase();
+           chooseMenuPrompt(i);
+           chosen = input.nextLine().toUpperCase();
         }while(invalidInput(choices, chosen));
         return chosen;
     }
 
+    public boolean askBooleanInput(){
+        Scanner input = new Scanner(System.in);
+        ArrayList<String> choices = new ArrayList<>();
+        choices.add("Y"); choices.add("N");
+        choices.add("YES"); choices.add("NO");
+        String chosen;
+        do{
+            presenter.display("Yes or No?");
+            chosen = input.next().toUpperCase();
+        }while(invalidInput(choices, chosen));
+        return chosen.equals("Y") || chosen.equals("YES");
+    }
+    public ArrayList<String> chooseMenuOptions(int i){
+        ArrayList<String> choices = new ArrayList<>();
+        switch (i){
+            case 1:
+                choices.add("L");
+                choices.add("R");
+                break;
+            case 3:
+                choices.add("C");
+                choices.add("S");
+            case 2:
+                choices.add("M");
+                choices.add("E");
+                choices.add("I");
+                choices.add(("B"));
+                break;
+            case 4:
+                choices.add("S");
+                choices.add("A");
+                choices.add("C");
+                choices.add(("B"));
+                break;
+            case 5:
+                choices.add("M");
+                choices.add("V");
+                choices.add(("B"));
+                break;
+            case 6:
+                choices.add("U");
+                choices.add("S");
+                choices.add("A");
+                choices.add("E");
+                choices.add("B");
+                break;
+            case 7:
+                choices.add("S");
+                choices.add("R");
+                choices.add("F");
+                choices.add("B");
+                break;
+            case 8:
+                choices.add("V");
+                choices.add("S");
+                choices.add("D");
+                choices.add(("B"));
+                break;
+            case 9:
+                choices.add("T");
+                choices.add("N");
+                choices.add("S");
+                break;
+        }
+        return choices;
+    }
+
+    public void chooseMenuPrompt(int i){
+        switch (i){
+            case 1:
+                presenter.loginMenu();
+                break;
+            case 2:
+                presenter.basicMenu1();
+                break;
+            case 3:
+                presenter.basicMenu2();
+                break;
+            case 4:
+                presenter.organizerMenu();
+                break;
+            case 5:
+                presenter.mainMessageMenu();
+                break;
+            case 6:
+                presenter.sendMessageMenu();
+                break;
+            case 7:
+                presenter.viewMessageMenu();
+                break;
+            case 8:
+                presenter.eventMenu();
+                break;
+            case 9:
+                presenter.viewEventsMenu();
+                break;
+        }
+    }
     /**
      * Initializes the use case classes. If the program has not been run before, or the save file has been corrupted,
      * moved, or missing, then new use case classes will be instantiated. Otherwise, the use case classes will be loaded
@@ -616,11 +625,11 @@ public class Controller {
      */
     private String login(){
         LoginSystem loginSystem = new LoginSystem(attendeeManager);
-        Scanner obj1 = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         presenter.printUsernameMessage();
-        String username = obj1.nextLine();
+        String username = input.nextLine();
         presenter.printPasswordMessage();
-        String password = obj1.nextLine();
+        String password = input.nextLine();
         if (loginSystem.canLogin(username, password)){
             presenter.printLoginSucceedMessage();
             return username;
@@ -639,29 +648,17 @@ public class Controller {
         String username = obj1.nextLine();
         presenter.printPasswordMessage();
         String password = obj1.nextLine();
-        presenter.displayMessages("Are you an organizer?"); //***replace with askInput system***
+        presenter.display("Are you an organizer?"); //***replace with askInput system***
         ArrayList<String> options = new ArrayList<>();
         ArrayList<String> choices = new ArrayList<>();
         options.add("(Y)es");
         options.add("(N)o");
         choices.add("Y"); choices.add("N"); choices.add(("EXIT"));
-        String chosen = askInput(options, choices, obj1);
-        switch (chosen) {
-            case "Y":
-                if(loginSystem.registerUser(username, password, true)) {
-                    presenter.printRegisterSucceedMessage();
-                } else {
-                    presenter.printRegisterFailMessage();
-                }
-                break;
-            case "N":
-                if(loginSystem.registerUser(username, password, false)) {
-                    presenter.printRegisterSucceedMessage();
-                } else {
-                    presenter.printRegisterFailMessage();
-                }
-                break;
-            case "EXIT": exit();
+        boolean chosen = askBooleanInput();
+        if(loginSystem.registerUser(username, password, chosen)){
+            presenter.printRegisterSucceedMessage();
+        }else{
+            presenter.printRegisterFailMessage();
         }
 
     }

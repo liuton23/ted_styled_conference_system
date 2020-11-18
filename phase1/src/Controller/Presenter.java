@@ -20,6 +20,9 @@ public class Presenter {
         System.out.println("Note that terminating the program without using the above method may not save your " +
                 "information.");
     }
+    public void display(String s){
+        System.out.println(s);
+    }
 
     /**
      * Displays <code>options</code> for the user.
@@ -27,14 +30,94 @@ public class Presenter {
      */
     public void prompt(ArrayList<String> options){
         int width = (options.size() / 4) + 1;
-        System.out.println("Would you like to do:");
+        System.out.println("What would you like to do:");
         for(int i = 0; i < options.size(); i++) {
-            System.out.print(options.get(i) + "\t");
+            System.out.print(options.get(i) + "\t \t \t");
             if( (i + 1) % width == 0){
                 System.out.println();
             }
         }
         System.out.print("Input: ");
+    }
+    //MENU METHODS
+    public void loginMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("(L)ogin");
+        options.add("(R)egister");
+        prompt(options);
+    }
+
+    public void basicMenu1(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("(M)essages");
+        options.add("(E)vents");
+        options.add("(I)tinerary");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    public void basicMenu2(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("(M)essages");
+        options.add("(E)vents");
+        options.add("(I)tinerary");
+        options.add("(S)chedule events");
+        options.add("(C)reate speaker account");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    public void organizerMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("(S)chedule Event");
+        options.add("(A)dd Room");
+        options.add("(C)hange Speaker");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    public void mainMessageMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("(M)essaging users");
+        options.add("(V)iewing messages");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    public void sendMessageMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Sending to a (U)ser");
+        options.add("Sending to all (S)peakers");
+        options.add("Sending to all (A)ttendees");
+        options.add("Sending to all attendees in one or multiple (E)vents");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    public void viewMessageMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Viewing (S)ent messages");
+        options.add("Viewing (R)eceived messages");
+        options.add("Viewing messages (F)rom another user");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    public void eventMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("(V)iew all events");
+        options.add("(S)ign up for events");
+        options.add("(D)rop out of events");
+        options.add("(B)ack");
+        prompt(options);
+    }
+
+    public void viewEventsMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Sort events by (T)ime");
+        options.add("Sort events by (N)ame");
+        options.add("Sort events by (S)peaker");
+        prompt(options);
     }
 
     /**
