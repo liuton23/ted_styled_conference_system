@@ -7,6 +7,7 @@ import Entities.EventComparators.byTimeEventComparator;
 import Entities.EventComparators.byTitleEventComparator;
 import Entities.Speaker;
 import UseCases.*;
+import Entities.Speaker;
 //import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
 
 //import java.awt.*;
@@ -126,6 +127,7 @@ public class Controller {
             switch (chosen) {
                 case "S":
                     scheduleEvent(scheduleSystem);
+                    save();
                     break;
                 case "A":
                     presenter.displayMessages("Add Room");
@@ -134,6 +136,7 @@ public class Controller {
                     presenter.displayMessages("Enter room capacity:");
                     int roomCapacity = input.nextInt();
                     presenter.printAddRoomMessage(scheduleSystem.addRoom(roomId,roomCapacity));
+                    save();
                     break;
                 case "C":
                     presenter.displayMessages("Change Speaker");
@@ -148,6 +151,7 @@ public class Controller {
                     String eventName = events.get(index).getTitle();
                     int message = scheduleSystem.changeSpeaker(eventName,newSpeaker);
                     presenter.printChangeSpeakerMessage(message);
+                    save();
                     break;
                 case "B":
                     scheduling = false;
@@ -158,7 +162,7 @@ public class Controller {
 
     /**
      * Method for organizers to schedule new events.
-     * @param scheduleSystem system that manages scheduling events.
+     * @param scheduleSystem ScheduleSystem created in parent method.
      */
     private void scheduleEvent(ScheduleSystem scheduleSystem){
         Scanner input = new Scanner(System.in);
@@ -168,17 +172,17 @@ public class Controller {
         presenter.displayMessages("Enter event speaker:");
         String speaker = input.nextLine();
         presenter.displayMessages("Enter year:");
-        int year = input.nextInt();
+        int year = Integer.parseInt(input.nextLine());
         presenter.displayMessages("Enter month:"); //Must be all CAPITAL FULLY SPELLED OUT
         String month = input.nextLine();
         presenter.displayMessages("Enter day:");
-        int day = input.nextInt();
+        int day = Integer.parseInt(input.nextLine());
         presenter.displayMessages("Enter hour:");
-        int hour = input.nextInt();
+        int hour = Integer.parseInt(input.nextLine());
         presenter.displayMessages("Enter minute:");
-        int min = input.nextInt();
+        int min = Integer.parseInt(input.nextLine());
         presenter.displayMessages("Enter room id:");
-        int roomID = input.nextInt();
+        int roomID = Integer.parseInt(input.nextLine());
         presenter.printScheduleEventMessage(scheduleSystem.scheduleEvent(title, speaker, year, month, day,
                 hour, min, roomID));
     }
@@ -224,18 +228,22 @@ public class Controller {
                 case "U":
                     presenter.displayMessages("sending message to a user");
                     messageOneUser(username,ms);
+                    save();
                     break;
                 case "S":
                     presenter.displayMessages("sending message to all speakers");
                     messageAllSpeaker(username,ms);
+                    save();
                     break;
                 case "A":
                     presenter.displayMessages("sending message to all attendees");
                     messageAllAtt(username,ms);
+                    save();
                     break;
                 case "E":
                     presenter.displayMessages("sending message to all attendees in one or multiple events");
                     messageEventAllAtt(username,ms);
+                    save();
                 case "B":
                     messagingOther = false;
                     break;
@@ -388,12 +396,14 @@ public class Controller {
                     presenter.displayMessages("Event ID of event you'd like to sign up for:");
                     index = input.nextInt();
                     presenter.printSignUpMessage(signUpSystem.signUpEvent(username, index));
+                    save();
                     break;
                 case "D":
                     presenter.displayMessages("Drop out");
                     presenter.displayMessages("Event ID of event you'd like to drop up for:");
                     index = input.nextInt();
                     presenter.displayMessages(signUpSystem.dropOutEvent(username, index));
+                    save();
                     break;
                 case "B":
                     activity = false;
@@ -633,11 +643,11 @@ public class Controller {
      */
     private String login(){
         LoginSystem loginSystem = new LoginSystem(attendeeManager);
-        Scanner input = new Scanner(System.in);
+        Scanner obj1 = new Scanner(System.in);
         presenter.printUsernameMessage();
-        String username = input.nextLine();
+        String username = obj1.nextLine();
         presenter.printPasswordMessage();
-        String password = input.nextLine();
+        String password = obj1.nextLine();
         if (loginSystem.canLogin(username, password)){
             presenter.printLoginSucceedMessage();
             return username;
