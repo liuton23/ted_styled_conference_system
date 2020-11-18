@@ -66,15 +66,6 @@ public class MessageSystem {
 
     //helper
 
-    /**
-     * @param org attendee object
-     * @return true of this attendee is organizer
-     */
-    private Boolean checkIsOrganizer(Attendee org){
-        if (org instanceof Speaker){
-            return false;
-        } else return org.isOrganizer();
-    }
 
     /**
      * This method will let only organizer sends message to all speakers at once.
@@ -94,7 +85,7 @@ public class MessageSystem {
             return 1; /*"Incorrect username. Please try again."*/
         }
         Attendee org = obj.get();
-        if (!checkIsOrganizer(org)){
+        if (!am.checkIsOrganizer(org)){
             return 2;/*"Only Organizer can message all speakers."*/
         } else {
             mm.createMessage(list, sender, text);
@@ -120,7 +111,7 @@ public class MessageSystem {
             allAtt.add(att.getUsername());
         }
         Attendee org = obj.get();
-        if (!checkIsOrganizer(org)){
+        if (!am.checkIsOrganizer(org)){
             return 2; /*"Only Organizer can message all attendees."*/
         } else {
             mm.createMessage(allAtt,sender,text);
@@ -173,7 +164,6 @@ public class MessageSystem {
 
     //helper method for display
 
-
     /**
      * This method helps to get a list of events where the speaker do not speak at.
      * @param eventIndex a list of input events
@@ -209,7 +199,6 @@ public class MessageSystem {
             return x + eventIndex.get(max - 2).toString() + " and " + eventIndex.get(max - 1).toString();
         }
     }
-
 
     //ViewMessage methods
 

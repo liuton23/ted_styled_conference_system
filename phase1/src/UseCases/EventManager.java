@@ -178,7 +178,7 @@ public class EventManager implements Serializable {
      * @param attendee the username of the Attendee being removed from the event.
      */
     public void dropOut(Event event, String attendee){
-        event.getAttendeeList().remove(attendee);
+        event.removeAttendee(attendee);
     }
 
     /**
