@@ -28,7 +28,7 @@ public class Gateway {
      * @throws IOException error in writing to file
      */
     public void writeToFile(List<Serializable> serializing) throws IOException {
-        FileOutputStream fileOutStream = new FileOutputStream(filepath);
+        FileOutputStream fileOutStream = new FileOutputStream(new File(filepath));
         ObjectOutputStream objOutStream = new ObjectOutputStream(fileOutStream);
 
         for(Object obj: serializing){
