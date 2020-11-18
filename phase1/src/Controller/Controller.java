@@ -15,8 +15,6 @@ import java.util.List;
 
 /**
  * Manages user input.
- *
- * @version 1.2
  */
 public class Controller {
 

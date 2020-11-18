@@ -6,8 +6,6 @@ import java.util.List;
 
 /**
  * Manages file saving and persistence of information.
- * @author Muhammad Hasnat Khan
- * @version 1.0
  */
 public class Gateway {
 

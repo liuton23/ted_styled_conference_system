@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 /**
  * Manages the formatting and output of most <code> Strings </code>.
- * @author Muhammad Hasnat Khan
- * @version 1.0
  */
 public class Presenter {
 
