@@ -6,9 +6,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * An instance of this class implements the Comparator interface for the sorting of events by time.
+ */
 public class byTimeEventComparator implements Comparator<Event>{
 
     @Override
+    /**
+     * Comparator to sort an iterable collection events by event start time.
+     */
     public int compare(Event e1, Event e2) {
         ArrayList<LocalDateTime> slot1 = e1.getEventTime();
         ArrayList<LocalDateTime> slot2 = e2.getEventTime();
