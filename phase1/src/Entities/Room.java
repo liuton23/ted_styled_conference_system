@@ -54,7 +54,7 @@ public class Room implements Iterable<LocalDateTime[]>, Serializable {
     }
 
     /**
-     * Removes a booking from a room
+     * Removes a booking from a room. Assumes the event is booked in room.
      * @param eventName the name of the event to remove the booking for
      */
     public void removeBooking(String eventName) {

@@ -37,7 +37,7 @@ public class RoomManager implements Serializable {
     }
 
     /**
-     * Takes in an id value and returns the corresponding room
+     * Takes in an id value and returns the corresponding room. Assume room in system
      * @param id the id of the room to return
      * @return the Room object
      */
@@ -50,6 +50,20 @@ public class RoomManager implements Serializable {
             }
         }
         return room;
+    }
+
+    /**
+     * Takes in an id value and returns whether or not the room is in the system
+     * @param id the id of the room to check
+     * @return true if the room is in the system, false if not
+     */
+    public boolean checkRoomInSystem(int id) {
+        for (Room r : rooms) {
+            if (r.getId() == id) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -112,7 +126,7 @@ public class RoomManager implements Serializable {
     }
 
     /**
-     * Removes a booking for an event from a room
+     * Removes a booking for an event from a room. Assumes event is booked in room.
      * @param room the room to remove a booking from
      * @param eventName the name of the event to remove the booking for
      */
