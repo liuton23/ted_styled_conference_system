@@ -202,17 +202,17 @@ public class Controller {
         presenter.displayMessages("Enter event speaker:");
         String speaker = input.nextLine();
         presenter.displayMessages("Enter year:");
-        int year = input.nextInt();
+        int year = Integer.parseInt(input.nextLine());
         presenter.displayMessages("Enter month:"); //Must be all CAPITAL FULLY SPELLED OUT
         String month = input.nextLine();
         presenter.displayMessages("Enter day:");
-        int day = input.nextInt();
+        int day = Integer.parseInt(input.nextLine());
         presenter.displayMessages("Enter hour:");
-        int hour = input.nextInt();
+        int hour = Integer.parseInt(input.nextLine());
         presenter.displayMessages("Enter minute:");
-        int min = input.nextInt();
+        int min = Integer.parseInt(input.nextLine());
         presenter.displayMessages("Enter room id:");
-        int roomID = input.nextInt();
+        int roomID = Integer.parseInt(input.nextLine());
         presenter.printScheduleEventMessage(scheduleSystem.scheduleEvent(title, speaker, year, month, day,
                 hour, min, roomID));
     }
