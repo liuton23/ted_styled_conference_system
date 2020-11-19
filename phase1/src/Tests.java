@@ -1,6 +1,9 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import Controller.ScheduleSystem;
+import Entities.EventComparators.bySpeakerEventComparator;
+import Entities.EventComparators.byTimeEventComparator;
+import Entities.EventComparators.byTitleEventComparator;
 import UseCases.EventManager;
 import org.junit.jupiter.api.Test;
 import Entities.Event;
@@ -68,5 +71,16 @@ public class Tests{
         assertEquals(0 , scheduleSystemA.scheduleEvent("Pot roast", "Guy", 2015, "DECEMBER",
                 20, 14, 0, 2));
 
+    }
+    @Test
+    public void signUpSystemTests(){
+        Tests testcase3 = new Tests();
+        testcase3.attendeeManagerA.createAttendee("Jim","123", false);
+        SignUpSystem sus = new SignUpSystem(testcase3.attendeeManagerA, testcase3.eventManagerA, testcase3.roomManagerA);
+        sus.setComparator(new byTimeEventComparator());
+        System.out.println(sus.viewAllEvents());
+        sus.signUpEvent("Jim", 1);
+        System.out.println(testcase3.attendeeManagerA.getItinerary(testcase3.attendeeManagerA.usernameToAttendeeObject("Jim").get()));
+        assertEquals("Holiday Dance", testcase3.attendeeManagerA.getItinerary(testcase3.attendeeManagerA.usernameToAttendeeObject("Jim").get()).get(0));
     }
 }
