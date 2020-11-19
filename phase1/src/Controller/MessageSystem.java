@@ -133,6 +133,7 @@ public class MessageSystem {
         Optional<Attendee> obj = am.usernameToAttendeeObject(sender);
         ArrayList<String> list = new ArrayList<String>();
         ArrayList<String> error = new ArrayList<String>();
+        ArrayList<String> noAtt = new ArrayList<String>();
 
         if (!obj.isPresent()){
             return 2; //"Incorrect username. Please try again.";
@@ -147,11 +148,15 @@ public class MessageSystem {
                 error.add(i);
             } else {
                 Event eventF = eve.get();
-                list.addAll(em.eventToAttendees(eventF));
+                if (em.eventToAttendees(eventF).size() != 0) {
+                    list.addAll(em.eventToAttendees(eventF));
+                } else noAtt.add(i);
             }
         }
         if (error.size() != 0){
             return 4; //"Event list contains event which you do not speak at.";
+        } else if (noAtt.size() != 0){
+            return 6; //"no attendee at this event"
         } else {
             mm.createMessage(list, sender, text);
             return 5; //"The message has been successfully sent.";

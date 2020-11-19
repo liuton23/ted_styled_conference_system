@@ -119,11 +119,7 @@ public class Room implements Iterable<LocalDateTime[]>, Serializable {
          */
         @Override
         public void remove() {
-
-            bookings.remove( current - 1);
-
-            // In case we do not want to implement remove we write the following body.
-            //throw new UnsupportedOperationException("Not supported.");
+            throw new UnsupportedOperationException("Not supported.");
         }
     }
 }

@@ -253,7 +253,7 @@ public class Controller {
                     save();
                     break;
                 case "E":
-                    ArrayList<String> events = new ArrayList<String>();
+                    ArrayList<String> events = new ArrayList<>();
                     messageEventAllAtt(username,ms,events);
                     save();
                 case "B":
@@ -671,16 +671,19 @@ public class Controller {
             messageManager = (MessageManager) listOfObj.get(2);
             roomManager = (RoomManager) listOfObj.get(3);
         } catch (IOException e) {
+            System.out.println("NO save file found");
             attendeeManager = new AttendeeManager();
             eventManager = new EventManager();
             messageManager = new MessageManager();
             roomManager = new RoomManager();
+            System.out.println("Save file was not found or was corrupted");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }finally {
             presenter = new Presenter();
         }
     }
+
 
     /**
      * Saves the use case classes and all their fields in a file.
@@ -697,6 +700,8 @@ public class Controller {
             e.printStackTrace();
         }
     }
+
+
 
     /**
      * Attendee login.

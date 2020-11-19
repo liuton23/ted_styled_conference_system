@@ -96,8 +96,8 @@ public class Presenter {
      */
     public void mainMessageMenu(){
         ArrayList<String> options = new ArrayList<>();
-        options.add("(M)essaging users");
-        options.add("(V)iewing messages");
+        options.add("(M)essage users");
+        options.add("(V)iew messages");
         options.add("(B)ack");
         prompt(options);
     }
@@ -107,7 +107,7 @@ public class Presenter {
      */
     public void sendMessageMenuAtt(){
         ArrayList<String> options = new ArrayList<>();
-        options.add("Sending to a (U)ser");
+        options.add("Send to a (U)ser");
         options.add("(B)ack");
         prompt(options);
     }
@@ -117,16 +117,16 @@ public class Presenter {
      */
     public void sendOrgMessageOrg(){
         ArrayList<String> options = new ArrayList<>();
-        options.add("Sending to a (U)ser");
-        options.add("Sending to all (S)peakers");
-        options.add("Sending to all (A)ttendees");
+        options.add("Send to a (U)ser");
+        options.add("Send to all (S)peakers");
+        options.add("Send to all (A)ttendees");
         options.add("(B)ack");
         prompt(options);
     }
 
     public void wishToSendMoreEvent(){
         ArrayList<String> options = new ArrayList<>();
-        options.add("(S)ending to one more event");
+        options.add("(S)end to one more event");
         options.add("(C)ontinue to message");
         prompt(options);
     }
@@ -136,8 +136,8 @@ public class Presenter {
      */
     public void sendMessageMenuSpeaker(){
         ArrayList<String> options = new ArrayList<>();
-        options.add("Sending to a (U)ser");
-        options.add("Sending to all attendees in one or multiple (E)vents");
+        options.add("Send to a (U)ser");
+        options.add("Send to all attendees in one or multiple (E)vents");
         options.add("(B)ack");
         prompt(options);
     }
@@ -147,9 +147,9 @@ public class Presenter {
      */
     public void viewMessageMenu(){
         ArrayList<String> options = new ArrayList<>();
-        options.add("Viewing (S)ent messages");
-        options.add("Viewing (R)eceived messages");
-        options.add("Viewing messages (F)rom another user");
+        options.add("View (S)ent messages");
+        options.add("View (R)eceived messages");
+        options.add("View messages (F)rom another user");
         options.add("(B)ack");
         prompt(options);
     }
@@ -603,6 +603,9 @@ public class Presenter {
             case 5:
                 System.out.println("The message has been successfully sent.");
                 break;
+            case 6:
+                System.out.println("This event has no attendees.");
+                break;
         }
     }
 
@@ -626,6 +629,9 @@ public class Presenter {
                   break;
               case 5:
                   System.out.println("The message has been successfully sent.");
+                  break;
+              case 6:
+                  System.out.println("Events you entered contains event with no attendees.");
                   break;
           }
     }
