@@ -33,10 +33,7 @@ public class EventManager implements Serializable {
     }
 
     /**
-     * This method creates an event instance when the following conditions are satisfied:
-     * 1) The desired room is free
-     * 2) The selected speaker is free.
-     * 3) The event name is available.
+     * This method creates an event and adds it to EventManager's Arraylist of events.
      * @param title the desired event name.
      * @param speaker the desired speaker username.
      * @param year the year the event starts.
@@ -45,62 +42,15 @@ public class EventManager implements Serializable {
      * @param hour the hour the event starts.
      * @param minute the minute the event starts.
      * @param room the room id of the desired room where the event takes place.
-     * @return an integer signifying whether the event was successfully created or an error message.
      */
-    public int createEvent(String title, String speaker, int year, String month, int day, int hour,
+    public void createEvent(String title, String speaker, int year, String month, int day, int hour,
                               int minute, int room){
         LocalTime startTime = LocalTime.of(hour, minute);
         LocalTime endTime = startTime.plusHours(1);
         ArrayList<LocalDateTime> eventTime = new ArrayList<LocalDateTime>();
         eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, hour, minute));
         eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute));
-        if(!freeRoomCheck(eventTime, room)){
-            //"Room is already booked for this timeslot."
-            return 0 ;
-        }
-        else if(!freeSpeakerCheck(eventTime, speaker)) {
-            //"Speaker is already booked for this timeslot."
-            return 1;
-        }
-        else if(!freeTitleCheck(title)){
-            //"This event name has already been taken."
-            return 2;
-        }
-        else{
-            events.add(new Event(title, speaker, year, month, day, hour, minute, room));
-            //"Event successfully created."
-            return 3;
-        }
-    }
-
-    /**
-     * This method checks that the room with the given id is available at the specified time.
-     * @param eventTime the time the room's availability is being checked at.
-     * @param room the room id belonging to the room whose availability is being checked.
-     * @return a boolean value; true signalling the room is available at the given time and false if it is not.
-     */
-    public boolean freeRoomCheck(ArrayList<LocalDateTime> eventTime, int room){
-        LocalDateTime newEventStart = eventTime.get(0);
-        LocalDateTime newEventEnd = eventTime.get(1);
-        for(Event eventInstance : events){
-            // if the room is being used in an already booked event
-            if (eventInstance.getRoom() == room){
-                LocalDateTime bookedEventStart = eventInstance.getEventTime().get(0);
-                LocalDateTime bookedEventEnd = eventInstance.getEventTime().get(1);
-                // case 1: pre-booked event starts before or at the same time as the event we are trying to schedule
-                // AND ends after the new event start time, the room is not free
-                if((bookedEventStart.isBefore(newEventStart) || bookedEventStart.isEqual(newEventStart)) &&
-                        (bookedEventEnd.isAfter(newEventStart))){
-                    return false;
-                }
-                // case 2: the pre-booked event starts after the new event start time and before the new event  end time,
-                // the room is not free
-                else if(bookedEventStart.isAfter(newEventStart) && bookedEventStart.isBefore(newEventEnd)){
-                    return false;
-                }
-            }
-        }
-        return true;
+        events.add(new Event(title, speaker, year, month, day, hour, minute, room));
     }
 
     /**
@@ -214,13 +164,13 @@ public class EventManager implements Serializable {
         System.out.println(eventManager.getEvents().get(1).getTitle());
         eventManager.changeSpeaker(eventManager.events.get(1), "Matt Smith");
         System.out.println(eventManager.events.get(1).getSpeaker());
-        System.out.println(eventManager.createEvent("Dog Show", "Caesar Milan", 2020, "NOVEMBER",
-                16, 11, 30, 200));
+        //System.out.println(eventManager.createEvent("Dog Show", "Caesar Milan", 2020, "NOVEMBER",
+        //       16, 11, 30, 200));
         System.out.println(eventManager.events.size());
-        System.out.println(eventManager.createEvent("Fan Expo", "Stan Lee", 2020, "NOVEMBER",
-                16, 11, 30, 210));
-        System.out.println(eventManager.createEvent("Garden Lover's", "The Green Thumb", 2015, "AUGUST",
-                20, 2, 10, 500));
+        //System.out.println(eventManager.createEvent("Fan Expo", "Stan Lee", 2020, "NOVEMBER",
+        //        16, 11, 30, 210));
+        //System.out.println(eventManager.createEvent("Garden Lover's", "The Green Thumb", 2015, "AUGUST",
+        //        20, 2, 10, 500));
         eventManager.cancelEvent(eventManager.events.get(0));
         System.out.println(eventManager.events.size());
         Attendee Ana = new Attendee("Ana", "Heidi");
