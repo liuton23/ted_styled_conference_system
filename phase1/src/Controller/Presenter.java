@@ -519,6 +519,8 @@ public class Presenter {
         }
         else if (signUpOutput == 3){
             System.out.println("Event is at capacity: unable to sign up user.");
+        } else if (signUpOutput == 4){
+            System.out.println("Invalid ID. Please try again.");
         } else {
             System.out.println("There are no such event");
         }

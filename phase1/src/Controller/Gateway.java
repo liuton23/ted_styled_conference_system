@@ -10,6 +10,7 @@ import java.util.List;
 public class Gateway {
 
     private String filepath;
+    private File file;
 
     /**
      * Constructs a gateway path with <code>filepath</code>.
@@ -18,6 +19,7 @@ public class Gateway {
      */
     public Gateway(String filepath){
         this.filepath = filepath;
+        this.file = new File(filepath);
     }
 
     /**
@@ -26,7 +28,7 @@ public class Gateway {
      * @throws IOException error in writing to file
      */
     public void writeToFile(List<Serializable> serializing) throws IOException {
-        FileOutputStream fileOutStream = new FileOutputStream(new File(filepath));
+        FileOutputStream fileOutStream = new FileOutputStream(file);
         ObjectOutputStream objOutStream = new ObjectOutputStream(fileOutStream);
 
         for(Object obj: serializing){
@@ -45,7 +47,7 @@ public class Gateway {
      * @throws ClassNotFoundException class does not exist.
      */
     public ArrayList<Serializable> readFromFile(int length) throws IOException, ClassNotFoundException {
-        FileInputStream fileInStream = new FileInputStream(filepath);
+        FileInputStream fileInStream = new FileInputStream(file);
         ObjectInputStream objInStream = new ObjectInputStream(fileInStream);
         ArrayList<Serializable> serialized = new ArrayList<>();
 

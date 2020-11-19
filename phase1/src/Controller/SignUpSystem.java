@@ -8,6 +8,7 @@ import UseCases.AttendeeManager;
 import UseCases.EventManager;
 import UseCases.RoomManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Optional;
@@ -79,7 +80,10 @@ public class SignUpSystem {
      * @param eventIndex index of the selected event from a sorted list of events.
      * @return boolean value that will be sent to presenter to display corresponding message.
      */
-    public int signUpEvent(String username, int eventIndex){
+    public int signUpEvent(String username, int eventIndex) {
+        if (eventIndex < 1 || eventIndex > eventManager.getEvents().size()) {
+            return 4;
+        }
         ArrayList<Event> eventList = eventManager.getEvents();
         eventList.sort(comparator);
         if (eventIndex > eventList.size()){
@@ -99,6 +103,7 @@ public class SignUpSystem {
             }
         }
         return 3;
+
     }
 
     /**
@@ -109,6 +114,9 @@ public class SignUpSystem {
      * @return status message saying whether or not the attendee successfully signed up for an event.
      */
     public String dropOutEvent(String username, int eventIndex){
+        if (eventIndex < 1 || eventIndex > eventManager.getEvents().size()){
+            return "Incorrect ID. Please try again.";
+        }
         ArrayList<Event> eventList = eventManager.getEvents();
         eventList.sort(comparator);
         Event event = eventList.get(eventIndex-1);
