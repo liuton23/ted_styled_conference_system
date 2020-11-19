@@ -60,4 +60,32 @@ public class Gateway {
 
         return serialized;
     }
+
+    public void writeObjToFile(Serializable obj,String path){
+        try {
+            OutputStream file = new FileOutputStream(path);
+            OutputStream buffer = new BufferedOutputStream(file);
+            ObjectOutput output = new ObjectOutputStream(buffer);
+
+            output.writeObject(obj); //students);
+            output.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Serializable readObjFromFile(String path) throws ClassNotFoundException{
+        try {
+            InputStream file = new FileInputStream(path);
+            InputStream buffer = new BufferedInputStream(file);
+            ObjectInput input = new ObjectInputStream(buffer);
+
+            Serializable obj = (Serializable) input.readObject();
+            input.close();
+            return obj;
+        } catch (IOException e) {
+            System.out.println("No save file found.");
+            return null;
+        }
+    }
 }
