@@ -141,15 +141,14 @@ public class MessageSystem {
         if (!(se instanceof Speaker)){
             return 3; //"Only speakers can sent messages to all attendees of their talks they give.";
         }
-        ArrayList<Event> eventList = em.getEvents();
         for (String i : eventNames){
-            for (Event e : eventList){
-                if (e.getTitle().equals(i)){
-                    list.addAll(em.eventToAttendees(e));
-                }
-                else error.add(i);
+            Optional<Event> eve = em.nameToEvent(i);
+            if (!eve.isPresent()){
+                error.add(i);
+            } else {
+                Event eventF = eve.get();
+                list.addAll(em.eventToAttendees(eventF));
             }
-            error.add(i);
         }
         if (error.size() != 0){
             return 4; //"Event list contains event which you do not speak at.";

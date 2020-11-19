@@ -305,7 +305,6 @@ public class Controller {
                     presenter.printMessageEventAttendees(ms.messageEventAttendees(events,username,message));
                 } else presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
                 break;
-
         }
         /*
         presenter.printInputEventNumOrZero();
