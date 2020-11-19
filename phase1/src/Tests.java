@@ -64,7 +64,9 @@ public class Tests{
         assertEquals(4 , scheduleSystemA.scheduleEvent("Cook off", "Guy", 2020, "JUNE", 20, 12, 0, 1));
         attendeeManagerA.createSpeaker("Guy", "food");
         assertEquals(3 , scheduleSystemA.scheduleEvent("Cook off", "Guy", 2020, "JUNE", 20, 12, 0, 1));
-        // should give room unavailable error
+
+        scheduleSystemA.scheduleEvent("Fake event", "Martha Stewart", 2015, "DECEMBER", 20, 14, 0, 2);
+        // should give room unavailable error (0)
         assertEquals(0 , scheduleSystemA.scheduleEvent("Pot roast", "Guy", 2015, "DECEMBER",
                 20, 14, 0, 2));
         // should give speaker unavailable error

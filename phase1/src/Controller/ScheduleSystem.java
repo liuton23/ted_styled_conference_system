@@ -71,6 +71,7 @@ public class ScheduleSystem {
             //attendeeManager.addEventToSpeakerList(sp, title);
             //return eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
             if(!eventManager.freeRoomCheck(eventTime, room)){
+            //if(!roomManager.checkIfRoomAvailable(tempRoom, startDateTime, endDateTime)){
                 //"Room is already booked for this timeslot."
                 return 0 ;
             }
