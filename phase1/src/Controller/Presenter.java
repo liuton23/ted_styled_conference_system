@@ -603,6 +603,9 @@ public class Presenter {
             case 5:
                 System.out.println("The message has been successfully sent.");
                 break;
+            case 6:
+                System.out.println("This event has no attendees.");
+                break;
         }
     }
 
@@ -626,6 +629,9 @@ public class Presenter {
                   break;
               case 5:
                   System.out.println("The message has been successfully sent.");
+                  break;
+              case 6:
+                  System.out.println("Events you entered contains event with no attendees.");
                   break;
           }
     }
