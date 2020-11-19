@@ -1,5 +1,6 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import Controller.ScheduleSystem;
 import UseCases.EventManager;
 import org.junit.jupiter.api.Test;
 import Entities.Event;
@@ -9,20 +10,39 @@ import Entities.Room;
 import Entities.Speaker;
 import UseCases.*;
 import UseCases.EventManager;
+import Controller.*;
 
 public class Tests{
     // some initial set up
     EventManager eventManagerA;
+    AttendeeManager attendeeManagerA;
+    RoomManager roomManagerA;
+    ScheduleSystem scheduleSystemA;
+    Controller controllerA;
     public Tests(){
         this.eventManagerA = new EventManager();
-        Room hall = new Room(1, 1000);
-        Room auditorium = new Room(2, 500);
-        Speaker principle = new Speaker("Principle Skinner", "Mother");
-        Speaker caesar = new Speaker("Caesar Milan", "iLikeDogs");
+        this.attendeeManagerA = new AttendeeManager();
+        this.roomManagerA = new RoomManager();
+        this.scheduleSystemA = new ScheduleSystem(eventManagerA, attendeeManagerA, roomManagerA);
+        this.controllerA = new Controller();
+        roomManagerA.addRoom(1, 1000);
+        roomManagerA.addRoom(2, 500);
+        attendeeManagerA.createSpeaker("Principle Skinner", "Mother");
+        attendeeManagerA.createSpeaker("Caesar Milan", "iLikeDogs");
+        attendeeManagerA.createSpeaker("Caesar Milan", "iLikeDogs");
         eventManagerA.createEvent("Holiday Dance", "Principle Skinner", 2015, "DECEMBER",
                 20, 14, 0, 2);
         eventManagerA.createEvent("PetConference", "Caesar Milan", 2020, "JUNE", 2,
                 12,0, 1);
+        // event name in use
+        eventManagerA.createEvent("PetConference", "Martha Stewart", 2020, "JUNE", 2,
+                12,0, 1);
+        // speaker busy
+        eventManagerA.createEvent("Bake Off", "Principle Skinner", 2015, "DECEMBER", 20,
+                14,0, 1);
+        // room in use
+        eventManagerA.createEvent("Bake Off", "Martha Stewart", 2015, "DECEMBER", 20,
+                14,0, 2);
     }
 
     //eventManager tests
@@ -30,6 +50,23 @@ public class Tests{
     public void eventManagerTests() {
         Tests testCase1 = new Tests();
         // assert statements
+        //testing createEvent method BASIC
         assertEquals("Holiday Dance @ 2015-12-20 14:00:00 PM to 2015-12-20 15:00:00 PM in room: 2 with : Principle Skinner.", eventManagerA.getEvents().get(0).toString());
+        assertEquals("PetConference @ 2020-06-02 12:00:00 PM to 2020-06-02 13:00:00 PM in room: 1 with : Caesar Milan.", eventManagerA.getEvents().get(1).toString());
+        //testing that doesn't create even when the speaker is not free, room is not free, or title is not free
+        assertEquals(eventManagerA.getEvents().size(), 2);
+    }
+    @Test
+    public void scheduleSystemTests(){
+        Tests testcase2 = new Tests();
+        // testing scheduleEvent
+        //should give speaker not in system error
+        assertEquals(4 , scheduleSystemA.scheduleEvent("Cook off", "Guy", 2020, "JUNE", 20, 12, 0, 1));
+        attendeeManagerA.createSpeaker("Guy", "food");
+        assertEquals(3 , scheduleSystemA.scheduleEvent("Cook off", "Guy", 2020, "JUNE", 20, 12, 0, 1));
+        // should give room unavailable error
+        assertEquals(0 , scheduleSystemA.scheduleEvent("Pot roast", "Guy", 2015, "DECEMBER",
+                20, 14, 0, 2));
+
     }
 }

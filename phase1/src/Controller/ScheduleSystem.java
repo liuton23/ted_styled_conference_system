@@ -9,6 +9,10 @@ import UseCases.EventManager;
 import UseCases.AttendeeManager;
 import UseCases.RoomManager;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -46,6 +50,14 @@ public class ScheduleSystem {
      */
     public int scheduleEvent(String title, String speaker, int year, String month, int day, int hour, int minute,
                                 int room){
+        LocalTime startTime = LocalTime.of(hour, minute);
+        LocalTime endTime = startTime.plusHours(1);
+        LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
+        LocalDateTime endDateTime = LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute);
+        ArrayList<LocalDateTime> eventTime = new ArrayList<LocalDateTime>();
+        eventTime.add(startDateTime);
+        eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute));
+        Room tempRoom = roomManager.idToRoom(room);
         if(!attendeeManager.registeredSpeaker(speaker)){
             //the username provided does not belong to a speaker in the system.
             return 4;
@@ -55,9 +67,26 @@ public class ScheduleSystem {
             return 5;
         }
         else {
-            Speaker sp = (Speaker) attendeeManager.usernameToAttendeeObject(speaker).get();
-            attendeeManager.addEventToSpeakerList(sp, title);
-            return eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
+            //Speaker sp = (Speaker) attendeeManager.usernameToAttendeeObject(speaker).get();
+            //attendeeManager.addEventToSpeakerList(sp, title);
+            //return eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
+            if(!eventManager.freeRoomCheck(eventTime, room)){
+                //"Room is already booked for this timeslot."
+                return 0 ;
+            }
+            else if(!eventManager.freeSpeakerCheck(eventTime, speaker)) {
+                //"Speaker is already booked for this timeslot."
+                return 1;
+            }
+            else if(!eventManager.freeTitleCheck(title)){
+                //"This event name has already been taken."
+                return 2;
+            }
+            else{
+                eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
+                //"Event successfully created."
+                return 3;
+            }
         }
     }
 
