@@ -129,19 +129,37 @@ public class Controller {
                 case "A":
                     presenter.displayMessages("requestAddRoom");
                     presenter.displayMessages("requestRoom");
-                    int roomId = input.nextInt();
+                    int roomId;
+                    int roomCapacity;
+                    try {
+                        roomId = input.nextInt();
+                    } catch (InputMismatchException e){
+                        presenter.invalidInput();
+                        break;
+                    }
                     presenter.displayMessages("requestCapacity");
-                    int roomCapacity = input.nextInt();
+                    try {
+                        roomCapacity = input.nextInt();
+                    } catch (InputMismatchException e){
+                        presenter.invalidInput();
+                        break;
+                    }
                     presenter.printAddRoomMessage(scheduleSystem.addRoom(roomId,roomCapacity));
                     save();
                     break;
                 case "C":
+                    int index;
                     presenter.displayMessages("changeSpeaker");
                     ArrayList<Event> events = new ArrayList<>(eventManager.getEvents());
                     events.sort(new bySpeakerEventComparator());
                     presenter.displayAllEvents(events, "speaker");
                     presenter.displayMessages("requestRoom");
-                    int index = input.nextInt();
+                    try {
+                        index = input.nextInt();
+                    } catch (InputMismatchException e){
+                        presenter.invalidInput();
+                        break;
+                    }
                     presenter.displayMessages("requestSpeaker");
                     String newSpeaker = input.nextLine();
                     String eventName = events.get(index - 1).getTitle();
@@ -411,14 +429,23 @@ public class Controller {
                 case "S":
                     presenter.displayMessages("signUp");
                     presenter.displayMessages("requestEventId");
-                    index = input.nextInt();
+                    try {
+                        index = input.nextInt();
+                    } catch (InputMismatchException e){
+                        presenter.printSignUpMessage(4);
+                        break;
+                    }
                     presenter.printSignUpMessage(signUpSystem.signUpEvent(username, index));
-                    save();
                     break;
                 case "D":
                     presenter.displayMessages("dropOut");
                     presenter.displayMessages("requestEventIdDropOut");
-                    index = input.nextInt();
+                    try {
+                        index = input.nextInt();
+                    } catch (InputMismatchException e){
+                        presenter.printSignUpMessage(4);
+                        break;
+                    }
                     presenter.display(signUpSystem.dropOutEvent(username, index));
                     save();
                     break;
