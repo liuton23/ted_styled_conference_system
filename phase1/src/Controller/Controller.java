@@ -163,7 +163,7 @@ public class Controller {
     private void scheduleEvent(ScheduleSystem scheduleSystem){
         Scanner input = new Scanner(System.in);
         presenter.displayMessages("S");
-        String title = input.nextLine();
+        String title = input.nextLine().trim();
         presenter.displayMessages("requestSpeaker");
         String speaker = input.nextLine();
         presenter.displayMessages("requestYear");
@@ -235,7 +235,8 @@ public class Controller {
                     save();
                     break;
                 case "E":
-                    messageEventAllAtt(username,ms);
+                    ArrayList<String> events = new ArrayList<String>();
+                    messageEventAllAtt(username,ms,events);
                     save();
                 case "B":
                     messagingOther = false;
@@ -288,24 +289,41 @@ public class Controller {
      * @param username username of the sender.
      * @param ms system that manages sending messages.
      */
-    private void messageEventAllAtt(String username, MessageSystem ms){
+    private void messageEventAllAtt(String username, MessageSystem ms, ArrayList<String> events){
         Scanner obj = new Scanner(System.in);
-        ArrayList<Integer> events = new ArrayList<>();
         presenter.printInputEventNum();
-        events.add(Integer.parseInt(obj.nextLine()));
+        events.add(obj.nextLine().trim());
+        String chosen = askMenuInput(12);
+        switch(chosen){
+            case "S":
+                messageEventAllAtt(username,ms,events);
+                break;
+            case "C":
+                presenter.printInputMessagePlz();
+                String message = obj.nextLine().trim();
+                if (events.size() == 1){
+                    presenter.printMessageEventAttendees(ms.messageEventAttendees(events,username,message));
+                } else presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
+                break;
+
+        }
+        /*
         presenter.printInputEventNumOrZero();
-        int i = Integer.parseInt(obj.nextLine());
-        while (i != 0){
+        String i = obj.nextLine().trim();
+        while (i.equals("N")){
             events.add(i);
             presenter.printInputEventNumOrZero();
-            i = Integer.parseInt(obj.nextLine());
+            i = obj.nextLine().trim();
         }
         presenter.printInputMessagePlz();
-        /*String message = obj.nextLine();
+        String message = obj.nextLine().trim();
         if (events.size() == 1){
             presenter.printMessageEventAttendees(ms.messageEventAttendees(events,username,message));
         } else presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
         */
+
+
+        /*
         String message = obj.nextLine();
         if (ms.messageEventAttendees(events,username,message) == 4){
             ArrayList<Integer> error = ms.viewEventsNotSpeak(events,username);
@@ -314,6 +332,7 @@ public class Controller {
             presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
         }
         else presenter.printMessageEventAttendees(ms.messageEventAttendees(events,username,message));
+        */
     }
 
     /**
@@ -560,6 +579,9 @@ public class Controller {
                 choices.add("E");
                 choices.add("B");
                 break;
+            case 12:
+                choices.add("S");
+                choices.add("C");
         }
         return choices;
     }
@@ -602,6 +624,9 @@ public class Controller {
                 break;
             case 11:
                 presenter.sendMessageMenuSpeaker();
+                break;
+            case 12:
+                presenter.wishToSendMoreEvent();
                 break;
         }
     }

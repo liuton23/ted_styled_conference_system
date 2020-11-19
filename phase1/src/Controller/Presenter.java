@@ -124,6 +124,13 @@ public class Presenter {
         prompt(options);
     }
 
+    public void wishToSendMoreEvent(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("(S)ending to one more event");
+        options.add("(C)ontinue to message");
+        prompt(options);
+    }
+
     /**
      * Displays the send message menu for speaker.
      */
@@ -347,15 +354,15 @@ public class Presenter {
      * Prompts user to input event number
      */
     public void printInputEventNum(){
-        System.out.println("Please enter an event number");
+        System.out.println("Please enter an event name");
     }
 
     /**
      * Prompts user to input event number or zero if no more event
      */
     public void printInputEventNumOrZero(){
-        System.out.println("Please enter another event number " +
-                "if you wish, otherwise please enter (0)");
+        System.out.println("Please enter another event name " +
+                "if you wish, otherwise just enter (N)o");
     }
 
     /**
@@ -372,13 +379,6 @@ public class Presenter {
         System.out.println("There are no received messages for you");
     }
 
-    /**
-     * string of message below
-     * @return "You do not speak at event number "
-     */
-    public String udoNotSpeakAt(){
-        return "You do not speak at event number ";
-    }
 
     /**
      * string of message below
@@ -596,7 +596,7 @@ public class Presenter {
                 System.out.println("Only speakers can sent messages to all attendees of their talks they give.");
                 break;
             case 4:
-                System.out.println("You do not speak at this event.");
+                System.out.println("You do not speak at this event or this event do not exist or you spell the name wrong");
                 break;
             case 5:
                 System.out.println("The message has been successfully sent.");
@@ -620,7 +620,7 @@ public class Presenter {
                   System.out.println("Only speakers can sent messages to all attendees of their talks they give.");
                   break;
               case 4:
-                  System.out.println("Events you entered contains event which you do not speak at.");
+                  System.out.println("Events you entered contains invalid event (do not speak at or invalid name).");
                   break;
               case 5:
                   System.out.println("The message has been successfully sent.");
