@@ -1,18 +1,12 @@
+package Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import Controller.ScheduleSystem;
-import Entities.EventComparators.bySpeakerEventComparator;
 import Entities.EventComparators.byTimeEventComparator;
-import Entities.EventComparators.byTitleEventComparator;
 import UseCases.EventManager;
 import org.junit.jupiter.api.Test;
-import Entities.Event;
-import Entities.Attendee;
-import Entities.Message;
-import Entities.Room;
-import Entities.Speaker;
 import UseCases.*;
-import UseCases.EventManager;
 import Controller.*;
 
 public class Tests{
