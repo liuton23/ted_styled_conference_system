@@ -28,15 +28,15 @@ public class Gateway {
      * @throws IOException error in writing to file
      */
     public void writeToFile(List<Serializable> serializing) throws IOException {
-        FileOutputStream fileOutStream = new FileOutputStream(file);
-        ObjectOutputStream objOutStream = new ObjectOutputStream(fileOutStream);
+        OutputStream file = new FileOutputStream(filepath);
+        OutputStream buffer = new BufferedOutputStream(file);
+        ObjectOutput objOut = new ObjectOutputStream(buffer);
 
         for(Object obj: serializing){
-            objOutStream.writeObject(obj);
+            objOut.writeObject(obj);
         }
 
-        objOutStream.flush();
-        objOutStream.close();
+        objOut.close();
     }
 
     /**
@@ -47,12 +47,13 @@ public class Gateway {
      * @throws ClassNotFoundException class does not exist.
      */
     public ArrayList<Serializable> readFromFile(int length) throws IOException, ClassNotFoundException {
-        FileInputStream fileInStream = new FileInputStream(file);
-        ObjectInputStream objInStream = new ObjectInputStream(fileInStream);
+        InputStream file = new FileInputStream(filepath);
+        InputStream buffer = new BufferedInputStream(file);
+        ObjectInput objInput = new ObjectInputStream(buffer);
         ArrayList<Serializable> serialized = new ArrayList<>();
 
         for(int i = 0; i < length; i++){
-            Object adding = objInStream.readObject();
+            Object adding = objInput.readObject();
             if(adding != null) {
                 serialized.add((Serializable) adding);
             }
@@ -61,31 +62,5 @@ public class Gateway {
         return serialized;
     }
 
-    public void writeObjToFile(Serializable obj,String path){
-        try {
-            OutputStream file = new FileOutputStream(path);
-            OutputStream buffer = new BufferedOutputStream(file);
-            ObjectOutput output = new ObjectOutputStream(buffer);
 
-            output.writeObject(obj); //students);
-            output.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Serializable readObjFromFile(String path) throws ClassNotFoundException{
-        try {
-            InputStream file = new FileInputStream(path);
-            InputStream buffer = new BufferedInputStream(file);
-            ObjectInput input = new ObjectInputStream(buffer);
-
-            Serializable obj = (Serializable) input.readObject();
-            input.close();
-            return obj;
-        } catch (IOException e) {
-            System.out.println("No save file found.");
-            return null;
-        }
-    }
 }
