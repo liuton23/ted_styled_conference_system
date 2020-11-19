@@ -27,9 +27,11 @@ public class Tests{
         this.controllerA = new Controller();
         roomManagerA.addRoom(1, 1000);
         roomManagerA.addRoom(2, 500);
+        roomManagerA.addRoom(3, 200);
         attendeeManagerA.createSpeaker("Principle Skinner", "Mother");
         attendeeManagerA.createSpeaker("Caesar Milan", "iLikeDogs");
         attendeeManagerA.createSpeaker("Caesar Milan", "iLikeDogs");
+        attendeeManagerA.createSpeaker("Martha Stewart", "bread");
         eventManagerA.createEvent("Holiday Dance", "Principle Skinner", 2015, "DECEMBER",
                 20, 14, 0, 2);
         eventManagerA.createEvent("PetConference", "Caesar Milan", 2020, "JUNE", 2,
@@ -59,16 +61,20 @@ public class Tests{
     @Test
     public void scheduleSystemTests(){
         Tests testcase2 = new Tests();
+
         // testing scheduleEvent
+
         //should give speaker not in system error
         assertEquals(4 , scheduleSystemA.scheduleEvent("Cook off", "Guy", 2020, "JUNE", 20, 12, 0, 1));
         attendeeManagerA.createSpeaker("Guy", "food");
         assertEquals(3 , scheduleSystemA.scheduleEvent("Cook off", "Guy", 2020, "JUNE", 20, 12, 0, 1));
 
-        scheduleSystemA.scheduleEvent("Fake event", "Martha Stewart", 2015, "DECEMBER", 20, 14, 0, 2);
+        System.out.println(scheduleSystemA.scheduleEvent("Fake event", "Martha Stewart", 2015, "AUGUST", 2, 14, 0, 3));
         // should give room unavailable error (0)
-        assertEquals(0 , scheduleSystemA.scheduleEvent("Pot roast", "Guy", 2015, "DECEMBER",
-                20, 14, 0, 2));
+        assertEquals(0 , scheduleSystemA.scheduleEvent("Pot roast", "Guy", 2015, "AUGUST",
+                2, 14, 0, 3));
+
         // should give speaker unavailable error
+        assertEquals(1, scheduleSystemA.scheduleEvent("BadEvent", "Martha Stewart", 2015, "DECEMBER", 20, 14, 2, 1));
     }
 }

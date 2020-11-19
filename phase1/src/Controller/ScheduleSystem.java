@@ -66,28 +66,25 @@ public class ScheduleSystem {
             //This room is not in the system.
             return 5;
         }
-        else {
-            //Speaker sp = (Speaker) attendeeManager.usernameToAttendeeObject(speaker).get();
-            //attendeeManager.addEventToSpeakerList(sp, title);
-            //return eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
-            if(!eventManager.freeRoomCheck(eventTime, room)){
-            //if(!roomManager.checkIfRoomAvailable(tempRoom, startDateTime, endDateTime)){
+        else if(!roomManager.checkIfRoomAvailable(tempRoom, startDateTime, endDateTime)){
                 //"Room is already booked for this timeslot."
                 return 0 ;
-            }
-            else if(!eventManager.freeSpeakerCheck(eventTime, speaker)) {
-                //"Speaker is already booked for this timeslot."
-                return 1;
-            }
-            else if(!eventManager.freeTitleCheck(title)){
-                //"This event name has already been taken."
-                return 2;
-            }
-            else{
-                eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
-                //"Event successfully created."
-                return 3;
-            }
+        }
+        else if(!eventManager.freeSpeakerCheck(eventTime, speaker)) {
+            //"Speaker is already booked for this timeslot."
+            return 1;
+        }
+        else if(!eventManager.freeTitleCheck(title)){
+            //"This event name has already been taken."
+            return 2;
+        }
+        else{
+            Speaker sp = (Speaker) attendeeManager.usernameToAttendeeObject(speaker).get();
+            attendeeManager.addEventToSpeakerList(sp, title);
+            roomManager.book(tempRoom, title, startDateTime, endDateTime);
+            eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
+            //"Event successfully created."
+            return 3;
         }
     }
 

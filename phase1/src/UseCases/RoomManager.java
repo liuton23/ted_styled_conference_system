@@ -175,5 +175,9 @@ public class RoomManager implements Serializable {
         System.out.println(r.checkIfRoomAvailable(one, start1, end1)); //true
         r.book(one,"party6", start1, end1);
         System.out.println(r.checkIfRoomAvailable(one, start1, end1)); //false
+        r.addRoom(3, 100);
+        Room three = r.idToRoom(3);
+        r.book(three, "Event", start1, end1);
+        System.out.println(r.checkIfRoomAvailable(three, start1, end1));
     }
 }
