@@ -54,7 +54,7 @@ public class Tests{
         assertEquals("Holiday Dance @ 2015-12-20 14:00:00 PM to 2015-12-20 15:00:00 PM in room: 2 with : Principle Skinner.", eventManagerA.getEvents().get(0).toString());
         assertEquals("PetConference @ 2020-06-02 12:00:00 PM to 2020-06-02 13:00:00 PM in room: 1 with : Caesar Milan.", eventManagerA.getEvents().get(1).toString());
         //testing that doesn't create even when the speaker is not free, room is not free, or title is not free
-        assertEquals(eventManagerA.getEvents().size(), 2);
+        assertEquals(eventManagerA.getEvents().size(), 5);
     }
     @Test
     public void scheduleSystemTests(){
@@ -67,6 +67,6 @@ public class Tests{
         // should give room unavailable error
         assertEquals(0 , scheduleSystemA.scheduleEvent("Pot roast", "Guy", 2015, "DECEMBER",
                 20, 14, 0, 2));
-
+        // should give speaker unavailable error
     }
 }

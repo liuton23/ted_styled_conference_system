@@ -47,30 +47,14 @@ public class EventManager implements Serializable {
      * @param room the room id of the desired room where the event takes place.
      * @return an integer signifying whether the event was successfully created or an error message.
      */
-    public int createEvent(String title, String speaker, int year, String month, int day, int hour,
+    public void createEvent(String title, String speaker, int year, String month, int day, int hour,
                               int minute, int room){
         LocalTime startTime = LocalTime.of(hour, minute);
         LocalTime endTime = startTime.plusHours(1);
         ArrayList<LocalDateTime> eventTime = new ArrayList<LocalDateTime>();
         eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, hour, minute));
         eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute));
-        if(!freeRoomCheck(eventTime, room)){
-            //"Room is already booked for this timeslot."
-            return 0 ;
-        }
-        else if(!freeSpeakerCheck(eventTime, speaker)) {
-            //"Speaker is already booked for this timeslot."
-            return 1;
-        }
-        else if(!freeTitleCheck(title)){
-            //"This event name has already been taken."
-            return 2;
-        }
-        else{
-            events.add(new Event(title, speaker, year, month, day, hour, minute, room));
-            //"Event successfully created."
-            return 3;
-        }
+        events.add(new Event(title, speaker, year, month, day, hour, minute, room));
     }
 
     /**
@@ -214,13 +198,13 @@ public class EventManager implements Serializable {
         System.out.println(eventManager.getEvents().get(1).getTitle());
         eventManager.changeSpeaker(eventManager.events.get(1), "Matt Smith");
         System.out.println(eventManager.events.get(1).getSpeaker());
-        System.out.println(eventManager.createEvent("Dog Show", "Caesar Milan", 2020, "NOVEMBER",
-                16, 11, 30, 200));
+        //System.out.println(eventManager.createEvent("Dog Show", "Caesar Milan", 2020, "NOVEMBER",
+        //       16, 11, 30, 200));
         System.out.println(eventManager.events.size());
-        System.out.println(eventManager.createEvent("Fan Expo", "Stan Lee", 2020, "NOVEMBER",
-                16, 11, 30, 210));
-        System.out.println(eventManager.createEvent("Garden Lover's", "The Green Thumb", 2015, "AUGUST",
-                20, 2, 10, 500));
+        //System.out.println(eventManager.createEvent("Fan Expo", "Stan Lee", 2020, "NOVEMBER",
+        //        16, 11, 30, 210));
+        //System.out.println(eventManager.createEvent("Garden Lover's", "The Green Thumb", 2015, "AUGUST",
+        //        20, 2, 10, 500));
         eventManager.cancelEvent(eventManager.events.get(0));
         System.out.println(eventManager.events.size());
         Attendee Ana = new Attendee("Ana", "Heidi");
