@@ -541,11 +541,16 @@ public class Presenter {
         if (signUpOutput == 2){
             System.out.println("User was successfully signed up.");
         }
-        else if (signUpOutput == 3){
+        else if (signUpOutput == 3) {
             System.out.println("Event is at capacity: unable to sign up user.");
-        } else if (signUpOutput == 4){
+        }
+        else if (signUpOutput == 5){
+            System.out.println("User is already signed up for this event.");
+            }
+        else if (signUpOutput == 4){
             System.out.println("Invalid ID. Please try again.");
-        } else {
+        }
+        else {
             System.out.println("There are no such event");
         }
     }

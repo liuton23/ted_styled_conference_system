@@ -16,6 +16,7 @@ public class Tests{
     RoomManager roomManagerA;
     ScheduleSystem scheduleSystemA;
     Controller controllerA;
+    MessageManager messageManagerA;
     public Tests(){
         this.eventManagerA = new EventManager();
         this.attendeeManagerA = new AttendeeManager();

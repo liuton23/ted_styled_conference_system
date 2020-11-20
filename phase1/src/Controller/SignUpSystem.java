@@ -95,6 +95,10 @@ public class SignUpSystem {
         //check if username is valid
         if (obj.isPresent()){
             Attendee attendee = obj.get();
+            //checking that person is not already signed up
+            if(event.getAttendeeList().contains(username)){
+                return 5;
+            }
             //checking that there is space at the event
             if(event.getAttendeeList().size() < room.getCapacity()) {
                 eventManager.signUp(event, attendee.getUsername());
