@@ -145,6 +145,7 @@ public class ScheduleSystem {
         }
     }
 
+    //for PHASE 2
     public int cancelEvent(String eventName) {
         if (!eventManager.nameToEvent(eventName).isPresent()) {
             // event name does not correspond to an event.

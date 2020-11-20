@@ -160,7 +160,7 @@ public class Controller {
     }
 
     /**
-     * Method for organizers to schedule new events.
+     * Method for organizers to input new event information.
      * @param scheduleSystem ScheduleSystem created in parent method.
      */
     private void scheduleEvent(ScheduleSystem scheduleSystem){
