@@ -36,7 +36,7 @@ public class Presenter {
      */
     public void prompt(ArrayList<String> options){
         int width = (options.size() / 4) + 1;
-        System.out.println("What would you like to do:");
+        System.out.println("Please select an option:");
         for(int i = 0; i < options.size(); i++) {
             System.out.print(options.get(i) + "\t \t \t");
             if( (i + 1) % width == 0){

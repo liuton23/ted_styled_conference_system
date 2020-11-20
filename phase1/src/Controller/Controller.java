@@ -678,6 +678,7 @@ public class Controller {
                 break;
         }
     }
+
     /**
      * Initializes the use case classes. If the program has not been run before, or the save file has been corrupted,
      * moved, or missing, then new use case classes will be instantiated. Otherwise, the use case classes will be loaded

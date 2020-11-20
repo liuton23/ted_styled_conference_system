@@ -198,8 +198,7 @@ public class MessageSystem {
         return messageManager.getAllMessagesFrom(r,s);
     }
 
-    /*
-    test case
+/* Test will be moved to test file
     public static void main(String[] args){
         AttendeeManager am = new AttendeeManager();
         MessageManager mm = new MessageManager();
@@ -213,30 +212,32 @@ public class MessageSystem {
         am.createSpeaker("james","iplayallday");
         RoomManager rm = new RoomManager();
         ScheduleSystem sls = new ScheduleSystem(em, am, rm);
+        sls.addRoom(1,2);
         sls.scheduleEvent("cv workshop","lily",2020, "NOVEMBER",
-                20,14,30,1, 2);
-        SignUpSystem sus = new SignUpSystem(am, em);
+                20,14,30,1);
+        SignUpSystem sus = new SignUpSystem(am, em, rm);
         sus.signUpEvent("ritawon",1);
         sus.signUpEvent("liuton23",1);
         sls.scheduleEvent("Harry Potter Fan Conference", "james",2020,"DECEMBER",10,
-                14,0,1,50);
-        sls.addRoom(1,2);
+                14,0,1);
         System.out.println(sus.viewAllEvents());
         sus.signUpEvent("ritawon",2);
         ms.messageAttendee("ritawon","liuton23","See u at LCBO!");
-        System.out.println(ms.messageEventAttendees(1,
+        ArrayList<String> evs = new ArrayList<String>();
+        evs.add("cv workshop");
+        System.out.println(ms.messageEventAttendees(evs,
                 "lily","The meeting is gonna be hold online!"));
         System.out.println(ms.messageAttendee("liuton23","ritawon","I'll bring some coffee:)!"));
-        System.out.println(ms.viewAllMessagesFrom("liuton23","ritawon"));
         System.out.println(ms.messageAllSpeakers("steve",
                 "I am looking for an experienced speaker, please DM me!"));
         System.out.println(ms.messageAllAttendees("steve","System will be down tmrw at 5:00pm!"));
-        ArrayList<Integer> evs = new ArrayList<Integer>();
-        evs.add(1);
-        evs.add(2);
+
+        evs.add("Harry Potter Fan Conference");
         System.out.println(ms.messageEventAttendees(evs,"james","Don't be late!"));
         System.out.println(ms.viewReceivedMessage("ritawon"));
-        System.out.println(ms.messageEventAttendees(3,"lily","lol."));
+        System.out.println(ms.messageAllSpeakers("liuton23", "lol"));
     }
-     */
+
+ */
+
 }
