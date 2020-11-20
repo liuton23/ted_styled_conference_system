@@ -353,7 +353,7 @@ public class Presenter {
     /**
      * Prompts user to input event number
      */
-    public void printInputEventNum(){
+    public void printInputEventName(){
         System.out.println("Please enter an event name");
     }
 
@@ -589,7 +589,7 @@ public class Presenter {
     public void printMessageEventAttendees(int messageEventAttendees){
         switch (messageEventAttendees) {
             case 1:
-                System.out.println("There is no such event.");
+                System.out.println("You do not speak at this event.");
                 break;
             case 2:
                 System.out.println("Incorrect username. Please try again.");
@@ -598,7 +598,7 @@ public class Presenter {
                 System.out.println("Only speakers can sent messages to all attendees of their talks they give.");
                 break;
             case 4:
-                System.out.println("You do not speak at this event or this event do not exist or you spell the name wrong");
+                System.out.println("This event do not exist or you spell the name wrong");
                 break;
             case 5:
                 System.out.println("The message has been successfully sent.");
@@ -616,7 +616,7 @@ public class Presenter {
     public void printMessageMultipleEventsAttendees(int messageMultipleEventsAttendees){
           switch(messageMultipleEventsAttendees){
               case 1:
-                  System.out.println("Event list contains non-existed event.");
+                  System.out.println("Events you entered contains event you do not speak at.");
                   break;
               case 2:
                   System.out.println("Incorrect username. Please try again.");
@@ -625,7 +625,7 @@ public class Presenter {
                   System.out.println("Only speakers can sent messages to all attendees of their talks they give.");
                   break;
               case 4:
-                  System.out.println("Events you entered contains invalid event (do not speak at or invalid name).");
+                  System.out.println("Events you entered contains invalid event.(do not exists or spelled name wrong)");
                   break;
               case 5:
                   System.out.println("The message has been successfully sent.");

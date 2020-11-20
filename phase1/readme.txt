@@ -38,6 +38,9 @@ Enter “a” or “A” if you want to message all the attendees in the system.
 
 If the user is a Speaker, additional message option is:
 Enter “e” or “E” if you want to message to all attendees from one or multiple events.
+After enter an event name (make sure exact name), you have options :
+Enter "s" or "S" if you want to message to another event at the same time
+Enter "c" or "C" if you do not wish to message to another event at the same time, and you will enter message after
 
 
 After entering the ViewingMessage option, options are:

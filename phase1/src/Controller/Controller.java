@@ -263,7 +263,7 @@ public class Controller {
     /**
      * Messages all speakers.
      * @param username username of the sender.
-     * @param ms system that manages sending messages.
+     * @param ms message system that controls sending messages.
      */
     private void messageAllSpeaker(String username, MessageSystem ms){
         Scanner obj = new Scanner(System.in);
@@ -291,7 +291,7 @@ public class Controller {
      */
     private void messageEventAllAtt(String username, MessageSystem ms, ArrayList<String> events){
         Scanner obj = new Scanner(System.in);
-        presenter.printInputEventNum();
+        presenter.printInputEventName();
         events.add(obj.nextLine().trim());
         String chosen = askMenuInput(12);
         switch(chosen){
@@ -303,35 +303,10 @@ public class Controller {
                 String message = obj.nextLine().trim();
                 if (events.size() == 1){
                     presenter.printMessageEventAttendees(ms.messageEventAttendees(events,username,message));
-                } else presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
+                } else presenter.printMessageMultipleEventsAttendees
+                        (ms.messageEventAttendees(events,username,message));
                 break;
         }
-        /*
-        presenter.printInputEventNumOrZero();
-        String i = obj.nextLine().trim();
-        while (i.equals("N")){
-            events.add(i);
-            presenter.printInputEventNumOrZero();
-            i = obj.nextLine().trim();
-        }
-        presenter.printInputMessagePlz();
-        String message = obj.nextLine().trim();
-        if (events.size() == 1){
-            presenter.printMessageEventAttendees(ms.messageEventAttendees(events,username,message));
-        } else presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
-        */
-
-
-        /*
-        String message = obj.nextLine();
-        if (ms.messageEventAttendees(events,username,message) == 4){
-            ArrayList<Integer> error = ms.viewEventsNotSpeak(events,username);
-            presenter.display( presenter.udoNotSpeakAt() + ms.eventDisplayBuilder(error));
-        } else if (events.size() == 1){
-            presenter.printMessageMultipleEventsAttendees(ms.messageEventAttendees(events,username,message));
-        }
-        else presenter.printMessageEventAttendees(ms.messageEventAttendees(events,username,message));
-        */
     }
 
     /**
