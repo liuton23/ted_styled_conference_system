@@ -19,6 +19,10 @@ public class Presenter {
                 "information.");
     }
 
+    public String getExit() {
+        return "EXIT";
+    }
+
     /**
      * Displays a generic message.
      */
@@ -176,6 +180,26 @@ public class Presenter {
         options.add("Sort events by (T)ime");
         options.add("Sort events by (N)ame");
         options.add("Sort events by (S)peaker");
+        prompt(options);
+    }
+
+    /**
+     * Displays the month options menu.
+     */
+    public void viewMonthsMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("JANUARY");
+        options.add("FEBRUARY");
+        options.add("MARCH");
+        options.add("APRIL");
+        options.add("MAY");
+        options.add("JUNE");
+        options.add("JULY");
+        options.add("AUGUST");
+        options.add("SEPTEMBER");
+        options.add("OCTOBER");
+        options.add("NOVEMBER");
+        options.add("DECEMBER");
         prompt(options);
     }
 
@@ -353,7 +377,7 @@ public class Presenter {
     /**
      * Prompts user to input event number
      */
-    public void printInputEventNum(){
+    public void printInputEventName(){
         System.out.println("Please enter an event name");
     }
 
@@ -589,7 +613,7 @@ public class Presenter {
     public void printMessageEventAttendees(int messageEventAttendees){
         switch (messageEventAttendees) {
             case 1:
-                System.out.println("There is no such event.");
+                System.out.println("You do not speak at this event.");
                 break;
             case 2:
                 System.out.println("Incorrect username. Please try again.");
@@ -598,7 +622,7 @@ public class Presenter {
                 System.out.println("Only speakers can sent messages to all attendees of their talks they give.");
                 break;
             case 4:
-                System.out.println("You do not speak at this event or this event do not exist or you spell the name wrong");
+                System.out.println("This event do not exist or you spell the name wrong");
                 break;
             case 5:
                 System.out.println("The message has been successfully sent.");
@@ -616,7 +640,7 @@ public class Presenter {
     public void printMessageMultipleEventsAttendees(int messageMultipleEventsAttendees){
           switch(messageMultipleEventsAttendees){
               case 1:
-                  System.out.println("Event list contains non-existed event.");
+                  System.out.println("Events you entered contains event you do not speak at.");
                   break;
               case 2:
                   System.out.println("Incorrect username. Please try again.");
@@ -625,7 +649,7 @@ public class Presenter {
                   System.out.println("Only speakers can sent messages to all attendees of their talks they give.");
                   break;
               case 4:
-                  System.out.println("Events you entered contains invalid event (do not speak at or invalid name).");
+                  System.out.println("Events you entered contains invalid event.(do not exists or spelled name wrong)");
                   break;
               case 5:
                   System.out.println("The message has been successfully sent.");
@@ -634,6 +658,38 @@ public class Presenter {
                   System.out.println("Events you entered contains event with no attendees.");
                   break;
           }
+    }
+
+    /**
+     * Prints a message that user should enter a valid integer
+     */
+    public void printInvalidIntMessage() {
+        System.out.println("Error: Please enter a valid integer");
+    }
+
+    /**
+     * Prints a message that user should enter a valid integer between start and end
+     * @param start start of valid range
+     * @param end end of valid range
+     */
+    public void printInvalidIntRangeMessage(int start, int end) {
+        System.out.println("Error: Please enter a valid integer between " + start + " and " + end);
+    }
+
+    /**
+     * Prints a message that user should enter a valid integer greater or equal to start
+     * @param start start of valid range
+     */
+    public void printInvalidIntRangeMessage(int start) {
+        System.out.println("Error: Please enter a valid integer greater than or equal to " + start);
+    }
+
+    /**
+     * Prints a message saying no save file was found
+     */
+    public void printNoSaveFile() {
+        System.out.println("NO save file found.");
+        System.out.println("Save file was not found or was corrupted.");
     }
 
 }
