@@ -48,7 +48,7 @@ public class Controller {
                         accountActivity(username);
                     }
                     break;
-                case "EXIT":
+                case "EXIT": //********* do we need if askMenuInput already deals with if user inputs exit?
                     running = false;
             }
         }
@@ -131,19 +131,9 @@ public class Controller {
                     presenter.displayMessages("requestRoom");
                     int roomId;
                     int roomCapacity;
-                    try {
-                        roomId = input.nextInt();
-                    } catch (InputMismatchException e){
-                        presenter.invalidInput();
-                        break;
-                    }
+                    roomId = getIntInput();
                     presenter.displayMessages("requestCapacity");
-                    try {
-                        roomCapacity = input.nextInt();
-                    } catch (InputMismatchException e){
-                        presenter.invalidInput();
-                        break;
-                    }
+                    roomCapacity = getIntInputGreaterThanEqualTo(1);
                     presenter.printAddRoomMessage(scheduleSystem.addRoom(roomId,roomCapacity));
                     save();
                     break;
@@ -154,12 +144,7 @@ public class Controller {
                     events.sort(new bySpeakerEventComparator());
                     presenter.displayAllEvents(events, "speaker");
                     presenter.displayMessages("requestRoom");
-                    try {
-                        index = input.nextInt();
-                    } catch (InputMismatchException e){
-                        presenter.invalidInput();
-                        break;
-                    }
+                    index = getIntInput();
                     presenter.displayMessages("requestSpeaker");
                     String newSpeaker = input.nextLine();
                     String eventName = events.get(index - 1).getTitle();
@@ -185,19 +170,78 @@ public class Controller {
         presenter.displayMessages("requestSpeaker");
         String speaker = input.nextLine();
         presenter.displayMessages("requestYear");
-        int year = Integer.parseInt(input.nextLine());
-        presenter.displayMessages("requestMonth");
-        String month = input.nextLine().toUpperCase();
+        int year = getIntInput();
+        presenter.displayMessages("requestMonth"); //***********
+        presenter.viewMonthsMenu();
+        String month = askMenuInput(13); //input.nextLine().toUpperCase();
         presenter.displayMessages("requestDay");
-        int day = Integer.parseInt(input.nextLine());
+        int day = getIntInputInRange(1, 31);
         presenter.displayMessages("requestHour");
-        int hour = Integer.parseInt(input.nextLine());
+        int hour = getIntInputInRange(0, 23);
         presenter.displayMessages("requestMinute");
-        int min = Integer.parseInt(input.nextLine());
+        int min = getIntInputInRange(0, 59);
         presenter.displayMessages("requestRoom");
-        int roomID = Integer.parseInt(input.nextLine());
+        int roomID = getIntInput();
         presenter.printScheduleEventMessage(scheduleSystem.scheduleEvent(title, speaker, year, month, day,
                 hour, min, roomID));
+    }
+
+    /**
+     * Makes sure user enters an int as input
+     * @return the int the user entered
+     */
+    private int getIntInput() {
+        Scanner input = new Scanner(System.in);
+        boolean done = false;
+        int in = 0;
+        do {
+            try {
+                in = Integer.parseInt(input.nextLine());
+                done = true;
+            } catch (NumberFormatException e) {
+                presenter.printInvalidIntMessage();
+            }
+        } while (!done);
+        return in;
+    }
+
+    /**
+     * Makes sure user enters an int between start and end (inclusive)
+     * @param start start of range
+     * @param end end of range
+     * @return the inputted int
+     */
+    private int getIntInputInRange(int start, int end) {
+        boolean done = false;
+        int in = 0;
+        do {
+            in = getIntInput();
+            if (!(start <= in && in <= end)) {
+                presenter.printInvalidIntRangeMessage(start, end);
+            } else {
+                done = true;
+            }
+        } while (!done);
+        return in;
+    }
+
+    /**
+     * Makes sure user enters an int greater than or equal to start
+     * @param start start of range
+     * @return the inputted int
+     */
+    private int getIntInputGreaterThanEqualTo(int start) {
+        boolean done = false;
+        int in = 0;
+        do {
+            in = getIntInput();
+            if (!(start <= in)) {
+                presenter.printInvalidIntRangeMessage(start);
+            } else {
+                done = true;
+            }
+        } while (!done);
+        return in;
     }
 
     /**
@@ -404,23 +448,13 @@ public class Controller {
                 case "S":
                     presenter.displayMessages("signUp");
                     presenter.displayMessages("requestEventId");
-                    try {
-                        index = input.nextInt();
-                    } catch (InputMismatchException e){
-                        presenter.printSignUpMessage(4);
-                        break;
-                    }
+                    index = getIntInput();
                     presenter.printSignUpMessage(signUpSystem.signUpEvent(username, index));
                     break;
                 case "D":
                     presenter.displayMessages("dropOut");
                     presenter.displayMessages("requestEventIdDropOut");
-                    try {
-                        index = input.nextInt();
-                    } catch (InputMismatchException e){
-                        presenter.printSignUpMessage(4);
-                        break;
-                    }
+                    index = getIntInput();
                     presenter.display(signUpSystem.dropOutEvent(username, index));
                     save();
                     break;
@@ -473,7 +507,7 @@ public class Controller {
         for(String choice: choices){
             if(choice.equals(chosen)){
                 return false;
-            }else if(chosen.equals("EXIT")){
+            }else if(chosen.equals("EXIT")){ //*******************
                 exit();
             }
         }
@@ -488,7 +522,7 @@ public class Controller {
      */
     public String askMenuInput(int i){
         Scanner input = new Scanner(System.in);
-        ArrayList<String> choices = chooseMenuOptions(i);
+        ArrayList<String> choices = chooseMenuOptions(i); //**********
         String chosen;
         do{
            chooseMenuPrompt(i);
@@ -501,7 +535,7 @@ public class Controller {
      * Asks the user yes or no and receives input.
      * @return  true if the user inputs Y/YES/T/True and false if the user inputs N/NO/F/FALSE.
      */
-    public boolean askBooleanInput(){
+    public boolean askBooleanInput(){ //***************
         Scanner input = new Scanner(System.in);
         ArrayList<String> choices = new ArrayList<>();
         choices.add("Y"); choices.add("N");
@@ -521,7 +555,7 @@ public class Controller {
      * @param menu_id determines which menu is needed.
      * @return list of valid options for a menu.
      */
-    public ArrayList<String> chooseMenuOptions(int menu_id){
+    public ArrayList<String> chooseMenuOptions(int menu_id){ //*****************
         ArrayList<String> choices = new ArrayList<>();
         switch (menu_id){
             case 1:
@@ -583,6 +617,19 @@ public class Controller {
             case 12:
                 choices.add("S");
                 choices.add("C");
+            case 13:
+                choices.add("JANUARY");
+                choices.add("FEBRUARY");
+                choices.add("MARCH");
+                choices.add("APRIL");
+                choices.add("MAY");
+                choices.add("JUNE");
+                choices.add("JULY");
+                choices.add("AUGUST");
+                choices.add("SEPTEMBER");
+                choices.add("OCTOBER");
+                choices.add("NOVEMBER");
+                choices.add("DECEMBER");
         }
         return choices;
     }
@@ -646,12 +693,11 @@ public class Controller {
             messageManager = (MessageManager) listOfObj.get(2);
             roomManager = (RoomManager) listOfObj.get(3);
         } catch (IOException e) {
-            System.out.println("NO save file found");
+            presenter.printNoSaveFile();
             attendeeManager = new AttendeeManager();
             eventManager = new EventManager();
             messageManager = new MessageManager();
             roomManager = new RoomManager();
-            System.out.println("Save file was not found or was corrupted");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }finally {
@@ -707,7 +753,7 @@ public class Controller {
         String username = obj1.nextLine();
         presenter.printPasswordMessage();
         String password = obj1.nextLine();
-        presenter.printAreUAOrg(); //***replace with askInput system***
+        presenter.printAreUAOrg();
         boolean chosen = askBooleanInput();
         if(loginSystem.registerUser(username, password, chosen)){
             presenter.printRegisterSucceedMessage();

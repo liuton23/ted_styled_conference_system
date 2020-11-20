@@ -19,6 +19,10 @@ public class Presenter {
                 "information.");
     }
 
+    public String getExit() {
+        return "EXIT";
+    }
+
     /**
      * Displays a generic message.
      */
@@ -176,6 +180,26 @@ public class Presenter {
         options.add("Sort events by (T)ime");
         options.add("Sort events by (N)ame");
         options.add("Sort events by (S)peaker");
+        prompt(options);
+    }
+
+    /**
+     * Displays the month options menu.
+     */
+    public void viewMonthsMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("JANUARY");
+        options.add("FEBRUARY");
+        options.add("MARCH");
+        options.add("APRIL");
+        options.add("MAY");
+        options.add("JUNE");
+        options.add("JULY");
+        options.add("AUGUST");
+        options.add("SEPTEMBER");
+        options.add("OCTOBER");
+        options.add("NOVEMBER");
+        options.add("DECEMBER");
         prompt(options);
     }
 
@@ -634,6 +658,38 @@ public class Presenter {
                   System.out.println("Events you entered contains event with no attendees.");
                   break;
           }
+    }
+
+    /**
+     * Prints a message that user should enter a valid integer
+     */
+    public void printInvalidIntMessage() {
+        System.out.println("Error: Please enter a valid integer");
+    }
+
+    /**
+     * Prints a message that user should enter a valid integer between start and end
+     * @param start start of valid range
+     * @param end end of valid range
+     */
+    public void printInvalidIntRangeMessage(int start, int end) {
+        System.out.println("Error: Please enter a valid integer between " + start + " and " + end);
+    }
+
+    /**
+     * Prints a message that user should enter a valid integer greater or equal to start
+     * @param start start of valid range
+     */
+    public void printInvalidIntRangeMessage(int start) {
+        System.out.println("Error: Please enter a valid integer greater than or equal to " + start);
+    }
+
+    /**
+     * Prints a message saying no save file was found
+     */
+    public void printNoSaveFile() {
+        System.out.println("NO save file found.");
+        System.out.println("Save file was not found or was corrupted.");
     }
 
 }
