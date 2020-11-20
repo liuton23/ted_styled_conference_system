@@ -2,6 +2,7 @@ package UseCases;
 
 import Entities.Attendee;
 import Entities.Event;
+import Entities.Speaker;
 
 
 import java.io.Serializable;
@@ -59,19 +60,16 @@ public class EventManager implements Serializable {
      * @param speaker the username of the speaker whose availability is being checked.
      * @return a boolean value where true signals the speaker is free at the specified time and false if they are not.
      */
-    public boolean freeSpeakerCheck(ArrayList<LocalDateTime> eventTime, String speaker){
+    public boolean freeSpeakerCheck(ArrayList<LocalDateTime> eventTime, String speaker) {
         LocalDateTime newEventStart = eventTime.get(0);
         LocalDateTime newEventEnd = eventTime.get(1);
-        for(Event eventInstance : events){
-            //checking if event pre-booked event has this speaker
-            if (eventInstance.getSpeaker().equals(speaker)){
-                LocalDateTime bookedEventStart = eventInstance.getEventTime().get(0);
-                LocalDateTime bookedEventEnd = eventInstance.getEventTime().get(1);
-                if((bookedEventStart.isBefore(newEventStart) || bookedEventStart.isEqual(newEventStart)) &&
-                        (bookedEventEnd.isAfter(newEventStart))){
-                    return false;
-                }
-                else if(bookedEventStart.isAfter(newEventStart) && bookedEventStart.isBefore(newEventEnd)) {
+        for (Event eventInstance : events) {
+            //checking if already registered event has this speaker speaking
+            if(eventInstance.getSpeaker().equals(speaker)) {
+                LocalDateTime existingEventStart = eventInstance.getEventTime().get(0);
+                LocalDateTime existingEventEnd = eventInstance.getEventTime().get(1);
+                if (newEventStart.isBefore(existingEventEnd) || newEventStart.isEqual(existingEventEnd) &&
+                        existingEventStart.isBefore(newEventEnd) || existingEventStart.isEqual(newEventEnd)) {
                     return false;
                 }
             }
@@ -149,7 +147,8 @@ public class EventManager implements Serializable {
     /**
      * This method removes the specified event from the list of events at the Tech Conference.
      * @param event the event to be removed.
-     */
+     * */
+    //for phase 2
     public void cancelEvent(Event event){
         events.remove(event);
     }
