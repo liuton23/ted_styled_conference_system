@@ -14,7 +14,7 @@ public class Presenter {
      */
     public void welcomeMessage(){
         System.out.println("Welcome to the 207th Tech Conference!");
-        System.out.println("You can enter 'EXIT' to exit anytime.");
+        System.out.println("You can enter " + getExit() + " to exit anytime.");
         System.out.println("Note that terminating the program without using the above method may not save your " +
                 "information.");
     }
