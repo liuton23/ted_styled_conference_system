@@ -203,6 +203,99 @@ public class Presenter {
         prompt(options);
     }
 
+    /**
+     * Chooses which options are valid input options for a menu given <code>menu_id</code>.
+     * @param menu_id determines which menu choices are needed.
+     * @return list of valid input choices for a menu.
+     */
+    public ArrayList<String> chooseMenuOptions(int menu_id){
+        ArrayList<String> choices = new ArrayList<>();
+        switch (menu_id){
+            case 1:
+                choices.add("L");
+                choices.add("R");
+                break;
+            case 3:
+                choices.add("C");
+                choices.add("S");
+            case 2:
+                choices.add("M");
+                choices.add("E");
+                choices.add("I");
+                choices.add(("B"));
+                break;
+            case 4:
+                choices.add("S");
+                choices.add("A");
+                choices.add("C");
+                choices.add(("B"));
+                break;
+            case 5:
+                choices.add("M");
+                choices.add("V");
+                choices.add(("B"));
+                break;
+            case 6:
+                choices.add("U");
+                choices.add("B");
+                break;
+            case 7:
+                choices.add("S");
+                choices.add("R");
+                choices.add("F");
+                choices.add("B");
+                break;
+            case 8:
+                choices.add("V");
+                choices.add("S");
+                choices.add("D");
+                choices.add(("B"));
+                break;
+            case 9:
+                choices.add("T");
+                choices.add("N");
+                choices.add("S");
+                break;
+            case 10:
+                choices.add("U");
+                choices.add("S");
+                choices.add("A");
+                choices.add("B");
+                break;
+            case 11:
+                choices.add("U");
+                choices.add("E");
+                choices.add("B");
+                break;
+            case 12:
+                choices.add("S");
+                choices.add("C");
+            case 13:
+                choices.add("JANUARY");
+                choices.add("FEBRUARY");
+                choices.add("MARCH");
+                choices.add("APRIL");
+                choices.add("MAY");
+                choices.add("JUNE");
+                choices.add("JULY");
+                choices.add("AUGUST");
+                choices.add("SEPTEMBER");
+                choices.add("OCTOBER");
+                choices.add("NOVEMBER");
+                choices.add("DECEMBER");
+            case 14: //yes options for are you organizer
+                choices.add("Y");
+                choices.add("T");
+                choices.add("YES");
+                choices.add("TRUE");
+            case 15: //no options for are you organizer
+                choices.add("N");
+                choices.add("F");
+                choices.add("NO");
+                choices.add("FALSE");
+        }
+        return choices;
+    }
 
     //DISPLAY METHODS
 

@@ -435,8 +435,6 @@ public class Controller {
         SignUpSystem signUpSystem = new SignUpSystem(attendeeManager, eventManager, roomManager);
         boolean activity = true;
         while (activity) {
-            Scanner input = new Scanner(System.in);
-
             String chosen = askMenuInput(8);
             int index;
 
@@ -507,7 +505,7 @@ public class Controller {
         for(String choice: choices){
             if(choice.equals(chosen)){
                 return false;
-            }else if(chosen.equals("EXIT")){ //*******************
+            }else if(chosen.equals("EXIT")){
                 exit();
             }
         }
@@ -522,7 +520,7 @@ public class Controller {
      */
     public String askMenuInput(int i){
         Scanner input = new Scanner(System.in);
-        ArrayList<String> choices = chooseMenuOptions(i); //**********
+        ArrayList<String> choices = presenter.chooseMenuOptions(i);
         String chosen;
         do{
            chooseMenuPrompt(i);
@@ -535,103 +533,17 @@ public class Controller {
      * Asks the user yes or no and receives input.
      * @return  true if the user inputs Y/YES/T/True and false if the user inputs N/NO/F/FALSE.
      */
-    public boolean askBooleanInput(){ //***************
+    public boolean askBooleanInput(){
         Scanner input = new Scanner(System.in);
         ArrayList<String> choices = new ArrayList<>();
-        choices.add("Y"); choices.add("N");
-        choices.add("T"); choices.add("TRUE");
-        choices.add("YES"); choices.add("NO");
-        choices.add("F"); choices.add("FALSE");
+        choices.addAll(presenter.chooseMenuOptions(14));
+        choices.addAll(presenter.chooseMenuOptions(15));
         String chosen;
         do{
             presenter.display("Yes or No?");
             chosen = input.next().toUpperCase();
         }while(invalidInput(choices, chosen));
-        return chosen.equals("Y") || chosen.equals("YES") || chosen.equals("T") || chosen.equals("TRUE");
-    }
-
-    /**
-     * Chooses which options are valid input options for a menu given <code>menu_id</code>.
-     * @param menu_id determines which menu is needed.
-     * @return list of valid options for a menu.
-     */
-    public ArrayList<String> chooseMenuOptions(int menu_id){ //*****************
-        ArrayList<String> choices = new ArrayList<>();
-        switch (menu_id){
-            case 1:
-                choices.add("L");
-                choices.add("R");
-                break;
-            case 3:
-                choices.add("C");
-                choices.add("S");
-            case 2:
-                choices.add("M");
-                choices.add("E");
-                choices.add("I");
-                choices.add(("B"));
-                break;
-            case 4:
-                choices.add("S");
-                choices.add("A");
-                choices.add("C");
-                choices.add(("B"));
-                break;
-            case 5:
-                choices.add("M");
-                choices.add("V");
-                choices.add(("B"));
-                break;
-            case 6:
-                choices.add("U");
-                choices.add("B");
-                break;
-            case 7:
-                choices.add("S");
-                choices.add("R");
-                choices.add("F");
-                choices.add("B");
-                break;
-            case 8:
-                choices.add("V");
-                choices.add("S");
-                choices.add("D");
-                choices.add(("B"));
-                break;
-            case 9:
-                choices.add("T");
-                choices.add("N");
-                choices.add("S");
-                break;
-            case 10:
-                choices.add("U");
-                choices.add("S");
-                choices.add("A");
-                choices.add("B");
-                break;
-            case 11:
-                choices.add("U");
-                choices.add("E");
-                choices.add("B");
-                break;
-            case 12:
-                choices.add("S");
-                choices.add("C");
-            case 13:
-                choices.add("JANUARY");
-                choices.add("FEBRUARY");
-                choices.add("MARCH");
-                choices.add("APRIL");
-                choices.add("MAY");
-                choices.add("JUNE");
-                choices.add("JULY");
-                choices.add("AUGUST");
-                choices.add("SEPTEMBER");
-                choices.add("OCTOBER");
-                choices.add("NOVEMBER");
-                choices.add("DECEMBER");
-        }
-        return choices;
+        return presenter.chooseMenuOptions(14).contains(chosen);
     }
 
     /**
