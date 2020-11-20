@@ -129,19 +129,37 @@ public class Controller {
                 case "A":
                     presenter.displayMessages("requestAddRoom");
                     presenter.displayMessages("requestRoom");
-                    int roomId = input.nextInt();
+                    int roomId;
+                    int roomCapacity;
+                    try {
+                        roomId = input.nextInt();
+                    } catch (InputMismatchException e){
+                        presenter.invalidInput();
+                        break;
+                    }
                     presenter.displayMessages("requestCapacity");
-                    int roomCapacity = input.nextInt();
+                    try {
+                        roomCapacity = input.nextInt();
+                    } catch (InputMismatchException e){
+                        presenter.invalidInput();
+                        break;
+                    }
                     presenter.printAddRoomMessage(scheduleSystem.addRoom(roomId,roomCapacity));
                     save();
                     break;
                 case "C":
+                    int index;
                     presenter.displayMessages("changeSpeaker");
                     ArrayList<Event> events = new ArrayList<>(eventManager.getEvents());
                     events.sort(new bySpeakerEventComparator());
                     presenter.displayAllEvents(events, "speaker");
                     presenter.displayMessages("requestRoom");
-                    int index = input.nextInt();
+                    try {
+                        index = input.nextInt();
+                    } catch (InputMismatchException e){
+                        presenter.invalidInput();
+                        break;
+                    }
                     presenter.displayMessages("requestSpeaker");
                     String newSpeaker = input.nextLine();
                     String eventName = events.get(index - 1).getTitle();
@@ -235,7 +253,7 @@ public class Controller {
                     save();
                     break;
                 case "E":
-                    ArrayList<String> events = new ArrayList<String>();
+                    ArrayList<String> events = new ArrayList<>();
                     messageEventAllAtt(username,ms,events);
                     save();
                 case "B":
@@ -386,14 +404,23 @@ public class Controller {
                 case "S":
                     presenter.displayMessages("signUp");
                     presenter.displayMessages("requestEventId");
-                    index = input.nextInt();
+                    try {
+                        index = input.nextInt();
+                    } catch (InputMismatchException e){
+                        presenter.printSignUpMessage(4);
+                        break;
+                    }
                     presenter.printSignUpMessage(signUpSystem.signUpEvent(username, index));
-                    save();
                     break;
                 case "D":
                     presenter.displayMessages("dropOut");
                     presenter.displayMessages("requestEventIdDropOut");
-                    index = input.nextInt();
+                    try {
+                        index = input.nextInt();
+                    } catch (InputMismatchException e){
+                        presenter.printSignUpMessage(4);
+                        break;
+                    }
                     presenter.display(signUpSystem.dropOutEvent(username, index));
                     save();
                     break;
@@ -619,16 +646,19 @@ public class Controller {
             messageManager = (MessageManager) listOfObj.get(2);
             roomManager = (RoomManager) listOfObj.get(3);
         } catch (IOException e) {
+            System.out.println("NO save file found");
             attendeeManager = new AttendeeManager();
             eventManager = new EventManager();
             messageManager = new MessageManager();
             roomManager = new RoomManager();
+            System.out.println("Save file was not found or was corrupted");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }finally {
             presenter = new Presenter();
         }
     }
+
 
     /**
      * Saves the use case classes and all their fields in a file.
@@ -645,6 +675,8 @@ public class Controller {
             e.printStackTrace();
         }
     }
+
+
 
     /**
      * Attendee login.
