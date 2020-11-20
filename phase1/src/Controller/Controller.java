@@ -155,7 +155,7 @@ public class Controller {
                     presenter.displayAllEvents(events, "speaker");
                     presenter.displayMessages("requestRoom");
                     try {
-                        index = input.nextInt();
+                        index = Integer.parseInt(input.nextLine());
                     } catch (InputMismatchException e){
                         presenter.invalidInput();
                         break;
@@ -175,7 +175,7 @@ public class Controller {
     }
 
     /**
-     * Method for organizers to schedule new events.
+     * Method for organizers to input new event information.
      * @param scheduleSystem ScheduleSystem created in parent method.
      */
     private void scheduleEvent(ScheduleSystem scheduleSystem){
