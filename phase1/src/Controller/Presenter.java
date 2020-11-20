@@ -19,6 +19,10 @@ public class Presenter {
                 "information.");
     }
 
+    /**
+     * Returns the string that would be used by the user to exit the program
+     * @return the string that would be used to exit the program
+     */
     public String getExit() {
         return "EXIT";
     }

@@ -505,7 +505,7 @@ public class Controller {
         for(String choice: choices){
             if(choice.equals(chosen)){
                 return false;
-            }else if(chosen.equals("EXIT")){
+            }else if(chosen.equals(presenter.getExit())){
                 exit();
             }
         }
