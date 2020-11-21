@@ -18,13 +18,13 @@ import java.util.List;
  */
 public class Controller {
 
-    private Gateway gateway;
-    private AttendeeManager attendeeManager;
-    private EventManager eventManager;
-    private MessageManager messageManager;
-    private RoomManager roomManager;
+    private Gateway gateway = new Gateway("save.ser");
+    private AttendeeManager attendeeManager = new AttendeeManager();
+    private EventManager eventManager = new EventManager();
+    private MessageManager messageManager = new MessageManager();
+    private RoomManager roomManager = new RoomManager();
 
-    private Presenter presenter;
+    private Presenter presenter = new Presenter();
 
     /**
      * Starts the program. Login menu.
