@@ -3,6 +3,11 @@ readme.txt
 Make sure src folder is marked as sources root.
 Navigate src -> Controller -> ConferenceMain.
 Run ConferenceMain’s main method to start the program.
+You may get an error from the Tests.java class.
+If this occurs, please add the required junit dependencies to the classpath.
+Do this by hovering on the red words and selecting add to classpath.
+Alternatively, you can delete the Tests folder as it is not required for the program to function.
+
 When the user runs the program, the console will say:
 “Welcome to the 207th Tech Conference! You can enter 'EXIT' to exit anytime. Note that terminating the program without using the above method may not save your information."
 
