@@ -48,7 +48,7 @@ public class Controller {
                         accountActivity(username);
                     }
                     break;
-                case "EXIT": //********* do we need if askMenuInput already deals with if user inputs exit?
+                case "EXIT": //only used to prevent infinite loop
                     running = false;
             }
         }
