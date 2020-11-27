@@ -1,4 +1,5 @@
 package Controller;
+import Entities.UserFactory.UserType;
 import UseCases.AttendeeManager;
 
 /**
@@ -29,16 +30,16 @@ public class LoginSystem {
      * Attempts to register a new account
      * @param username inputted new username
      * @param password inputted new password
-     * @param isOrg whether or not new account is an organizer account
+     * @param type the type of the account
      * @return true if the account was successfully registered. False if not.
      */
-    public boolean registerUser(String username, String password, boolean isOrg) {
+    public boolean registerUser(String username, String password, UserType type) {
         if (attendeeManager.usernameToUserObject(username).isPresent()) {
             return false;
         } else if (username.trim().isEmpty() || password.trim().isEmpty()){
             return false;
         } else {
-            attendeeManager.createAttendee(username, password, isOrg);
+            attendeeManager.createAttendee(username, password, type);
             return true;
         }
     }
@@ -55,7 +56,7 @@ public class LoginSystem {
         } else if (username.trim().isEmpty() || password.trim().isEmpty()){
             return false;
         } else {
-            attendeeManager.createSpeaker(username, password);
+            attendeeManager.createAttendee(username, password, UserType.SPEAKER);
             return true;
         }
     }

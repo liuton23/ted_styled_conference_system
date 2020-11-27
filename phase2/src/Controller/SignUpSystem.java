@@ -1,5 +1,6 @@
 package Controller;
 
+import AttendAble;
 import Entities.Event;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.Room;
@@ -101,7 +102,7 @@ public class SignUpSystem {
             //checking that there is space at the event
             if(event.getAttendeeList().size() < room.getCapacity()) {
                 eventManager.signUp(event, attendee.getUsername());
-                attendeeManager.signUp(attendee, event.getTitle());
+                attendeeManager.signUp((AttendAble) attendee, event.getTitle());
                 return 2;
             }
         }
@@ -130,7 +131,7 @@ public class SignUpSystem {
         }
         User attendee = obj.get();
         eventManager.dropOut(event, attendee.getUsername());
-        attendeeManager.dropOut(attendee, event.getTitle());
+        attendeeManager.dropOut((AttendAble) attendee, event.getTitle());
         return "You have successfully dropped " + event.getTitle() + " @ " + event.getEventTime();
     }
 /*

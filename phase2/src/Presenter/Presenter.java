@@ -1,4 +1,4 @@
-package Controller;
+package Presenter;
 
 import Entities.Event;
 
@@ -708,41 +708,15 @@ public class Presenter {
 
     }
 
-    /**
-     * Displays message reflecting the situation after messaging all attendees from a specific event.
-     * @param messageEventAttendees  output from MessageSystem.messageEventAttendees()
-     */
-    public void printMessageEventAttendees(int messageEventAttendees){
-        switch (messageEventAttendees) {
-            case 1:
-                System.out.println("You do not speak at this event.");
-                break;
-            case 2:
-                System.out.println("Incorrect username. Please try again.");
-                break;
-            case 3:
-                System.out.println("Only speakers can sent messages to all attendees of their talks they give.");
-                break;
-            case 4:
-                System.out.println("This event do not exist or you spell the name wrong");
-                break;
-            case 5:
-                System.out.println("The message has been successfully sent.");
-                break;
-            case 6:
-                System.out.println("This event has no attendees.");
-                break;
-        }
-    }
 
     /**
      * Displays message reflecting the situation after messaging all attendees from multiple events.
      * @param messageMultipleEventsAttendees output from overloading MessageSystem.messageEventAttendees()
      */
-    public void printMessageMultipleEventsAttendees(int messageMultipleEventsAttendees){
+    public void printMessageEventsAttendees(int messageMultipleEventsAttendees){
           switch(messageMultipleEventsAttendees){
               case 1:
-                  System.out.println("Events you entered contains event you do not speak at.");
+                  System.out.println("Event(s) you entered contain event you do not speak at.");
                   break;
               case 2:
                   System.out.println("Incorrect username. Please try again.");
@@ -751,13 +725,13 @@ public class Presenter {
                   System.out.println("Only speakers can sent messages to all attendees of their talks they give.");
                   break;
               case 4:
-                  System.out.println("Events you entered contains invalid event.(do not exists or spelled name wrong)");
+                  System.out.println("Event(s) you entered contain invalid event.(do not exists or spelled name wrong)");
                   break;
               case 5:
                   System.out.println("The message has been successfully sent.");
                   break;
               case 6:
-                  System.out.println("Events you entered contains event with no attendees.");
+                  System.out.println("Event(s) you entered contain event with no attendees.");
                   break;
           }
     }

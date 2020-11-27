@@ -1,4 +1,6 @@
-package Entities;
+package Entities.UserFactory;
+
+import Entities.*;
 
 public class UserFactory {
 

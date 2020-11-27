@@ -1,4 +1,4 @@
-package Entities;
+package Entities.UserFactory;
 
 import java.util.ArrayList;
 

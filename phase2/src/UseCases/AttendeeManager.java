@@ -1,10 +1,8 @@
 package UseCases;
 
 import Entities.*;
-import jdk.nashorn.internal.ir.ReturnNode;
+import Entities.UserFactory.*;
 
-import javax.jws.soap.SOAPBinding;
-import javax.swing.text.html.Option;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -33,7 +31,7 @@ public class AttendeeManager implements Serializable {
      * Method that creates an instance of Attendee and stores it in an instance of AttendeeManager
      * @param username the new attendee account login username.
      * @param password the new attendee account login password.
-     * @param isOrg true iff the new attendee is an organizer.
+     * @param type type of the user
      * @return the new attendee instance.
      */
     public User createAttendee(String username, String password, UserType type){
@@ -201,6 +199,10 @@ public class AttendeeManager implements Serializable {
         if (org instanceof OrganizeAble){
             return true;
         } else return false;
+    }
+
+    public String getUsername(User user) {
+        return user.getUsername();
     }
 
     /**

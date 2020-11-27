@@ -2,7 +2,7 @@ package Entities;
 
 import java.util.ArrayList;
 
-public class Organizer extends User implements OrganizeAble{
+public class Organizer extends User implements OrganizeAble {
     private ArrayList<String> eventOrganized;
 
     public Organizer(String username, String password) {
