@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * An instance of this class represent a registered speaker at the tech conference.
  */
-public class Speaker extends User{
+public class Speaker extends User implements TalkAble{
 
     private ArrayList<String> talkList;
 

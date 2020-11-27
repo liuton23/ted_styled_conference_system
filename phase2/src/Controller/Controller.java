@@ -100,12 +100,16 @@ public class Controller {
      */
     private void getItinerary(AttendeeManager attendeeManager, String user, Boolean isSpeaker){
         Optional<User> obj = attendeeManager.usernameToUserObject(user);
-        User attendee = obj.get();
-        if (isSpeaker){
-            Speaker sp = (Speaker) attendee;
-            presenter.displaySchedule(attendeeManager.getSpeakingList(sp), "speakItinerary");
-            presenter.displaySchedule(attendeeManager.getItinerary(sp), "itinerary");
-        } else presenter.displaySchedule(attendeeManager.getItinerary(attendee), "itinerary");
+        User userObj = obj.get();
+        if (userObj instanceof AttendAble){
+            //Speaker sp = (Speaker) attendee;
+            //presenter.displaySchedule(attendeeManager.getSpeakingList(sp), "speakItinerary");
+            //presenter.displaySchedule(attendeeManager.getItinerary(sp), "itinerary");
+            presenter.displaySchedule(attendeeManager.getItinerary((AttendAble) userObj), "itinerary");
+        } //else presenter.displaySchedule(attendeeManager.getItinerary(attendee), "itinerary");
+        if (userObj instanceof TalkAble){
+            presenter.displaySchedule(attendeeManager.getSpeakingList((TalkAble) userObj), "speakItinerary");
+        }
     }
 
     /**

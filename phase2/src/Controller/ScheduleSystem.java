@@ -150,7 +150,7 @@ public class ScheduleSystem {
             Event eventObject = eventManager.nameToEvent(eventName).get();
             for (String attendeeName : eventObject.getAttendeeList()) {
                 User attendee = attendeeManager.usernameToUserObject(attendeeName).get();
-                attendeeManager.dropOut(attendee, eventName);
+                attendeeManager.dropOut((AttendAble) attendee, eventName);
             }
             //this will change in phase 2 when we can have a variable number of speakers
             String speakerName = eventObject.getSpeaker();

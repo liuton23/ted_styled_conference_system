@@ -1,7 +1,10 @@
 package UseCases;
 
 import Entities.*;
+import jdk.nashorn.internal.ir.ReturnNode;
 
+import javax.jws.soap.SOAPBinding;
+import javax.swing.text.html.Option;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -11,14 +14,16 @@ import java.util.Optional;
  */
 public class AttendeeManager implements Serializable {
 
-    ArrayList<Attendee> attendeeList;
-    ArrayList<Speaker> speakerList;
-    ArrayList<Organizer> organizerList;
+    ArrayList<User> masterList;
+    ArrayList<AttendAble> attendeeList;
+    ArrayList<TalkAble> speakerList;
+    ArrayList<OrganizeAble> organizerList;
 
     /**
      * Constructor for an instance of AttendeeManager.
      */
     public AttendeeManager(){
+        masterList = new ArrayList<>();
         attendeeList = new ArrayList<>();
         speakerList = new ArrayList<>();
         organizerList = new ArrayList<>();
@@ -31,7 +36,23 @@ public class AttendeeManager implements Serializable {
      * @param isOrg true iff the new attendee is an organizer.
      * @return the new attendee instance.
      */
-    public User createAttendee(String username, String password, Boolean isOrg){
+    public User createAttendee(String username, String password, UserType type){
+        UserFactory userFactory = new UserFactory();
+        User newUser = userFactory.createAccount(username, password,type);
+        masterList.add(newUser);
+        switch (type){
+            case ATTENDEE:
+                attendeeList.add((AttendAble) newUser);
+                break;
+            case ORGANIZER:
+                organizerList.add((OrganizeAble) newUser);
+                break;
+            case SPEAKER:
+                speakerList.add((TalkAble) newUser);
+                break;
+        }
+        return newUser;
+        /*
         if ( isOrg ) {
             Organizer org = new Organizer(username, password);
             organizerList.add(org);
@@ -41,6 +62,8 @@ public class AttendeeManager implements Serializable {
             attendeeList.add(attendee);
             return attendee;
         }
+
+         */
     }
 
     /**
@@ -49,11 +72,14 @@ public class AttendeeManager implements Serializable {
      * @param password the new speaker account login username.
      * @return the new speaker instance.
      */
+    /*
     public Speaker createSpeaker(String username, String password){
         Speaker sp = new Speaker(username, password);
         speakerList.add(sp);
         return sp;
     }
+
+     */
 
     /**
      * This method returns a boolean whether the given username belongs to a speaker in the system.
@@ -61,8 +87,8 @@ public class AttendeeManager implements Serializable {
      * @return a boolean reflecting if the username belongs to a speaker in the system.
      */
     public boolean registeredSpeaker(String username){
-        for (Speaker speaker: this.getAllSpeakers()) {
-            if(speaker.getUsername().equals(username)){
+        for (TalkAble speaker: this.getAllSpeakers()) {
+            if(((User) speaker).getUsername().equals(username)){
                 return true;
             }
         }
@@ -77,11 +103,14 @@ public class AttendeeManager implements Serializable {
      * @return true iff an attendee/speaker account matches the username and password.
      */
     public boolean inSystem(String username, String password){
+        /*
         ArrayList<User> combinedlist = new ArrayList<>();
         combinedlist.addAll(getAllAttendees());
         combinedlist.addAll(getAllSpeakers());
         combinedlist.addAll(getAllOrganizers());
-        for (User a: combinedlist){
+
+         */
+        for (User a: masterList){
             if (username.equals(a.getUsername()) && password.equals(a.getPassword())){
                 return true;
             }
@@ -89,7 +118,7 @@ public class AttendeeManager implements Serializable {
         return false;
     }
 
-    public ArrayList<Organizer> getAllOrganizers(){
+    public ArrayList<OrganizeAble> getAllOrganizers(){
         return organizerList;
     }
 
@@ -97,7 +126,7 @@ public class AttendeeManager implements Serializable {
      * Method that returns the list of stored attendees.
      * @return list of all stored attendees.
      */
-    public ArrayList<Attendee> getAllAttendees(){
+    public ArrayList<AttendAble> getAllAttendees(){
         return attendeeList;
     }
 
@@ -105,26 +134,26 @@ public class AttendeeManager implements Serializable {
      * Method that returns the list of stored speakers.
      * @return list of all stored attendees.
      */
-    public ArrayList<Speaker> getAllSpeakers() {
+    public ArrayList<TalkAble> getAllSpeakers() {
         return speakerList;
     }
 
     /**
      * Add talk to talk list
-     * @param sp speaker
+     * @param speaker speaker
      * @param event event name
      */
-    public void addEventToSpeakerList(Speaker sp, String event){
-        sp.addTalk(event);
+    public void addEventToSpeakerList(TalkAble speaker, String event){
+        speaker.addTalk(event);
     }
 
     /**
      * remove talk from speaker list
-     * @param sp speaker
+     * @param speaker speaker
      * @param event event name
      */
-    public void removeEventFromSpeakerList(Speaker sp, String event){
-        sp.removeTalk(event);
+    public void removeEventFromSpeakerList(TalkAble speaker, String event){
+        speaker.removeTalk(event);
     }
 
 
@@ -133,7 +162,7 @@ public class AttendeeManager implements Serializable {
      * @param attendee a stored attendee.
      * @return list of events that the attendee will attend.
      */
-    public ArrayList<String> getItinerary(User attendee){
+    public ArrayList<String> getItinerary(AttendAble attendee){
         return attendee.getItinerary();
     }
 
@@ -142,7 +171,7 @@ public class AttendeeManager implements Serializable {
      * @param speaker a stored attendee.
      * @return list of events that the speaker will speak at.
      */
-    public ArrayList<String> getSpeakingList(Speaker speaker) {
+    public ArrayList<String> getSpeakingList(TalkAble speaker) {
         return speaker.getTalkList();
     }
 
@@ -152,13 +181,13 @@ public class AttendeeManager implements Serializable {
      * @param newSpeakerUsername username of the new speaker.
      */
     public void changeSpeaker(String title, String newSpeakerUsername){
-        for (Speaker speaker: speakerList) {
+        for (TalkAble speaker: speakerList) {
             if (speaker.getTalkList().contains(title)) {
                 speaker.removeTalk(title);
             }
         }
-        for (Speaker speaker: speakerList) {
-            if(speaker.getUsername().equals(newSpeakerUsername)){
+        for (TalkAble speaker: speakerList) {
+            if(((User) speaker).getUsername().equals(newSpeakerUsername)){
                 speaker.addTalk(title);
             }
         }
@@ -169,7 +198,7 @@ public class AttendeeManager implements Serializable {
      * @return true of this attendee is organizer
      */
     public Boolean checkIsOrganizer(User org){
-        if (org instanceof Organizer){
+        if (org instanceof OrganizeAble){
             return true;
         } else return false;
     }
@@ -179,7 +208,7 @@ public class AttendeeManager implements Serializable {
      * @param attendee a stored attendee.
      * @param event name of an upcoming event.
      */
-    public void signUp(User attendee, String event){
+    public void signUp(AttendAble attendee, String event){
         attendee.addEvent(event);
     }
 
@@ -188,7 +217,7 @@ public class AttendeeManager implements Serializable {
      * @param attendee a stored attendee.
      * @param event name of an upcoming event.
      */
-    public void dropOut(User attendee, String event){
+    public void dropOut(AttendAble attendee, String event){
         attendee.removeEvent(event);
     }
 
@@ -199,8 +228,9 @@ public class AttendeeManager implements Serializable {
      * @return instance of Attendee iff one exists.
      */
     public Optional<User> usernameToUserObject(String username){
-        for (User user: attendeeList) {
-            if(username.equals(user.getUsername())){
+        /*
+        for (AttendAble user: attendeeList) {
+            if(username.equals(((User) user).getUsername())){
                 return Optional.of(user);
             }
         }
@@ -214,6 +244,13 @@ public class AttendeeManager implements Serializable {
                 return Optional.of(user);
             }
         }
+
+         */
+        for (User user: masterList){
+            if (username.equals(user.getUsername())){
+                return Optional.of(user);
+            }
+        }
         return Optional.empty();
     }
 
@@ -222,10 +259,10 @@ public class AttendeeManager implements Serializable {
      * @param event instance of Event that some attendees will attend.
      * @return list of attendees who will attend the event.
      */
-    public ArrayList<Attendee> eventToAttendees(Event event){
-        ArrayList<Attendee> list = new ArrayList<Attendee>();
+    public ArrayList<AttendAble> eventToAttendees(Event event){
+        ArrayList<AttendAble> list = new ArrayList<>();
         String title = event.getTitle();
-        for (Attendee a: attendeeList){
+        for (AttendAble a: attendeeList){
             if (a.getItinerary().contains(title)){
                 list.add(a);
             }
