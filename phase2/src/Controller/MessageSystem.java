@@ -1,6 +1,8 @@
 package Controller;
 
 import Entities.*;
+import Entities.UserFactory.AttendAble;
+import Entities.UserFactory.TalkAble;
 import Presenter.Presenter;
 import UseCases.AttendeeManager;
 import UseCases.EventManager;

@@ -1,6 +1,6 @@
 package Controller;
 
-import AttendAble;
+import Entities.UserFactory.AttendAble;
 import Entities.Event;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.Room;

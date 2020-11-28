@@ -1,5 +1,7 @@
 package Entities;
 
+import Entities.UserFactory.TalkAble;
+
 import java.util.ArrayList;
 
 /**

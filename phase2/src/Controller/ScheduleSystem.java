@@ -2,6 +2,8 @@ package Controller;
 
 
 import Entities.*;
+import Entities.UserFactory.AttendAble;
+import Entities.UserFactory.TalkAble;
 import UseCases.EventManager;
 import UseCases.AttendeeManager;
 import UseCases.RoomManager;
@@ -76,7 +78,7 @@ public class ScheduleSystem {
         }
         else{
             Speaker sp = (Speaker) attendeeManager.usernameToUserObject(speaker).get();
-            attendeeManager.addEventToSpeakerList(sp, title);
+            attendeeManager.addEventToSpeakerList((TalkAble) sp, title);
             roomManager.book(tempRoom, title, startDateTime, endDateTime);
             eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
             //"Event successfully created."
@@ -155,7 +157,7 @@ public class ScheduleSystem {
             //this will change in phase 2 when we can have a variable number of speakers
             String speakerName = eventObject.getSpeaker();
             Speaker sp = (Speaker) attendeeManager.usernameToUserObject(speakerName).get();
-            attendeeManager.removeEventFromSpeakerList(sp,eventName);
+            attendeeManager.removeEventFromSpeakerList((TalkAble) sp,eventName);
             Room room = roomManager.idToRoom(eventObject.getRoom());
             room.removeBooking(eventName);
             eventManager.cancelEvent(eventObject);

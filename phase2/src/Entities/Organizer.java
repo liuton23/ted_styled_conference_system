@@ -1,5 +1,7 @@
 package Entities;
 
+import Entities.UserFactory.OrganizeAble;
+
 import java.util.ArrayList;
 
 public class Organizer extends User implements OrganizeAble {
