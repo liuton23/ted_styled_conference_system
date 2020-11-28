@@ -1,8 +1,11 @@
 package Entities;
 
+import Entities.UserFactory.OrganizeAble;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Organizer extends User implements OrganizeAble {
+public class Organizer extends User implements Serializable, OrganizeAble {
     private ArrayList<String> eventOrganized;
 
     public Organizer(String username, String password) {

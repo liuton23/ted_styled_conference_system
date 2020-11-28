@@ -10,7 +10,7 @@ import java.util.Optional;
 /**
  * Manages and stores attendees and speakers in this tech conference system.
  */
-public class AttendeeManager implements Serializable {
+public class UserManager implements Serializable {
 
     ArrayList<User> masterList;
     ArrayList<AttendAble> attendeeList;
@@ -20,7 +20,7 @@ public class AttendeeManager implements Serializable {
     /**
      * Constructor for an instance of AttendeeManager.
      */
-    public AttendeeManager(){
+    public UserManager(){
         masterList = new ArrayList<>();
         attendeeList = new ArrayList<>();
         speakerList = new ArrayList<>();

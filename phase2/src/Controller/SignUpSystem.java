@@ -1,11 +1,11 @@
 package Controller;
 
-import AttendAble;
+import Entities.UserFactory.AttendAble;
 import Entities.Event;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.Room;
 import Entities.User;
-import UseCases.AttendeeManager;
+import UseCases.UserManager;
 import UseCases.EventManager;
 import UseCases.RoomManager;
 
@@ -17,19 +17,19 @@ import java.util.Optional;
  * Controls sign-ups and drop-outs for events based on user input.
  */
 public class SignUpSystem {
-    private AttendeeManager attendeeManager;
+    private UserManager userManager;
     private EventManager eventManager;
     private RoomManager roomManager;
     private Comparator<Event> comparator = new byTimeEventComparator();
 
     /**
      * Constructor for an instance of SignUpSystem.
-     * @param attendeeManager stored attendeeManager
+     * @param userManager stored attendeeManager
      * @param eventManager stored eventManager
      * @param roomManager stored roomManager
      */
-    public SignUpSystem(AttendeeManager attendeeManager, EventManager eventManager, RoomManager roomManager){
-        this.attendeeManager = attendeeManager;
+    public SignUpSystem(UserManager userManager, EventManager eventManager, RoomManager roomManager){
+        this.userManager = userManager;
         this.eventManager = eventManager;
         this.roomManager = roomManager;
     }
@@ -91,7 +91,7 @@ public class SignUpSystem {
         }
         Event event = eventList.get(eventIndex-1);
         Room room = roomManager.idToRoom(event.getRoom());
-        Optional<User> obj = attendeeManager.usernameToUserObject(username);
+        Optional<User> obj = userManager.usernameToUserObject(username);
         //check if username is valid
         if (obj.isPresent()){
             User attendee = obj.get();
@@ -102,7 +102,7 @@ public class SignUpSystem {
             //checking that there is space at the event
             if(event.getAttendeeList().size() < room.getCapacity()) {
                 eventManager.signUp(event, attendee.getUsername());
-                attendeeManager.signUp((AttendAble) attendee, event.getTitle());
+                userManager.signUp((AttendAble) attendee, event.getTitle());
                 return 2;
             }
         }
@@ -124,14 +124,14 @@ public class SignUpSystem {
         ArrayList<Event> eventList = eventManager.getEvents();
         eventList.sort(comparator);
         Event event = eventList.get(eventIndex-1);
-        Optional<User> obj = attendeeManager.usernameToUserObject(username);
+        Optional<User> obj = userManager.usernameToUserObject(username);
         //check if username is valid
         if (!obj.isPresent()){
             return "Incorrect username. Please try again.";
         }
         User attendee = obj.get();
         eventManager.dropOut(event, attendee.getUsername());
-        attendeeManager.dropOut((AttendAble) attendee, event.getTitle());
+        userManager.dropOut((AttendAble) attendee, event.getTitle());
         return "You have successfully dropped " + event.getTitle() + " @ " + event.getEventTime();
     }
 /*

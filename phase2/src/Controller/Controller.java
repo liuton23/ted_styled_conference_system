@@ -1,5 +1,6 @@
 package Controller;
 
+import Controller.Registration.RegistrationPortal;
 import Entities.*;
 import Entities.EventComparators.bySpeakerEventComparator;
 import Entities.EventComparators.byTimeEventComparator;
@@ -22,7 +23,7 @@ import java.util.List;
 public class Controller {
 
     private Gateway gateway = new Gateway("save.ser");
-    private AttendeeManager attendeeManager = new AttendeeManager();
+    private UserManager userManager = new UserManager();
     private EventManager eventManager = new EventManager();
     private MessageManager messageManager = new MessageManager();
     private RoomManager roomManager = new RoomManager();
@@ -43,7 +44,7 @@ public class Controller {
 
             switch (chosen) {
                 case "R":
-                    registerUser();
+                    registerUser(userManager);
                     break;
                 case "L":
                     username = login();
@@ -64,8 +65,8 @@ public class Controller {
      */
     private void accountActivity(String username) {
         boolean loggedin = true;
-        boolean isOrg = attendeeManager.usernameToUserObject(username).get() instanceof Organizer;
-        boolean isSpeaker = attendeeManager.usernameToUserObject(username).get() instanceof Speaker;
+        boolean isOrg = userManager.usernameToUserObject(username).get() instanceof Organizer;
+        boolean isSpeaker = userManager.usernameToUserObject(username).get() instanceof Speaker;
         while (loggedin) {
 
             String chosen;
@@ -83,7 +84,7 @@ public class Controller {
                     eventActivity(username);
                     break;
                 case "I":
-                    getItinerary(attendeeManager, username, isSpeaker);
+                    getItinerary(userManager, username, isSpeaker);
                     break;
                 case "S":
                     scheduleActivity();
@@ -100,20 +101,20 @@ public class Controller {
 
     /**
      * Displays a schedule of all the events <code>Attendee</code> with username <code>user</code> is attending.
-     * @param attendeeManager gets the schedule.
+     * @param userManager gets the schedule.
      * @param user username of <code>Attendee</code> to which the schedule belongs.
      */
-    private void getItinerary(AttendeeManager attendeeManager, String user, Boolean isSpeaker){
-        Optional<User> obj = attendeeManager.usernameToUserObject(user);
+    private void getItinerary(UserManager userManager, String user, Boolean isSpeaker){
+        Optional<User> obj = userManager.usernameToUserObject(user);
         User userObj = obj.get();
         if (userObj instanceof AttendAble){
             //Speaker sp = (Speaker) attendee;
             //presenter.displaySchedule(attendeeManager.getSpeakingList(sp), "speakItinerary");
             //presenter.displaySchedule(attendeeManager.getItinerary(sp), "itinerary");
-            presenter.displaySchedule(attendeeManager.getItinerary((AttendAble) userObj), "itinerary");
+            presenter.displaySchedule(userManager.getItinerary((AttendAble) userObj), "itinerary");
         } //else presenter.displaySchedule(attendeeManager.getItinerary(attendee), "itinerary");
         if (userObj instanceof TalkAble){
-            presenter.displaySchedule(attendeeManager.getSpeakingList((TalkAble) userObj), "speakItinerary");
+            presenter.displaySchedule(userManager.getSpeakingList((TalkAble) userObj), "speakItinerary");
         }
     }
 
@@ -121,7 +122,7 @@ public class Controller {
      * Organizer only menu to schedule events, add rooms and change speakers.
      */
     private void scheduleActivity(){
-        ScheduleSystem scheduleSystem  = new ScheduleSystem(eventManager,attendeeManager, roomManager);
+        ScheduleSystem scheduleSystem  = new ScheduleSystem(eventManager,userManager, roomManager);
         boolean scheduling = true;
         while (scheduling) {
             Scanner input = new Scanner(System.in);
@@ -256,7 +257,7 @@ public class Controller {
      * @param username username of <code>Attendee</code>.
      */
     private void messageActivity(String username) {
-        MessageSystem messageSystem = new MessageSystem(messageManager,attendeeManager,eventManager);
+        MessageSystem messageSystem = new MessageSystem(messageManager,userManager,eventManager);
         boolean messaging = true;
         while (messaging) {
             String chosen = askMenuInput(5);
@@ -275,7 +276,7 @@ public class Controller {
     }
     public void messageUser(String username, MessageSystem messageSystem){
         boolean messagingOther = true;
-        User user = attendeeManager.usernameToUserObject(username).get();
+        User user = userManager.usernameToUserObject(username).get();
         while (messagingOther) {
             String chosen;
             if (user instanceof TalkAble) {
@@ -374,7 +375,7 @@ public class Controller {
      * @param username username of <code>Attendee</code>.
      */
     private void eventActivity(String username) {
-        SignUpSystem signUpSystem = new SignUpSystem(attendeeManager, eventManager, roomManager);
+        SignUpSystem signUpSystem = new SignUpSystem(userManager, eventManager, roomManager);
         boolean activity = true;
         while (activity) {
             String chosen = askMenuInput(8);
@@ -437,6 +438,23 @@ public class Controller {
     }
 
     /**
+     * Asks the user yes or no and receives input.
+     * @return  true if the user inputs Y/YES/T/True and false if the user inputs N/NO/F/FALSE.
+     */
+    public boolean askBooleanInput(){
+        Scanner input = new Scanner(System.in);
+        ArrayList<String> choices = new ArrayList<>();
+        choices.addAll(presenter.chooseMenuOptions(14));
+        choices.addAll(presenter.chooseMenuOptions(15));
+        String chosen;
+        do{
+            presenter.display("Yes or No?");
+            chosen = input.next().toUpperCase();
+        }while(invalidInput(choices, chosen));
+        return presenter.chooseMenuOptions(14).contains(chosen);
+    }
+
+    /**
      * Checks if <code>chosen</code> is a valid input in <code>choices</code>. If input is "EXIT", <code>exit</code>
      * will be called.
      * @param choices list of choices that are valid. Must be uppercase.
@@ -471,22 +489,7 @@ public class Controller {
         return chosen;
     }
 
-    /**
-     * Asks the user yes or no and receives input.
-     * @return  true if the user inputs Y/YES/T/True and false if the user inputs N/NO/F/FALSE.
-     */
-    public boolean askBooleanInput(){
-        Scanner input = new Scanner(System.in);
-        ArrayList<String> choices = new ArrayList<>();
-        choices.addAll(presenter.chooseMenuOptions(14));
-        choices.addAll(presenter.chooseMenuOptions(15));
-        String chosen;
-        do{
-            presenter.display("Yes or No?");
-            chosen = input.next().toUpperCase();
-        }while(invalidInput(choices, chosen));
-        return presenter.chooseMenuOptions(14).contains(chosen);
-    }
+
 
     /**
      * Displays a menu given <code>menu_id</code>.
@@ -543,13 +546,13 @@ public class Controller {
         ArrayList<Serializable> listOfObj;
         try {
             listOfObj = gateway.readFromFile(4);
-            attendeeManager = (AttendeeManager) listOfObj.get(0);
+            userManager = (UserManager) listOfObj.get(0);
             eventManager = (EventManager) listOfObj.get(1);
             messageManager = (MessageManager) listOfObj.get(2);
             roomManager = (RoomManager) listOfObj.get(3);
         } catch (IOException e) {
             presenter.printNoSaveFile();
-            attendeeManager = new AttendeeManager();
+            userManager = new UserManager();
             eventManager = new EventManager();
             messageManager = new MessageManager();
             roomManager = new RoomManager();
@@ -566,7 +569,7 @@ public class Controller {
      */
     public void save() {
         ArrayList<Serializable> listOfObj = new ArrayList<>();
-        listOfObj.add(attendeeManager);
+        listOfObj.add(userManager);
         listOfObj.add(eventManager);
         listOfObj.add(messageManager);
         listOfObj.add(roomManager);
@@ -584,7 +587,7 @@ public class Controller {
      * @return username of <code>Attendee</code> if it exists. Otherwise returns an empty string.
      */
     private String login(){
-        LoginSystem loginSystem = new LoginSystem(attendeeManager);
+        LoginSystem loginSystem = new LoginSystem(userManager);
         Scanner obj1 = new Scanner(System.in);
         presenter.printUsernameMessage();
         String username = obj1.nextLine();
@@ -601,8 +604,8 @@ public class Controller {
     /**
      * Attendee registration. Cannot choose a username that is already taken.
      */
-    private void registerUser(){
-        LoginSystem loginSystem = new LoginSystem(attendeeManager);
+    private void registerUser(UserManager userManager){
+        LoginSystem loginSystem = new LoginSystem(userManager);
         Scanner obj1 = new Scanner(System.in);
         presenter.printUsernameMessage();
         String username = obj1.nextLine();
@@ -628,7 +631,7 @@ public class Controller {
      * Speaker registration. Cannot choose a username that is already taken.
      */
     private void createSpeaker(){
-        LoginSystem loginSystem = new LoginSystem(attendeeManager);
+        LoginSystem loginSystem = new LoginSystem(userManager);
         Scanner obj1 = new Scanner(System.in);
         presenter.displayMessages("requestSpeaker");
         String username = obj1.nextLine();

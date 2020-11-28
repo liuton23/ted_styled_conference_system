@@ -1,19 +1,19 @@
 package Controller;
 import Entities.UserFactory.UserType;
-import UseCases.AttendeeManager;
+import UseCases.UserManager;
 
 /**
  * Manages the logging in and registering of users to the system
  */
 public class LoginSystem {
-    AttendeeManager attendeeManager;
+    UserManager userManager;
 
     /**
      * Creates an instance of LoginSystem
-     * @param attendeeManager the attendeeManager with the users in the system
+     * @param userManager the attendeeManager with the users in the system
      */
-    public LoginSystem(AttendeeManager attendeeManager) {
-        this.attendeeManager = attendeeManager;
+    public LoginSystem(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     /**
@@ -23,7 +23,7 @@ public class LoginSystem {
      * @return true if a user with the same username and password were found in the system. False if not.
      */
     public boolean canLogin(String username, String password) {
-        return attendeeManager.inSystem(username, password);
+        return userManager.inSystem(username, password);
     }
 
     /**
@@ -34,12 +34,12 @@ public class LoginSystem {
      * @return true if the account was successfully registered. False if not.
      */
     public boolean registerUser(String username, String password, UserType type) {
-        if (attendeeManager.usernameToUserObject(username).isPresent()) {
+        if (userManager.usernameToUserObject(username).isPresent()) {
             return false;
         } else if (username.trim().isEmpty() || password.trim().isEmpty()){
             return false;
         } else {
-            attendeeManager.createAttendee(username, password, type);
+            userManager.createAttendee(username, password, type);
             return true;
         }
     }
@@ -50,14 +50,16 @@ public class LoginSystem {
      * @param password speaker account password
      * @return true iff the account was successfully registered.
      */
+
     public boolean registerSpeaker(String username, String password){
-        if (attendeeManager.usernameToUserObject(username).isPresent()){
+        if (userManager.usernameToUserObject(username).isPresent()){
             return false;
         } else if (username.trim().isEmpty() || password.trim().isEmpty()){
             return false;
         } else {
-            attendeeManager.createAttendee(username, password, UserType.SPEAKER);
+            userManager.createAttendee(username, password, UserType.SPEAKER);
             return true;
         }
     }
+
 }
