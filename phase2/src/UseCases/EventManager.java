@@ -2,11 +2,10 @@ package UseCases;
 
 import Entities.Attendee;
 import Entities.Event;
+import Entities.SpeakerEvent;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -15,7 +14,7 @@ import java.util.Optional;
  */
 public class EventManager implements Serializable {
     private ArrayList<Event> events;
-    private ArrayList<Event> speakerEvents;
+    private ArrayList<SpeakerEvent> speakerEvents;
 
     /**
      * Constructs an instance of EventManager with an empty Arraylist of Events.

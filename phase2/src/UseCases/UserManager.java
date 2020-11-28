@@ -1,6 +1,7 @@
 package UseCases;
 
 import Entities.*;
+import Entities.Event;
 import Entities.UserFactory.*;
 
 import java.io.Serializable;

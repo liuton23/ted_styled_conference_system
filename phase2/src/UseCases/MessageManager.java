@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class MessageManager implements Serializable {
     private ArrayList<Message> messages;
+    private ArrayList<String> messageNumStorage;
 
     // All the string representation of Attendee is its username
 
@@ -20,21 +21,7 @@ public class MessageManager implements Serializable {
 
     public MessageManager(){
         messages = new ArrayList<Message>();
-    }
-
-    /**
-     * Create a message base on sender, recipient, and message content.
-     * @param recipient username of the recipient
-     * @param sender username of the sender
-     * @param text content of the message
-     * @return an message object
-     */
-
-    public Message createMessage(String recipient, String sender, String text){
-        Message currMessage = new Message(sender, text);
-        currMessage.setRecipients(recipient);
-        messages.add(currMessage);
-        return currMessage;
+        messageNumStorage = new ArrayList<String>();
     }
 
     /**
@@ -49,8 +36,24 @@ public class MessageManager implements Serializable {
         for (String a : recipients) {
             currMessage.setRecipients(a);
         }
+        messageNumGenerator(currMessage);
         messages.add(currMessage);
         return currMessage;
+    }
+
+    public Boolean deleteMessage(String messageNum){
+        if (!messageNumStorage.contains(messageNum)){
+            return false;
+        }
+        Message currMessage = null;
+        for (Message m: messages){
+            if (m.getMessageNumber().equals(messageNum)){
+                currMessage = m;
+            }
+        }
+        messages.remove(currMessage);
+        messageNumStorage.remove(messageNum);
+        return true;
     }
 
     /**
@@ -90,11 +93,34 @@ public class MessageManager implements Serializable {
      * @return a list of all the messages received by this user
      */
     public ArrayList<String> getReceivedBy(String recipient){
+        ArrayList<Message> allMessagesObj = getAllReceivedBy(recipient);
         ArrayList<String> allMessages = new ArrayList<String>();
-        for (Message m : messages){
-            if (m.getRecipients().contains(recipient)){
-                allMessages.add("From " + m.getSender() + ": " + m.getText() + " @ " +
+        for (Message m : allMessagesObj){
+                allMessages.add(m.getMessageNumber() + " From " + m.getSender() + ": " + m.getText() + " @ " +
                         m.getMessageTime().toString());
+                m.setRead(recipient);
+            }
+        return allMessages;
+    }
+
+    private ArrayList<Message> getAllReceivedBy(String recipient){
+        ArrayList<Message> allMessages = new ArrayList<Message>();
+        for (Message m : messages) {
+            if (m.getRecipients().contains(recipient)) {
+                allMessages.add(m);
+            }
+        }
+        return allMessages;
+    }
+
+    public ArrayList<String> getUnreadMessage(String recipient){
+        ArrayList<Message> allMessagesObj = getAllReceivedBy(recipient);
+        ArrayList<String> allMessages = new ArrayList<String>();
+        for (Message m : allMessagesObj) {
+            if (!m.getRead(recipient)) {
+                allMessages.add(m.getMessageNumber() + " From " + m.getSender() + ": " + m.getText() + " @ " +
+                        m.getMessageTime().toString());
+                m.setRead(recipient);
             }
         }
         return allMessages;
@@ -111,10 +137,15 @@ public class MessageManager implements Serializable {
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : messages){
             if (m.getSender().equals(sender) && m.getRecipients().contains(recipient)){
-                allMessages.add(m.getText() + " @ " + m.getMessageTime().toString());
+                allMessages.add(m.getMessageNumber() + ": " + m.getText() + " @ " + m.getMessageTime().toString());
+                m.setRead(recipient);
             }
         }
         return allMessages;
+    }
+
+    public void markUnread(String messageNum){
+
     }
 
 
@@ -140,6 +171,18 @@ public class MessageManager implements Serializable {
                 x += list.get(i) + ", ";
             }
             return x + "..., " + list.get(max - 2) + " and " + list.get(max - 1);
+        }
+    }
+
+    public void messageNumGenerator(Message message){
+        String x = "";
+        int num = 10000 + (int)(Math.random() * (90000));
+        x = "MSG" + message.getSender().toUpperCase().charAt(0) + num;
+        if (messageNumStorage.contains(x)){
+            messageNumGenerator(message);
+        } else {
+            messageNumStorage.add(x);
+            message.setMessageNumber(x);
         }
     }
 

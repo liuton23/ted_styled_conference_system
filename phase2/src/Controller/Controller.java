@@ -2,6 +2,7 @@ package Controller;
 
 import Controller.Registration.RegistrationPortal;
 import Entities.*;
+import Entities.Event;
 import Entities.EventComparators.bySpeakerEventComparator;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.EventComparators.byTitleEventComparator;
@@ -145,7 +146,7 @@ public class Controller {
                 case "C":
                     int index;
                     presenter.displayMessages("changeSpeaker");
-                    ArrayList<Event> events = new ArrayList<>(eventManager.getEvents());
+                    ArrayList<Event> events = new ArrayList<Event>(eventManager.getEvents());
                     events.sort(new bySpeakerEventComparator());
                     presenter.displayAllEvents(events, "speaker");
                     presenter.displayMessages("requestRoom");
@@ -308,7 +309,6 @@ public class Controller {
 
     }
 
-
     /**
      * Messages all users attending a specific event.
      * @param username username of the sender.
@@ -341,19 +341,24 @@ public class Controller {
         boolean viewingMessage = true;
         while (viewingMessage) {
             String chosen = askMenuInput(7);
-
             switch (chosen) {
                 case "S":
-                    ArrayList<String> messagesS = messageSystem.viewSentMessage(username);
+                    ArrayList<String> messagesS = messageManager.getSendBy(username);
                     if (messagesS.size() == 0){
                         presenter.printNoSentForU();
                     } else presenter.displayListOfMessage(messagesS);
                     break;
                 case "R":
-                    ArrayList<String> messagesR = messageSystem.viewReceivedMessage(username);
+                    ArrayList<String> messagesR = messageManager.getReceivedBy(username);
                     if (messagesR.size() == 0){
                         presenter.printNoRecForU();
                     } else presenter.displayListOfMessage(messagesR);
+                    break;
+                case "U":
+                    ArrayList<String> messagesU = messageManager.getUnreadMessage(username);
+                    if (messagesU.size() == 0){
+                        presenter.printNoRecForU();
+                    } else presenter.displayListOfMessage(messagesU);
                     break;
                 case "F":
                     messageSystem.viewFrom(username);

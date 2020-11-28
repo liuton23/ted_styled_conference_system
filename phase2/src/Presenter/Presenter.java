@@ -157,6 +157,7 @@ public class Presenter {
         ArrayList<String> options = new ArrayList<>();
         options.add("View (S)ent messages");
         options.add("View (R)eceived messages");
+        options.add("View (U)nread messages");
         options.add("View messages (F)rom another user");
         options.add("(B)ack");
         prompt(options);
@@ -246,6 +247,7 @@ public class Presenter {
             case 7:
                 choices.add("S");
                 choices.add("R");
+                choices.add("U");
                 choices.add("F");
                 choices.add("B");
                 break;

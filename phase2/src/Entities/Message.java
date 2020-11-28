@@ -1,8 +1,12 @@
 package Entities;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class represents an message objects in this system.
@@ -14,6 +18,9 @@ public class Message implements Serializable {
     private String sender;
     private String text;
     private LocalDateTime messageTime;
+    private HashMap<String, Boolean> readDict;
+    private PropertyChangeSupport observable;
+    private String messageNumber;
 
     /**
      * Create an instance of message
@@ -26,6 +33,50 @@ public class Message implements Serializable {
         this.text = text;
         this.recipients = new ArrayList<String>();
         this.messageTime = LocalDateTime.now();
+        this.readDict = new HashMap<String, Boolean>();
+        this.observable = new PropertyChangeSupport(this);
+    }
+
+
+    /*
+     * Add a new observer to observe the changes to this class.
+     * @param observer
+     */
+    public void addObserver(PropertyChangeListener observer) {
+        observable.addPropertyChangeListener("read", observer);
+    }
+
+
+    /*
+     * Remove an existing observer from the list of observers.
+     * @param observer
+     */
+    public void removeObserver(PropertyChangeListener observer) {
+        observable.removePropertyChangeListener(observer);
+    }
+
+    /*
+     * Notify observers o the change event.
+     * @param newEvent
+     */
+    public void notifyObservers (PropertyChangeEvent newEvent)
+    {
+        for ( PropertyChangeListener observer : observable.getPropertyChangeListeners())
+            observer.propertyChange(newEvent);
+    }
+
+    public void markUnread(String recipient) {
+
+        String oldRead  = "READ";
+        String newRead = "UNREAD";
+        this.readDict.put(recipient,false);
+        PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "read status", oldRead, newRead);
+        notifyObservers (newEvent);
+
+        /*
+         * The following line does not work.
+         *  observable.firePropertyChange("The location: ", oldLocation, newLocation);
+         */
     }
 
     /**
@@ -35,6 +86,7 @@ public class Message implements Serializable {
 
     public void setRecipients(String recipient) {
         this.recipients.add(recipient);
+        this.readDict.put(recipient, false);
     }
 
     /**
@@ -73,6 +125,24 @@ public class Message implements Serializable {
         return text;
     }
 
+    public void setRead(String recipient){
+        if (!readDict.get(recipient)){
+            this.readDict.put(recipient,true);
+        }
+    }
+
+    public Boolean getRead(String recipient){
+        return this.readDict.get(recipient);
+    }
+
+    public void setMessageNumber(String messageNumber) {
+        this.messageNumber = messageNumber;
+    }
+
+    public String getMessageNumber(){
+        return this.messageNumber;
+    }
+
     /**
      * Return the message time.
      * @return the time of this message
@@ -82,17 +152,15 @@ public class Message implements Serializable {
         return messageTime;
     }
 
-
-/*
-    public static void main(String[] args) {
-        Message m = new Message("felix", "I like cat");
-        System.out.println(m.getSender());
-        m.setRecipients("rita");
-        System.out.println(m.getRecipients().size());
-        System.out.println(m.getText());
-        System.out.println(m.getMessageTime());
+    @Override
+    public String toString() {
+        return "From " + sender + ": " + text + " @ " +
+                messageTime.toString();
     }
 
-*/
+
+
+
+
 
 }

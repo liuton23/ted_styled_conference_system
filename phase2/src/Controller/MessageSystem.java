@@ -1,6 +1,7 @@
 package Controller;
 
 import Entities.*;
+import Entities.Event;
 import Entities.UserFactory.*;
 import Presenter.Presenter;
 import UseCases.UserManager;
@@ -56,7 +57,9 @@ public class MessageSystem {
         if (userManager.checkIsOrganizer(recipient)){
             return 2; //"The message can not be sent to an Organizer."
         } else {
-            messageManager.createMessage(attendee, sender, text);
+            ArrayList<String> att = new ArrayList<String>();
+            att.add(attendee);
+            messageManager.createMessage(att, sender, text);
             return 3; //"The message has been successfully sent."
         }
     }
@@ -126,7 +129,7 @@ public class MessageSystem {
      * @param eventNames a list of names of events
      * @param sender username of the sender
      * @param text the content of the message
-     * @return integer which will send to presenter and presents the crresponding messages
+     * @return integer which will send to presenter and presents the corresponding messages
      */
 
     public int messageEventAttendees(ArrayList<String> eventNames, String sender, String text){
@@ -162,38 +165,6 @@ public class MessageSystem {
             messageManager.createMessage(list, sender, text);
             return 5; //"The message has been successfully sent.";
         }
-    }
-
-
-
-    //ViewMessage methods
-
-    /**
-     * This method get all the received message from user r
-     * @param r username
-     * @return a list of received message for user r
-     */
-    public ArrayList<String> viewReceivedMessage(String r){
-        return messageManager.getReceivedBy(r);
-    }
-
-    /**
-     * This method get all the received message from user r
-     * @param r username
-     * @return a list of sent message by this user r
-     */
-    public ArrayList<String> viewSentMessage(String r){
-        return messageManager.getSendBy(r);
-    }
-
-    /**
-     * This method gets all the message sent from s to r
-     * @param s sender's username
-     * @param r recipient's username
-     * @return a list of all the message sent from s to r
-     */
-    public ArrayList<String> viewAllMessagesFrom(String s, String r){
-        return messageManager.getAllMessagesFrom(r,s);
     }
 
 
@@ -249,7 +220,7 @@ public class MessageSystem {
             presenter.printIncorrectUsername();
             viewFrom(username);
         } else {
-            ArrayList<String> messageF = viewAllMessagesFrom(user,username);
+            ArrayList<String> messageF = messageManager.getAllMessagesFrom(username, user);
             if (messageF.size() == 0){
                 presenter.display(presenter.thereAreNoMessForUFrom() + user);
             } else presenter.displayListOfMessage(messageF);

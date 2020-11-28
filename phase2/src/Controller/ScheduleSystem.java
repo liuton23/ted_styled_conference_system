@@ -2,6 +2,7 @@ package Controller;
 
 
 import Entities.*;
+import Entities.Event;
 import Entities.UserFactory.AttendAble;
 import Entities.UserFactory.TalkAble;
 import UseCases.EventManager;
