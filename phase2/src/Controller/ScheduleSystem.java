@@ -3,10 +3,10 @@ package Controller;
 
 import Entities.*;
 import Entities.UserFactory.AttendAble;
+import Entities.UserFactory.TalkAble;
 import UseCases.EventManager;
-import UseCases.UserManager;
+import UseCases.AttendeeManager;
 import UseCases.RoomManager;
-import UseCases.UserManager;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -18,18 +18,18 @@ import java.util.ArrayList;
  */
 public class ScheduleSystem {
     private EventManager eventManager = new EventManager();
-    private UserManager userManager = new UserManager();
+    private AttendeeManager attendeeManager = new AttendeeManager();
     private RoomManager roomManager = new RoomManager();
 
     /**
      * Constructs an instance of ScheduleSystem with the provided EventManger, AttendeeManager, and RoomManager.
      * @param eventManager the EventManager being manipulated.
-     * @param userManager the AttendeeManager being manipulated.
+     * @param attendeeManager the AttendeeManager being manipulated.
      * @param roomManager the RoomManager being manipulated.
      */
-    public ScheduleSystem(EventManager eventManager, UserManager userManager, RoomManager roomManager){
+    public ScheduleSystem(EventManager eventManager, AttendeeManager attendeeManager, RoomManager roomManager){
         this.eventManager = eventManager;
-        this.userManager = userManager;
+        this.attendeeManager = attendeeManager;
         this.roomManager = roomManager;
     }
 
@@ -56,7 +56,7 @@ public class ScheduleSystem {
         eventTime.add(startDateTime);
         eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute));
         Room tempRoom = roomManager.idToRoom(room);
-        if(!userManager.registeredSpeaker(speaker)){
+        if(!attendeeManager.registeredSpeaker(speaker)){
             //the username provided does not belong to a speaker in the system.
             return 4;
         }
@@ -77,8 +77,8 @@ public class ScheduleSystem {
             return 2;
         }
         else{
-            Speaker sp = (Speaker) userManager.usernameToUserObject(speaker).get();
-            userManager.addEventToSpeakerList(sp, title);
+            Speaker sp = (Speaker) attendeeManager.usernameToUserObject(speaker).get();
+            attendeeManager.addEventToSpeakerList((TalkAble) sp, title);
             roomManager.book(tempRoom, title, startDateTime, endDateTime);
             eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
             //"Event successfully created."
@@ -115,20 +115,20 @@ public class ScheduleSystem {
             // event name does not correspond to an event.
             return 4;
         }
-        else if (!userManager.registeredSpeaker(newSpeaker)){
+        else if (!attendeeManager.registeredSpeaker(newSpeaker)){
             // not a registered speaker
             return 5;
         }
         else {
             Event eventObject = eventManager.nameToEvent(eventName).get();
             // if the value is not null
-            if (userManager.usernameToUserObject(newSpeaker).isPresent()) {
+            if (attendeeManager.usernameToUserObject(newSpeaker).isPresent()) {
                 // if object is speaker
-                if (userManager.usernameToUserObject(newSpeaker).get() instanceof Speaker) {
+                if (attendeeManager.usernameToUserObject(newSpeaker).get() instanceof Speaker) {
                     // changing speaker
                     if (eventManager.freeSpeakerCheck(eventObject.getEventTime(), newSpeaker)) {
                         eventManager.changeSpeaker(eventObject, newSpeaker);
-                        userManager.changeSpeaker(eventObject.getTitle(), newSpeaker);
+                        attendeeManager.changeSpeaker(eventObject.getTitle(), newSpeaker);
                         //"Speaker changed successfully."
                         return 0;
                     }
@@ -151,13 +151,13 @@ public class ScheduleSystem {
         } else {
             Event eventObject = eventManager.nameToEvent(eventName).get();
             for (String attendeeName : eventObject.getAttendeeList()) {
-                User attendee = userManager.usernameToUserObject(attendeeName).get();
-                userManager.dropOut((AttendAble) attendee, eventName);
+                User attendee = attendeeManager.usernameToUserObject(attendeeName).get();
+                attendeeManager.dropOut((AttendAble) attendee, eventName);
             }
             //this will change in phase 2 when we can have a variable number of speakers
             String speakerName = eventObject.getSpeaker();
-            Speaker sp = (Speaker) userManager.usernameToUserObject(speakerName).get();
-            userManager.removeEventFromSpeakerList(sp,eventName);
+            Speaker sp = (Speaker) attendeeManager.usernameToUserObject(speakerName).get();
+            attendeeManager.removeEventFromSpeakerList((TalkAble) sp,eventName);
             Room room = roomManager.idToRoom(eventObject.getRoom());
             room.removeBooking(eventName);
             eventManager.cancelEvent(eventObject);

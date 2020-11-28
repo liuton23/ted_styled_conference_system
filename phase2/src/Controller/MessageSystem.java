@@ -1,9 +1,10 @@
 package Controller;
 
 import Entities.*;
-import Entities.UserFactory.*;
+import Entities.UserFactory.AttendAble;
+import Entities.UserFactory.TalkAble;
 import Presenter.Presenter;
-import UseCases.UserManager;
+import UseCases.AttendeeManager;
 import UseCases.EventManager;
 import UseCases.MessageManager;
 
@@ -17,21 +18,21 @@ import java.util.Scanner;
 public class MessageSystem {
 
     MessageManager messageManager;
-    UserManager userManager;
+    AttendeeManager attendeeManager;
     EventManager eventManager;
     private Presenter presenter = new Presenter();
 
     /**
      * Create an instance of MessageSystem
      * @param messageManager MessageManager
-     * @param userManager AttendeeManager
+     * @param attendeeManager AttendeeManager
      * @param eventManager EventManager
      */
 
-    public MessageSystem(MessageManager messageManager, UserManager userManager,
+    public MessageSystem(MessageManager messageManager, AttendeeManager attendeeManager,
                          EventManager eventManager){
         this.messageManager = messageManager;
-        this.userManager = userManager;
+        this.attendeeManager = attendeeManager;
         this.eventManager = eventManager;
     }
 
@@ -45,15 +46,15 @@ public class MessageSystem {
      * @return integer which will send to presenter and present corresponding message
      */
     public int messageAttendee(String sender, String attendee, String text){
-        Optional<User> obj1 = userManager.usernameToUserObject(sender);
-        Optional<User> obj2 = userManager.usernameToUserObject(attendee);
+        Optional<User> obj1 = attendeeManager.usernameToUserObject(sender);
+        Optional<User> obj2 = attendeeManager.usernameToUserObject(attendee);
         if (!obj1.isPresent()){
             return 1; //"Incorrect username. Please try again."
         } else if (!obj2.isPresent()){
             return 1; //"Incorrect username. Please try again.";
         }
         User recipient = obj2.get();
-        if (userManager.checkIsOrganizer(recipient)){
+        if (attendeeManager.checkIsOrganizer(recipient)){
             return 2; //"The message can not be sent to an Organizer."
         } else {
             messageManager.createMessage(attendee, sender, text);
@@ -75,17 +76,17 @@ public class MessageSystem {
      */
 
     public int messageAllSpeakers(String sender, String text){
-        Optional<User> obj = userManager.usernameToUserObject(sender);
-        ArrayList<TalkAble> listOfSpeakers = userManager.getAllSpeakers();
+        Optional<User> obj = attendeeManager.usernameToUserObject(sender);
+        ArrayList<TalkAble> listOfSpeakers = attendeeManager.getAllSpeakers();
         ArrayList<String> list = new ArrayList<String>();
         for (TalkAble s : listOfSpeakers){
-            list.add(userManager.getUsername((User) s));
+            list.add(attendeeManager.getUsername((User) s));
         }
         if (!obj.isPresent()){
             return 1; /*"Incorrect username. Please try again."*/
         }
         User org = obj.get();
-        if (!userManager.checkIsOrganizer(org)){
+        if (!attendeeManager.checkIsOrganizer(org)){
             return 2;/*"Only Organizer can message all speakers."*/
         } else {
             messageManager.createMessage(list, sender, text);
@@ -101,18 +102,18 @@ public class MessageSystem {
      */
 
     public int messageAllAttendees(String sender, String text){
-        Optional<User> obj = userManager.usernameToUserObject(sender);
+        Optional<User> obj = attendeeManager.usernameToUserObject(sender);
         if (!obj.isPresent()){
             return 1; /*"Incorrect username. Please try again."*/
         }
         User org = obj.get();
-        if (!userManager.checkIsOrganizer(org)) {
+        if (!attendeeManager.checkIsOrganizer(org)) {
             return 2; /*"Only Organizer can message all attendees."*/
         }
         ArrayList<String> allAtt = new ArrayList<String>();
-        ArrayList<AttendAble> allAttObj = userManager.getAllAttendees();
+        ArrayList<AttendAble> allAttObj = attendeeManager.getAllAttendees();
         for(AttendAble att: allAttObj){
-            allAtt.add(userManager.getUsername((User) att));
+            allAtt.add(attendeeManager.getUsername((User) att));
         }
         messageManager.createMessage(allAtt,sender,text);
         return 3; /*"The message has been successfully sent."*/
@@ -130,7 +131,7 @@ public class MessageSystem {
      */
 
     public int messageEventAttendees(ArrayList<String> eventNames, String sender, String text){
-        Optional<User> obj = userManager.usernameToUserObject(sender);
+        Optional<User> obj = attendeeManager.usernameToUserObject(sender);
         ArrayList<String> list = new ArrayList<String>();
         ArrayList<String> noAtt = new ArrayList<String>();
         ArrayList<String> notSpeakAt = new ArrayList<String>();
@@ -244,7 +245,7 @@ public class MessageSystem {
         Scanner obj = new Scanner(System.in);
         presenter.printPleaseInputUsername();
         String user = obj.nextLine();
-        Optional<User> obj1 = userManager.usernameToUserObject(user);
+        Optional<User> obj1 = attendeeManager.usernameToUserObject(user);
         if (!obj1.isPresent()){
             presenter.printIncorrectUsername();
             viewFrom(username);
