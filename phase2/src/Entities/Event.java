@@ -8,57 +8,33 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
- * An instance of this class represent an event at the tech conference.
+ *
  */
-public class Event implements Serializable {
-    private String speaker;
+public class Event implements Serializable{
     private String title;
     // two item ArrayList
     private ArrayList<LocalDateTime> eventTime;
     private int room;
     private ArrayList<String> attendeeList;
 
-    // Event with one hour length
-    // month should be in all caps
-    /**
-     * Constructs an instance of event.
-     * @param title the name of the event. Event names are unique.
-     * @param speaker the username of the speaker speaking at the event.
-     * @param year the year the event is starting in.
-     * @param month the month the event is starting in.
-     * @param day the first (and possibly only) day of the event.
-     * @param hour the starting hour of the event.
-     * @param minute the starting minute of the event.
-     * @param room the room id of the room where the event is taking place.
-     */
-    public Event(String title, String speaker, int year, String month, int day, int hour, int minute, int room){
+    // duration has to be an int representing a number of hours
+    public Event(String title, int year, String month, int day, int hour, int minute, int room, int duration){
         LocalTime startTime = LocalTime.of(hour, minute);
-        LocalTime endTime = startTime.plusHours(1);
+        LocalTime endTime = startTime.plusHours(duration);
         this.title = title;
-        this.speaker = speaker;
         this.eventTime = new ArrayList<>();
         this.eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, hour, minute, 0));
         this.eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute, 0));
         this.room = room;
         this.attendeeList = new ArrayList<String>();
     }
-
     // getters
-
     /**
      * Method that returns the name of this event.
      * @return the name of the event.
      */
     public String getTitle() {
         return title;
-    }
-
-    /**
-     * Method that returns the username of the speaker speaking at this event.
-     * @return username of the speaker of this event.
-     */
-    public String getSpeaker() {
-        return speaker;
     }
 
     /**
@@ -84,18 +60,7 @@ public class Event implements Serializable {
      */
     public ArrayList<String> getAttendeeList(){ return attendeeList;}
 
-    // setters
-
-    /**
-     * A method that sets an event instance's speaker
-     * @param newSpeaker the speaker that is speaking at this event's username.
-     */
-    public void setSpeaker(String newSpeaker){
-        this.speaker = newSpeaker;
-    }
-
-    // this method is for events of a 1 hour duration
-
+    //setters
     /**
      * This method sets the time of an event, for any events whose desired length is 1 hour.
      * @param year the year that this event starts.
@@ -103,10 +68,11 @@ public class Event implements Serializable {
      * @param day the day this event starts in.
      * @param hour the hour this event starts in.
      * @param minute the minute this event starts in.
+     * @param duration of the event in hours.
      */
-    public void setEventTime(int year, String month, int day, int hour, int minute){
+    public void setEventTime(int year, String month, int day, int hour, int minute, int duration){
         LocalTime startTime = LocalTime.of(hour, minute);
-        LocalTime endTime = startTime.plusHours(1);
+        LocalTime endTime = startTime.plusHours(duration);
         this.eventTime.remove(1);
         this.eventTime.remove(0);
         this.eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, hour, minute));
@@ -137,6 +103,61 @@ public class Event implements Serializable {
     public void removeAttendee(String attendee){
         this.attendeeList.remove(attendee);
     }
+}
+
+/**
+ * An instance of this class represent an event at the tech conference that has at least one speaker speaking.
+ */
+public class SpeakerEvent extends Event implements Serializable {
+    private ArrayList<String> speaker;
+    private String title;
+    // two item ArrayList
+    private ArrayList<LocalDateTime> eventTime;
+    private int room;
+    private ArrayList<String> attendeeList;
+
+    /**
+     * Constructs an instance of event.
+     * @param title the name of the event. Event names are unique.
+     * @param speaker the username of the speaker speaking at the event.
+     * @param year the year the event is starting in.
+     * @param month the month the event is starting in.
+     * @param day the first (and possibly only) day of the event.
+     * @param hour the starting hour of the event.
+     * @param minute the starting minute of the event.
+     * @param room the room id of the room where the event is taking place.
+     */
+
+    public SpeakerEvent(String title, ArrayList<String> speaker, int year, String month, int day, int hour, int minute, int room, int duration){
+        super(title, year, month, day, hour, minute, room, duration)
+        this.speaker = speaker;
+    }
+
+    //getters
+    /**
+     * Method that returns a list of usernames of the speakers speaking at this event.
+     * @return a list of usernames of the speakers of this event.
+     */
+    public ArrayList<String> getSpeaker() {
+        return speaker;
+    }
+
+    // setters
+    /**
+     * A method that adds a speaker to an event instance.
+     * @param newSpeaker the speaker that is speaking at this event's username.
+     */
+    public void addSpeaker(String newSpeaker){
+        this.speaker.add(newSpeaker);
+    }
+
+    /**
+     * A method that removes a speaker from an event instance as long as at least one speaker will remain after removal.
+     * @param newSpeaker the username of the speaker to remove from the event.
+     */
+    public void removeSpeaker(String oldSpeaker) {
+            this.speaker.remove(oldSpeaker);
+    }
 
     /**
      * This method returns a string representation of the event.
@@ -145,10 +166,16 @@ public class Event implements Serializable {
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
-
-        return String.format(this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
-                this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + " with : " +
-                this.getSpeaker() + ".");
+        if(this.speaker.size() == 1) {
+            return String.format(this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
+                    this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + " with : " +
+                    this.getSpeaker() + ".");
+        }
+        else{
+            return String.format(this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
+                    this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + " with : " +
+                    this.getSpeaker().get(0) + "and more.");
+        }
     }
 
     //testing

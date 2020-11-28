@@ -22,9 +22,9 @@ public class ScheduleSystem {
     private RoomManager roomManager;// = new RoomManager();
 
     /**
-     * Constructs an instance of ScheduleSystem with the provided EventManger, AttendeeManager, and RoomManager.
+     * Constructs an instance of ScheduleSystem with the provided EventManger, UserManager, and RoomManager.
      * @param eventManager the EventManager being manipulated.
-     * @param userManager the AttendeeManager being manipulated.
+     * @param userManager the UserManager being manipulated.
      * @param roomManager the RoomManager being manipulated.
      */
     public ScheduleSystem(EventManager eventManager, UserManager userManager, RoomManager roomManager){
@@ -44,23 +44,20 @@ public class ScheduleSystem {
      * @param hour the desired starting hour of the event to be created.
      * @param minute the desired starting minute of the event to be created.
      * @param room the id of the desired room of the event to be created.
+     * @param duration the length of time (in hours) of the event.
      * @return an integer signaling the successful creation of an event or a relevant error message.
      */
-    public int scheduleEvent(String title, String speaker, int year, String month, int day, int hour, int minute,
-                                int room){
+    public int scheduleEvent(String title, ArrayList speakerList, int year, String month, int day, int hour, int minute,
+                                int room, int duration){
         LocalTime startTime = LocalTime.of(hour, minute);
-        LocalTime endTime = startTime.plusHours(1);
+        LocalTime endTime = startTime.plusHours(duration);
         LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
         LocalDateTime endDateTime = LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute);
         ArrayList<LocalDateTime> eventTime = new ArrayList<LocalDateTime>();
         eventTime.add(startDateTime);
         eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute));
         Room tempRoom = roomManager.idToRoom(room);
-        if(!userManager.registeredSpeaker(speaker)){
-            //the username provided does not belong to a speaker in the system.
-            return 4;
-        }
-        else if(!roomManager.checkRoomInSystem(room)){
+        if(!roomManager.checkRoomInSystem(room)){
             //This room is not in the system.
             return 5;
         }
@@ -68,19 +65,30 @@ public class ScheduleSystem {
                 //"Room is already booked for this timeslot."
                 return 0 ;
         }
-        else if(!eventManager.freeSpeakerCheck(eventTime, speaker)) {
-            //"Speaker is already booked for this timeslot."
-            return 1;
-        }
         else if(!eventManager.freeTitleCheck(title)){
             //"This event name has already been taken."
             return 2;
         }
         else{
-            Speaker sp = (Speaker) userManager.usernameToUserObject(speaker).get();
-            userManager.addEventToSpeakerList((TalkAble) sp, title);
+            if(speaker.size() == 0){
+                roomManager.book(tempRoom, title, startDateTime, endDateTime);
+                eventManager.createEvent(title, year, month, day, hour, minute, room, duration);
+                //"Event successfully created."
+                return 3;
+            }
+            for (Speaker speaker: speakerList) {
+                if(!userManager.registeredSpeaker(speaker)){
+                    //the username provided does not belong to a speaker in the system.
+                    return 4;
+                }
+                else if(!eventManager.freeSpeakerCheck(speaker, eventTime))
+                    return 1;
+            }
+            for (Speaker speaker: speakerList) {
+                Speaker sp = (Speaker) userManager.usernameToUserObject(speaker).get();
+                userManager.addEventToSpeakerList((TalkAble) sp, title);
             roomManager.book(tempRoom, title, startDateTime, endDateTime);
-            eventManager.createEvent(title, speaker, year, month, day, hour, minute, room);
+            eventManager.createSpeakerEvent(title, speaker, year, month, day, hour, minute, room, duration);
             //"Event successfully created."
             return 3;
         }

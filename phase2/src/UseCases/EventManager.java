@@ -15,12 +15,14 @@ import java.util.Optional;
  */
 public class EventManager implements Serializable {
     private ArrayList<Event> events;
+    private ArrayList<Event> speakerEvents;
 
     /**
      * Constructs an instance of EventManager with an empty Arraylist of Events.
      */
     public EventManager(){
         this.events = new ArrayList<Event>();
+        this.speakerEvents = new ArrayList<SpeakerEvent>();
     }
 
     /**
@@ -29,6 +31,14 @@ public class EventManager implements Serializable {
      */
     public ArrayList<Event> getEvents() {
         return events;
+    }
+
+    /**
+     * This method returns an ArrayList of speaker events.
+     * @return an ArrayList<Event> representing the events occurring at the tech conference.
+     */
+    public ArrayList<Event> getEvents() {
+        return speakerEvents;
     }
 
     /**
@@ -42,14 +52,26 @@ public class EventManager implements Serializable {
      * @param minute the minute the event starts.
      * @param room the room id of the desired room where the event takes place.
      */
-    public void createEvent(String title, String speaker, int year, String month, int day, int hour,
-                              int minute, int room){
-        LocalTime startTime = LocalTime.of(hour, minute);
-        LocalTime endTime = startTime.plusHours(1);
-        ArrayList<LocalDateTime> eventTime = new ArrayList<LocalDateTime>();
-        eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, hour, minute));
-        eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute));
-        events.add(new Event(title, speaker, year, month, day, hour, minute, room));
+    public void createSpeakerEvent(String title, String speaker, int year, String month, int day, int hour,
+                              int minute, int room, int duration){
+        newEvent = new SpeakerEvent(title, speaker, year, month, day, hour, minute, room, duration)
+        events.add(newEvent);
+        speakerEvents.add(newEvent);
+    }
+
+    /**
+     * This method creates an event and adds it to EventManager's Arraylist of events.
+     * @param title the desired event name.
+     * @param year the year the event starts.
+     * @param month the month the event starts.
+     * @param day the day the event starts.
+     * @param hour the hour the event starts.
+     * @param minute the minute the event starts.
+     * @param room the room id of the desired room where the event takes place.
+     */
+    public void createNoSpeakerEvent(String title, int year, String month, int day, int hour,
+                                   int minute, int room, int duration){
+        events.add(new Event(title, year, month, day, hour, minute, room, duration));
     }
 
     /**
@@ -61,14 +83,17 @@ public class EventManager implements Serializable {
     public boolean freeSpeakerCheck(ArrayList<LocalDateTime> eventTime, String speaker) {
         LocalDateTime newEventStart = eventTime.get(0);
         LocalDateTime newEventEnd = eventTime.get(1);
-        for (Event eventInstance : events) {
+        for (Event eventInstance : speakerEvents) {
             //checking if already registered event has this speaker speaking
-            if(eventInstance.getSpeaker().equals(speaker)) {
-                LocalDateTime existingEventStart = eventInstance.getEventTime().get(0);
-                LocalDateTime existingEventEnd = eventInstance.getEventTime().get(1);
-                if (newEventStart.isBefore(existingEventEnd) || newEventStart.isEqual(existingEventEnd) &&
-                        existingEventStart.isBefore(newEventEnd) || existingEventStart.isEqual(newEventEnd)) {
-                    return false;
+            for (Speaker speaker: eventInstance.getSpeaker()
+                 ) {
+                if(eventInstance.getSpeaker().equals(speaker)) {
+                    LocalDateTime existingEventStart = eventInstance.getEventTime().get(0);
+                    LocalDateTime existingEventEnd = eventInstance.getEventTime().get(1);
+                    if (newEventStart.isBefore(existingEventEnd) || newEventStart.isEqual(existingEventEnd) &&
+                            existingEventStart.isBefore(newEventEnd) || existingEventStart.isEqual(newEventEnd)) {
+                        return false;
+                    }
                 }
             }
         }
@@ -89,8 +114,14 @@ public class EventManager implements Serializable {
         }
         return true;
     }
+
+    /**
+     * Method that returns an event object from its name.
+     * @param eventName the name of the event to be returned
+     * @return the respective event object.
+     */
     public Optional<Event> nameToEvent(String eventName){
-        for (Event event: this.getEvents()) {
+        for (Event event: events) {
             if(event.getTitle().equals(eventName)){
                 return Optional.of(event);
             }
@@ -104,16 +135,18 @@ public class EventManager implements Serializable {
      * @return an Arraylist of Attendee usernames who are attending the provided Event.
      */
     public ArrayList<String> eventToAttendees(Event event) {
-        return event.getAttendeeList();
+        for (Event eventInstance: events) {
+            if (eventInstance == event){
+                return eventInstance.getAttendeeList();
+            }
+        }
     }
 
     /**
-     * Method adds an Attendee to an Event provided the event is not at capacity. Returns an integer signifying a
-     * successful sign up (0) or that the event is full(1).
+     * Method adds an Attendee to an Event.
      * @param event the event an Attendee is attempting to be signed up for.
      * @param attendee the Attendee attempting to be signed up for the given event.
      */
-
     public void signUp(Event event, String attendee){
         event.addAttendee(attendee);
     }
@@ -133,11 +166,45 @@ public class EventManager implements Serializable {
      * @param speaker the username of the new speaker at the event.
      * @return a boolean where true signals a successful change and false signals the new speaker is unavailable.
      */
-    public boolean changeSpeaker(Event event, String speaker){
+    public boolean changeSpeaker(SpeakerEvent event, String newSpeaker, String oldSpeaker){
+        // checking that the corresponding speaker is free at this event time
+        if(freeSpeakerCheck(event.getEventTime(), newSpeaker)){
+            event.setSpeaker(newSpeaker);
+            event.removeSpeaker(oldSpeaker);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * This method adds an additional speaker to a specified event.
+     * @param event the event whose speaker is being changed.
+     * @param speaker the username of the new speaker at the event.
+     * @return a boolean where true signals a successful change and false signals the new speaker is unavailable.
+     */
+    public boolean addSpeaker(SpeakerEvent event, String speaker){
         // checking that the corresponding speaker is free at this event time
         if(freeSpeakerCheck(event.getEventTime(), speaker)){
-            event.setSpeaker(speaker);
+            event.addSpeaker(speaker);
             return true;
+        }
+        return false;
+    }
+
+    /**
+     * This method removes a speaker from a specified event as long as at least one speaker would remain speaking at the event
+     * after removal.
+     * @param event the event whose speaker is being changed.
+     * @param speaker the username of the new speaker at the event.
+     * @return a boolean where true signals a successful change and false signals the new speaker is unavailable.
+     */
+    public boolean removeSpeaker(SpeakerEvent event, String speaker){
+        // checking that the corresponding speaker is free at this event time
+        if(freeSpeakerCheck(event.getEventTime(), speaker)){
+            if (event.getSpeaker.size() >= 2) {
+                event.removeSpeaker(speaker);
+                return true;
+            }
         }
         return false;
     }
@@ -149,6 +216,9 @@ public class EventManager implements Serializable {
     //for phase 2
     public void cancelEvent(Event event){
         events.remove(event);
+        if (event instanceof SpeakerEvent){
+            speakerEvents.remove(event);
+        }
     }
     //testing
     public static void main(String[] args) {
