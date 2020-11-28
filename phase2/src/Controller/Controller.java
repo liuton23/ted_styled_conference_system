@@ -5,10 +5,7 @@ import Entities.*;
 import Entities.EventComparators.bySpeakerEventComparator;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.EventComparators.byTitleEventComparator;
-import Entities.UserFactory.AttendAble;
-import Entities.UserFactory.OrganizeAble;
-import Entities.UserFactory.TalkAble;
-import Entities.UserFactory.UserType;
+import Entities.UserFactory.*;
 import Presenter.Presenter;
 import UseCases.*;
 import Entities.Speaker;
@@ -105,8 +102,8 @@ public class Controller {
      * @param user username of <code>Attendee</code> to which the schedule belongs.
      */
     private void getItinerary(UserManager userManager, String user, Boolean isSpeaker){
-        Optional<User> obj = userManager.usernameToUserObject(user);
-        User userObj = obj.get();
+        Optional<Account> obj = userManager.usernameToUserObject(user);
+        Account userObj = obj.get();
         if (userObj instanceof AttendAble){
             //Speaker sp = (Speaker) attendee;
             //presenter.displaySchedule(attendeeManager.getSpeakingList(sp), "speakItinerary");
@@ -276,7 +273,7 @@ public class Controller {
     }
     public void messageUser(String username, MessageSystem messageSystem){
         boolean messagingOther = true;
-        User user = userManager.usernameToUserObject(username).get();
+        Account user = userManager.usernameToUserObject(username).get();
         while (messagingOther) {
             String chosen;
             if (user instanceof TalkAble) {

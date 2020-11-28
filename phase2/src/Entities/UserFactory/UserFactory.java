@@ -14,6 +14,8 @@ public class UserFactory {
                 return new Organizer(username, password);
             case SPEAKER:
                 return new Speaker(username, password);
+            case VIP:
+                return new VIP(username, password);
         }
         return null;
     }

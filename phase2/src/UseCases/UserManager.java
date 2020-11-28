@@ -12,7 +12,7 @@ import java.util.Optional;
  */
 public class UserManager implements Serializable {
 
-    ArrayList<User> masterList;
+    ArrayList<Account> masterList;
     ArrayList<AttendAble> attendeeList;
     ArrayList<TalkAble> speakerList;
     ArrayList<OrganizeAble> organizerList;
@@ -47,6 +47,10 @@ public class UserManager implements Serializable {
                 break;
             case SPEAKER:
                 speakerList.add((TalkAble) newUser);
+                break;
+            case VIP:
+                speakerList.add((TalkAble) newUser);
+                attendeeList.add((AttendAble) newUser);
                 break;
         }
         return newUser;
@@ -108,7 +112,7 @@ public class UserManager implements Serializable {
         combinedlist.addAll(getAllOrganizers());
 
          */
-        for (User a: masterList){
+        for (Account a: masterList){
             if (username.equals(a.getUsername()) && password.equals(a.getPassword())){
                 return true;
             }
@@ -195,7 +199,7 @@ public class UserManager implements Serializable {
      * @param org attendee object
      * @return true of this attendee is organizer
      */
-    public Boolean checkIsOrganizer(User org){
+    public Boolean checkIsOrganizer(Account org){
         if (org instanceof OrganizeAble){
             return true;
         } else return false;
@@ -229,7 +233,7 @@ public class UserManager implements Serializable {
      * @param username username of an attendee.
      * @return instance of Attendee iff one exists.
      */
-    public Optional<User> usernameToUserObject(String username){
+    public Optional<Account> usernameToUserObject(String username){
         /*
         for (AttendAble user: attendeeList) {
             if(username.equals(((User) user).getUsername())){
@@ -248,7 +252,7 @@ public class UserManager implements Serializable {
         }
 
          */
-        for (User user: masterList){
+        for (Account user: masterList){
             if (username.equals(user.getUsername())){
                 return Optional.of(user);
             }
