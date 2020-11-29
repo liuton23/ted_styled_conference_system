@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
- *
+ * An Instance of this class represents a speakerless event.
  */
 public class Event implements Serializable{
     private String title;
@@ -87,7 +87,6 @@ public class Event implements Serializable{
         this.room = newRoom;
     }
 
-
     /**
      * This method adds an Attendee's username to the event's list of attendee usernames.
      * @param attendee the username of an attendee that is to be added to this event.
@@ -104,26 +103,100 @@ public class Event implements Serializable{
         this.attendeeList.remove(attendee);
     }
 
-
-
-    /*
-    public static void main(String[] args) {
-        Event petConference = new Event("Pet Conference", "Caesar Milan", 2020, "NOVEMBER",
-                16, 12, 0, 100);
-        System.out.println(petConference.getTitle());
-        System.out.println(petConference.getSpeaker());
-        System.out.println(petConference.getEventTime());
-        System.out.println(petConference.getRoom());
-        petConference.setEventTime(2020, "DECEMBER", 22, 12, 0);
-        System.out.println(petConference.getEventTime());
-        System.out.println(petConference.getAttendeeList());
-        petConference.addAttendee("Heidi");
-        petConference.addAttendee("Maya");
-        System.out.println(petConference.getAttendeeList());
-        petConference.removeAttendee("Iva");
-        petConference.removeAttendee("Heidi");
-        System.out.println(petConference.getAttendeeList());
-        System.out.println(petConference);
-    }
+    /**
+     * This method returns a string representation of the event instance.
+     * @return a string representing this event.
      */
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
+        return String.format(this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
+                this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + ".");
+}
+
+/**
+ * An instance of this class represent an event at the tech conference that has at least one speaker speaking.
+ */
+public class SpeakerEvent extends Event implements Serializable {
+    private ArrayList<String> speaker;
+    private String title;
+    // two item ArrayList
+    private ArrayList<LocalDateTime> eventTime;
+    private int room;
+    private ArrayList<String> attendeeList;
+
+    /**
+     * Constructs an instance of event.
+     *
+     * @param title   the name of the event. Event names are unique.
+     * @param speaker the username of the speaker speaking at the event.
+     * @param year    the year the event is starting in.
+     * @param month   the month the event is starting in.
+     * @param day     the first (and possibly only) day of the event.
+     * @param hour    the starting hour of the event.
+     * @param minute  the starting minute of the event.
+     * @param room    the room id of the room where the event is taking place.
+     */
+
+    public SpeakerEvent(String title, ArrayList<String> speaker, int year, String month, int day, int hour, int minute, int room, int duration) {
+        super(title, year, month, day, hour, minute, room, duration);
+        this.speaker = speaker;
+    }
+
+    //getters
+
+    /**
+     * Method that returns a list of usernames of the speakers speaking at this event.
+     *
+     * @return a list of usernames of the speakers of this event.
+     */
+    public ArrayList<String> getSpeaker() {
+        return this.speaker;
+    }
+
+    // setters
+
+    /**
+     * A method that adds a speaker to an event instance.
+     *
+     * @param newSpeaker the speaker that is speaking at this event's username.
+     */
+    public void addSpeaker(String newSpeaker) {
+        this.speaker.add(newSpeaker);
+    }
+
+    /**
+     * A method that removes a speaker from an event instance as long as at least one speaker will remain after removal.
+     *
+     * @param oldSpeaker the username of the speaker to remove from the event.
+     */
+    public void removeSpeaker(String oldSpeaker) {
+        this.speaker.remove(oldSpeaker);
+    }
+
+    /**
+     * This method returns a string representation of the event.
+     *
+     * @return a string representation of the event.
+     */
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
+        if (this.speaker.size() == 1) {
+            return String.format(this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
+                    this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + " with : " +
+                    this.getSpeaker() + ".");
+        } else {
+            return String.format(this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
+                    this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + " with : " +
+                    this.getSpeaker().get(0) + "and more.");
+        }
+    }
+}
+
+    //testing
+    public static void main(String[] args) {
+        ArrayList<String> speakerList = new ArrayList<String>();
+        speakerList.add("Caesar Milan");
+    }
 }

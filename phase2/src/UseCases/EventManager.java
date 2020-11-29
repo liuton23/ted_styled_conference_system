@@ -36,7 +36,7 @@ public class EventManager implements Serializable {
      * This method returns an ArrayList of speaker events.
      * @return an ArrayList<Event> representing the events occurring at the tech conference.
      */
-    public ArrayList<Event> getEvents() {
+    public ArrayList<SpeakerEvent> getSpeakerEvents() {
         return speakerEvents;
     }
 
@@ -51,9 +51,9 @@ public class EventManager implements Serializable {
      * @param minute the minute the event starts.
      * @param room the room id of the desired room where the event takes place.
      */
-    public void createSpeakerEvent(String title, String speaker, int year, String month, int day, int hour,
+    public void createSpeakerEvent(String title, ArrayList<String> speaker, int year, String month, int day, int hour,
                               int minute, int room, int duration){
-        newEvent = new SpeakerEvent(title, speaker, year, month, day, hour, minute, room, duration)
+        SpeakerEvent newEvent = new SpeakerEvent(title, speaker, year, month, day, hour, minute, room, duration);
         events.add(newEvent);
         speakerEvents.add(newEvent);
     }
@@ -82,11 +82,11 @@ public class EventManager implements Serializable {
     public boolean freeSpeakerCheck(ArrayList<LocalDateTime> eventTime, String speaker) {
         LocalDateTime newEventStart = eventTime.get(0);
         LocalDateTime newEventEnd = eventTime.get(1);
-        for (Event eventInstance : speakerEvents) {
+        for (SpeakerEvent eventInstance : speakerEvents) {
             //checking if already registered event has this speaker speaking
-            for (Speaker speaker: eventInstance.getSpeaker()
-                 ) {
-                if(eventInstance.getSpeaker().equals(speaker)) {
+            ArrayList<String> speakerList = eventInstance.getSpeaker();
+            for (String speakerName : speakerList) {
+                if(speaker.equals(speakerName)) {
                     LocalDateTime existingEventStart = eventInstance.getEventTime().get(0);
                     LocalDateTime existingEventEnd = eventInstance.getEventTime().get(1);
                     if (newEventStart.isBefore(existingEventEnd) || newEventStart.isEqual(existingEventEnd) &&
@@ -139,6 +139,7 @@ public class EventManager implements Serializable {
                 return eventInstance.getAttendeeList();
             }
         }
+        return new ArrayList<>();
     }
 
     /**
@@ -162,13 +163,14 @@ public class EventManager implements Serializable {
     /**
      * This method changes the speaker to the specified new speaker at the specified event.
      * @param event the event whose speaker is being changed.
-     * @param speaker the username of the new speaker at the event.
+     * @param newSpeaker the username of the new speaker at the event.
+     * @param oldSpeaker the username of the speaker to be changed.
      * @return a boolean where true signals a successful change and false signals the new speaker is unavailable.
      */
     public boolean changeSpeaker(SpeakerEvent event, String newSpeaker, String oldSpeaker){
         // checking that the corresponding speaker is free at this event time
         if(freeSpeakerCheck(event.getEventTime(), newSpeaker)){
-            event.setSpeaker(newSpeaker);
+            event.addSpeaker(newSpeaker);
             event.removeSpeaker(oldSpeaker);
             return true;
         }
@@ -200,7 +202,7 @@ public class EventManager implements Serializable {
     public boolean removeSpeaker(SpeakerEvent event, String speaker){
         // checking that the corresponding speaker is free at this event time
         if(freeSpeakerCheck(event.getEventTime(), speaker)){
-            if (event.getSpeaker.size() >= 2) {
+            if (event.getSpeaker().size() >= 2) {
                 event.removeSpeaker(speaker);
                 return true;
             }
@@ -222,24 +224,15 @@ public class EventManager implements Serializable {
     //testing
     public static void main(String[] args) {
         EventManager eventManager = new EventManager();
-        eventManager.createEvent("Pet Conference", "Caesar Milan", 2020, "NOVEMBER",
-                16, 12, 0, 100);
-        eventManager.createEvent("Fan Expo", "Karen Gillan", 2015, "AUGUST",
-                20, 2, 0, 500);
-        System.out.println(eventManager.getEvents().get(0).getTitle());
-        System.out.println(eventManager.getEvents().get(1).getTitle());
-        eventManager.changeSpeaker(eventManager.events.get(1), "Matt Smith");
-        System.out.println(eventManager.events.get(1).getSpeaker());
-        //System.out.println(eventManager.createEvent("Dog Show", "Caesar Milan", 2020, "NOVEMBER",
-        //       16, 11, 30, 200));
-        System.out.println(eventManager.events.size());
-        //System.out.println(eventManager.createEvent("Fan Expo", "Stan Lee", 2020, "NOVEMBER",
-        //        16, 11, 30, 210));
-        //System.out.println(eventManager.createEvent("Garden Lover's", "The Green Thumb", 2015, "AUGUST",
-        //        20, 2, 10, 500));
-        eventManager.cancelEvent(eventManager.events.get(0));
-        System.out.println(eventManager.events.size());
-        Attendee Ana = new Attendee("Ana", "Heidi");
+        ArrayList<String> speakerList1 = new ArrayList<>();
+        ArrayList<String> speakerList2 = new ArrayList<>();
+        speakerList1.add("Caesar Milan");
+        speakerList1.add("Fido");
+        speakerList2.add("Karen Gillan");
 
+        eventManager.createSpeakerEvent("Pet Conference", speakerList1, 2020, "NOVEMBER",
+                16, 12, 0, 100, 5);
+        eventManager.createSpeakerEvent("Fan Expo", speakerList2, 2015, "AUGUST",
+                20, 2, 0, 500, 2);
     }
 }
