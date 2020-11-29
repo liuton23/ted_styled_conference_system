@@ -129,7 +129,7 @@ public class Controller {
 
             switch (chosen) {
                 case "S":
-                    scheduleEvent(scheduleSystem);
+                    scheduleSpeakerEvent(scheduleSystem);
                     save();
                     break;
                 case "A":
@@ -152,9 +152,11 @@ public class Controller {
                     presenter.displayMessages("requestRoom");
                     index = getIntInput();
                     presenter.displayMessages("requestSpeaker");
+                    // NEED TO ADD A REQUEST FOR THE OLD SPEAKER (vs the new speaker)
                     String newSpeaker = input.nextLine();
+                    String oldSpeaker = input.nextLine();
                     String eventName = events.get(index - 1).getTitle();
-                    int message = scheduleSystem.changeSpeaker(eventName,newSpeaker);
+                    int message = scheduleSystem.changeSpeaker(eventName,newSpeaker, oldSpeaker);
                     presenter.printChangeSpeakerMessage(message);
                     save();
                     break;
@@ -169,7 +171,7 @@ public class Controller {
      * Method for organizers to input new event information.
      * @param scheduleSystem ScheduleSystem created in parent method.
      */
-    private void scheduleEvent(ScheduleSystem scheduleSystem){
+    private void scheduleSpeakerEvent(ScheduleSystem scheduleSystem){
         Scanner input = new Scanner(System.in);
         presenter.displayMessages("S");
         String title = input.nextLine().trim();
@@ -186,10 +188,12 @@ public class Controller {
         int hour = getIntInputInRange(0, 23);
         presenter.displayMessages("requestMinute");
         int min = getIntInputInRange(0, 59);
+        presenter.displayMessages("requestDuration");
+        int duration = getIntInput();
         presenter.displayMessages("requestRoom");
         int roomID = getIntInput();
-        presenter.printScheduleEventMessage(scheduleSystem.scheduleEvent(title, speaker, year, month, day,
-                hour, min, roomID));
+        presenter.printScheduleEventMessage(scheduleSystem.scheduleSpeakerEvent(title, speaker, year, month, day,
+                hour, min, roomID, duration));
     }
 
     /**
