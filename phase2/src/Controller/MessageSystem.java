@@ -48,14 +48,14 @@ public class MessageSystem {
      * @return integer which will send to presenter and present corresponding message
      */
     private int messageAttendee(String sender, String attendee, String text){
-        Optional<Account> obj1 = userManager.usernameToUserObject(sender);
-        Optional<Account> obj2 = userManager.usernameToUserObject(attendee);
+        Optional<User> obj1 = userManager.usernameToUserObject(sender);
+        Optional<User> obj2 = userManager.usernameToUserObject(attendee);
         if (!obj1.isPresent()){
             return 1; //"Incorrect username. Please try again."
         } else if (!obj2.isPresent()){
             return 1; //"Incorrect username. Please try again.";
         }
-        Account recipient = obj2.get();
+        User recipient = obj2.get();
         if (userManager.checkIsOrganizer(recipient)){
             return 2; //"The message can not be sent to an Organizer."
         } else {
@@ -80,7 +80,7 @@ public class MessageSystem {
      */
 
     private int messageAllSpeakers(String sender, String text){
-        Optional<Account> obj = userManager.usernameToUserObject(sender);
+        Optional<User> obj = userManager.usernameToUserObject(sender);
         ArrayList<TalkAble> listOfSpeakers = userManager.getAllSpeakers();
         ArrayList<String> list = new ArrayList<String>();
         for (TalkAble s : listOfSpeakers){
@@ -106,11 +106,11 @@ public class MessageSystem {
      */
 
     private int messageAllAttendees(String sender, String text){
-        Optional<Account> obj = userManager.usernameToUserObject(sender);
+        Optional<User> obj = userManager.usernameToUserObject(sender);
         if (!obj.isPresent()){
             return 1; /*"Incorrect username. Please try again."*/
         }
-        Account org = obj.get();
+        User org = obj.get();
         if (!userManager.checkIsOrganizer(org)) {
             return 2; /*"Only Organizer can message all attendees."*/
         }
@@ -135,7 +135,7 @@ public class MessageSystem {
      */
 
     private int messageEventAttendees(ArrayList<String> eventNames, String sender, String text){
-        Optional<Account> obj = userManager.usernameToUserObject(sender);
+        Optional<User> obj = userManager.usernameToUserObject(sender);
         ArrayList<String> list = new ArrayList<String>();
         ArrayList<String> noAtt = new ArrayList<String>();
         ArrayList<String> notSpeakAt = new ArrayList<String>();
@@ -143,7 +143,7 @@ public class MessageSystem {
         if (!obj.isPresent()){
             return 2; //"Incorrect username. Please try again.";
         }
-        Account se = obj.get();
+        User se = obj.get();
         if (!(se instanceof Speaker)){
             return 3; //"Only speakers can sent messages to all attendees of their talks they give.";
         }
@@ -199,7 +199,7 @@ public class MessageSystem {
 
     public void messageUser(String username){
         boolean messagingOther = true;
-        Account user = userManager.usernameToUserObject(username).get();
+        User user = userManager.usernameToUserObject(username).get();
         while (messagingOther) {
             String chosen;
             if (user instanceof TalkAble) {
@@ -339,7 +339,7 @@ public class MessageSystem {
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("printPleaseInputUsername");
         String user = obj.nextLine();
-        Optional<Account> obj1 = userManager.usernameToUserObject(user);
+        Optional<User> obj1 = userManager.usernameToUserObject(user);
         if (!obj1.isPresent()){
             messagePresenter.generalPrintHelperForMS("printIncorrectUsername");
             viewFrom(username);

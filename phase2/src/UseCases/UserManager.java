@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 public class UserManager implements Serializable {
 
-    ArrayList<Account> masterList;
+    ArrayList<User> masterList;
     ArrayList<AttendAble> attendeeList;
     ArrayList<TalkAble> speakerList;
     ArrayList<OrganizeAble> organizerList;
@@ -113,7 +113,7 @@ public class UserManager implements Serializable {
         combinedlist.addAll(getAllOrganizers());
 
          */
-        for (Account a: masterList){
+        for (User a: masterList){
             if (username.equals(a.getUsername()) && password.equals(a.getPassword())){
                 return true;
             }
@@ -183,27 +183,27 @@ public class UserManager implements Serializable {
      * @param title Name of the upcoming event.
      * @param newSpeakerUsername username of the new speaker.
      */
-    public void changeSpeaker(String title, String newSpeakerUsername){
+    public void changeSpeaker(String title, String newSpeakerUsername, String oldSpeakerUsername){
         for (TalkAble speaker: speakerList) {
-            if (speaker.getTalkList().contains(title)) {
+            if (((User) speaker).getUsername().equals(oldSpeakerUsername)) {
                 speaker.removeTalk(title);
             }
-        }
-        for (TalkAble speaker: speakerList) {
-            if(((User) speaker).getUsername().equals(newSpeakerUsername)){
+            if (((User) speaker).getUsername().equals(newSpeakerUsername)) {
                 speaker.addTalk(title);
             }
         }
     }
 
     /**
-     * @param org attendee object
+     * @param user attendee object
      * @return true of this attendee is organizer
      */
-    public Boolean checkIsOrganizer(Account org){
-        if (org instanceof OrganizeAble){
-            return true;
-        } else return false;
+    public Boolean checkIsOrganizer(User user){
+        return user instanceof OrganizeAble;
+    }
+
+    public Boolean hasVIPAccess(User user){
+        return user instanceof VIPAccess;
     }
 
     public String getUsername(User user) {
@@ -234,7 +234,7 @@ public class UserManager implements Serializable {
      * @param username username of an attendee.
      * @return instance of Attendee iff one exists.
      */
-    public Optional<Account> usernameToUserObject(String username){
+    public Optional<User> usernameToUserObject(String username){
         /*
         for (AttendAble user: attendeeList) {
             if(username.equals(((User) user).getUsername())){
@@ -253,7 +253,7 @@ public class UserManager implements Serializable {
         }
 
          */
-        for (Account user: masterList){
+        for (User user: masterList){
             if (username.equals(user.getUsername())){
                 return Optional.of(user);
             }

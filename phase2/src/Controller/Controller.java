@@ -104,8 +104,8 @@ public class Controller {
      * @param user username of <code>Attendee</code> to which the schedule belongs.
      */
     private void getItinerary(UserManager userManager, String user, Boolean isSpeaker){
-        Optional<Account> obj = userManager.usernameToUserObject(user);
-        Account userObj = obj.get();
+        Optional<User> obj = userManager.usernameToUserObject(user);
+        User userObj = obj.get();
         if (userObj instanceof AttendAble){
             //Speaker sp = (Speaker) attendee;
             //presenter.displaySchedule(attendeeManager.getSpeakingList(sp), "speakItinerary");

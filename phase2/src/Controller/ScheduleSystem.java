@@ -162,11 +162,11 @@ public class ScheduleSystem {
             // if the values are both not null
             if (userManager.usernameToUserObject(newSpeaker).isPresent() && userManager.usernameToUserObject(oldSpeaker).isPresent()) {
                 // if object is speaker
-                if (userManager.usernameToUserObject(newSpeaker).get() instanceof Speaker && userManager.usernameToUserObject(oldSpeaker).get() instanceof Speaker) {
+                if (userManager.usernameToUserObject(newSpeaker).get() instanceof TalkAble && userManager.usernameToUserObject(oldSpeaker).get() instanceof TalkAble) {
                     // changing speaker
                     if (eventManager.freeSpeakerCheck(eventObject.getEventTime(), newSpeaker)) {
                         eventManager.changeSpeaker(eventObject, newSpeaker, oldSpeaker);
-                        userManager.changeSpeaker(eventObject.getTitle(), newSpeaker);
+                        userManager.changeSpeaker(eventObject.getTitle(), newSpeaker, oldSpeaker);
                         //"Speaker changed successfully."
                         return 0;
                     }
@@ -192,7 +192,8 @@ public class ScheduleSystem {
             ArrayList<String> speakerUsernameList = eventManager.getSpeakers(speakerEvent);
             for (String speakerName : speakerUsernameList) {
                 // these method types don't match... needs to be resolved in UserManager
-                userManager.removeEventFromSpeakerList(userManager.usernameToUserObject(speakerName), eventName);
+                TalkAble speaker = (TalkAble) userManager.usernameToUserObject(speakerName).get();
+                userManager.removeEventFromSpeakerList(speaker, eventName);
             }
         }
         Event event = eventManager.nameToEvent(eventName).get();
