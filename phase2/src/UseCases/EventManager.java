@@ -2,6 +2,7 @@ package UseCases;
 
 import Entities.Attendee;
 import Entities.Event;
+import Entities.Speaker;
 import Entities.SpeakerEvent;
 
 import java.io.Serializable;
@@ -120,7 +121,10 @@ public class EventManager implements Serializable {
      * @return the respective event object.
      */
     public Optional<Event> nameToEvent(String eventName){
-        for (Event event: events) {
+        ArrayList<Event> combinedEvents = new ArrayList<Event>();
+        combinedEvents.addAll(events);
+        combinedEvents.addAll(speakerEvents);
+        for (Event event: combinedEvents) {
             if(event.getTitle().equals(eventName)){
                 return Optional.of(event);
             }
@@ -159,6 +163,16 @@ public class EventManager implements Serializable {
     public void dropOut(Event event, String attendee){
         event.removeAttendee(attendee);
     }
+
+    /**
+     * return a list of speakers of an event
+     * @param event
+     * @return
+     */
+    public ArrayList<String> getSpeakers(SpeakerEvent event){
+        return event.getSpeaker();
+    }
+
 
     /**
      * This method changes the speaker to the specified new speaker at the specified event.

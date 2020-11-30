@@ -3,7 +3,7 @@ package Controller;
 import Entities.*;
 import Entities.Event;
 import Entities.UserFactory.*;
-import Presenter.Presenter;
+import Presenter.*;
 import UseCases.UserManager;
 import UseCases.EventManager;
 import UseCases.MessageManager;
@@ -20,7 +20,8 @@ public class MessageSystem {
     MessageManager messageManager;
     UserManager userManager;
     EventManager eventManager;
-    private Presenter presenter = new Presenter();
+    private MessagePresenter messagePresenter = new MessagePresenter();
+    private Controller controller;
 
     /**
      * Create an instance of MessageSystem
@@ -30,22 +31,23 @@ public class MessageSystem {
      */
 
     public MessageSystem(MessageManager messageManager, UserManager userManager,
-                         EventManager eventManager){
+                         EventManager eventManager, Controller controller){
         this.messageManager = messageManager;
         this.userManager = userManager;
         this.eventManager = eventManager;
+        this.controller = controller;
     }
 
-    // General message methods (Suitable for all attendees, speakers, and organizers)
+    // General message helper methods (Suitable for all attendees, speakers, and organizers)
 
     /**
-     * This method can let all attendee, speakers and organizers message a specific user which is not an organizer.
+     * This helper method can let all attendee, speakers and organizers message a specific user which is not an organizer.
      * @param sender username of the sender
      * @param attendee username of the attendee's the sender want to send message to
      * @param text the content of the message
      * @return integer which will send to presenter and present corresponding message
      */
-    public int messageAttendee(String sender, String attendee, String text){
+    private int messageAttendee(String sender, String attendee, String text){
         Optional<Account> obj1 = userManager.usernameToUserObject(sender);
         Optional<Account> obj2 = userManager.usernameToUserObject(attendee);
         if (!obj1.isPresent()){
@@ -65,19 +67,19 @@ public class MessageSystem {
     }
 
 
-    //All the Organizer methods
+    //All the Organizer helper methods
 
     //helper
 
 
     /**
-     * This method will let only organizer sends message to all speakers at once.
+     * This helper method will let only organizer sends message to all speakers at once.
      * @param sender the username of the sender
      * @param text the content of the message
      * @return integer which will send to presenter and presents the corresponding messages
      */
 
-    public int messageAllSpeakers(String sender, String text){
+    private int messageAllSpeakers(String sender, String text){
         Optional<Account> obj = userManager.usernameToUserObject(sender);
         ArrayList<TalkAble> listOfSpeakers = userManager.getAllSpeakers();
         ArrayList<String> list = new ArrayList<String>();
@@ -87,7 +89,7 @@ public class MessageSystem {
         if (!obj.isPresent()){
             return 1; /*"Incorrect username. Please try again."*/
         }
-        User org = obj.get();
+        User org = (User) obj.get();
         if (!userManager.checkIsOrganizer(org)){
             return 2;/*"Only Organizer can message all speakers."*/
         } else {
@@ -97,13 +99,13 @@ public class MessageSystem {
     }
 
     /**
-     * This method only let organizer sends message to all attendees in the system at once.
+     * This helper method only let organizer sends message to all attendees in the system at once.
      * @param sender username of sender
      * @param text the content of the message
      * @return integer which will send to presenter and presents the crresponding messages
      */
 
-    public int messageAllAttendees(String sender, String text){
+    private int messageAllAttendees(String sender, String text){
         Optional<Account> obj = userManager.usernameToUserObject(sender);
         if (!obj.isPresent()){
             return 1; /*"Incorrect username. Please try again."*/
@@ -122,17 +124,17 @@ public class MessageSystem {
 
     }
 
-    //All the Speaker methods
+    //All the Speaker helper methods
 
     /**
-     * This method only let speaker message all attendees from multiple events they speak at.
+     * This helper method only let speaker message all attendees from multiple events they speak at.
      * @param eventNames a list of names of events
      * @param sender username of the sender
      * @param text the content of the message
      * @return integer which will send to presenter and presents the corresponding messages
      */
 
-    public int messageEventAttendees(ArrayList<String> eventNames, String sender, String text){
+    private int messageEventAttendees(ArrayList<String> eventNames, String sender, String text){
         Optional<Account> obj = userManager.usernameToUserObject(sender);
         ArrayList<String> list = new ArrayList<String>();
         ArrayList<String> noAtt = new ArrayList<String>();
@@ -151,7 +153,10 @@ public class MessageSystem {
                 return 4; //"Event do not exist or spell the name wrong
             }
             Event eventF = eve.get();
-            if (eventF.getSpeaker().equals(sender)) {
+            if (!(eventF instanceof SpeakerEvent)){
+                return 1; // event with no speaker == event you do not speak at
+            }
+            if (((SpeakerEvent) eventF).getSpeaker().contains(sender)) {
                 if (eventManager.eventToAttendees(eventF).size() != 0) {
                     list.addAll(eventManager.eventToAttendees(eventF));
                 } else noAtt.add(i);
@@ -168,7 +173,126 @@ public class MessageSystem {
     }
 
 
-    // Activity method below
+    // Activity main controller method below (depends on user input)
+
+    /**
+     * Messager menu to view and send messages.
+     * @param username username of <code>Attendee</code>.
+     */
+    public void messageActivity(String username) {
+        boolean messaging = true;
+        while (messaging) {
+            String chosen = controller.askMenuInput(5);
+            switch (chosen) {
+                case "M":
+                    messageUser(username);
+                    break;
+                case "V":
+                    viewMessages(username);
+                    break;
+                case "B":
+                    messaging = false;
+                    break;
+            }
+        }
+    }
+
+    public void messageUser(String username){
+        boolean messagingOther = true;
+        Account user = userManager.usernameToUserObject(username).get();
+        while (messagingOther) {
+            String chosen;
+            if (user instanceof TalkAble) {
+                chosen = controller.askMenuInput(11);
+            } else if (user instanceof OrganizeAble) {
+                chosen = controller.askMenuInput(10);
+            } else
+                chosen = controller.askMenuInput(6);
+
+            switch (chosen) {
+                case "U":
+                    messageOneUser(username);
+                    controller.save();
+                    break;
+                case "S":
+                    messageAllSpeaker(username);
+                    controller.save();
+                    break;
+                case "A":
+                    messageAllAtt(username);
+                    controller.save();
+                    break;
+                case "E":
+                    ArrayList<String> events = new ArrayList<>();
+                    messageEventAllAtt(username,events);
+                    controller.save();
+                case "B":
+                    messagingOther = false;
+                    break;
+            }
+        }
+
+    }
+
+    /**
+     * Messages all users attending a specific event.
+     * @param username username of the sender.
+     */
+    private void messageEventAllAtt(String username, ArrayList<String> events){
+        Scanner obj = new Scanner(System.in);
+        messagePresenter.generalPrintHelperForMS("printInputEventName");
+        events.add(obj.nextLine().trim());
+        String chosen = controller.askMenuInput(12);
+        switch(chosen){
+            case "S":
+                messageEventAllAtt(username,events);
+                break;
+            case "C":
+                messagePresenter.generalPrintHelperForMS("printInputMessagePlz");
+                String message = obj.nextLine().trim();
+                messagePresenter.printMessageEventsAttendees(messageEventAttendees(events,username,message));
+                break;
+        }
+    }
+
+    /**
+     * View message menu to view sent and received messages, and messages sent to <code>Attendee</code> with username
+     * <code>username</code> by another <code>Attendee</code>.
+     * @param username username of <code>Attendee</code> viewing the messages.
+     */
+    private void viewMessages(String username){
+        boolean viewingMessage = true;
+        while (viewingMessage) {
+            String chosen = controller.askMenuInput(7);
+            switch (chosen) {
+                case "S":
+                    ArrayList<String> messagesS = messageManager.getSendBy(username);
+                    if (messagesS.size() == 0){
+                        messagePresenter.generalPrintHelperForMS("printNoSentForU");
+                    } else messagePresenter.displayListOfMessage(messagesS);
+                    break;
+                case "R":
+                    ArrayList<String> messagesR = messageManager.getReceivedBy(username);
+                    if (messagesR.size() == 0){
+                        messagePresenter.generalPrintHelperForMS("printNoRecForU");
+                    } else messagePresenter.displayListOfMessage(messagesR);
+                    break;
+                case "U":
+                    ArrayList<String> messagesU = messageManager.getUnreadMessage(username);
+                    if (messagesU.size() == 0){
+                        messagePresenter.generalPrintHelperForMS("printNoRecForU");
+                    } else messagePresenter.displayListOfMessage(messagesU);
+                    break;
+                case "F":
+                    viewFrom(username);
+                    break;
+                case "B":
+                    viewingMessage = false;
+                    break;
+            }
+        }
+    }
+
 
 
     /**
@@ -177,11 +301,11 @@ public class MessageSystem {
      */
     public void messageOneUser(String username){
         Scanner obj = new Scanner(System.in);
-        presenter.printPleaseInputUsername();
+        messagePresenter.generalPrintHelperForMS("printPleaseInputUsername");
         String user = obj.nextLine();
-        presenter.printInputMessagePlz();
+        messagePresenter.generalPrintHelperForMS("printInputMessagePlz");
         String message = obj.nextLine();
-        presenter.printMessageAttendee(messageAttendee(username,user,message));
+        messagePresenter.printMessageAttendee(messageAttendee(username,user,message));
     }
 
     /**
@@ -190,9 +314,9 @@ public class MessageSystem {
      */
     public void messageAllSpeaker(String username){
         Scanner obj = new Scanner(System.in);
-        presenter.printPleaseInputUsername();
+        messagePresenter.generalPrintHelperForMS("printPleaseInputUsername");
         String message = obj.nextLine();
-        presenter.printMessageAllSpeakers(messageAllSpeakers(username, message));
+        messagePresenter.printMessageAllSpeakers(messageAllSpeakers(username, message));
     }
 
     /**
@@ -201,9 +325,9 @@ public class MessageSystem {
      */
     public void messageAllAtt(String username){
         Scanner obj = new Scanner(System.in);
-        presenter.printInputMessagePlz();
+        messagePresenter.generalPrintHelperForMS("printInputMessagePlz");
         String message = obj.nextLine();
-        presenter.printMessageAllAttendees(messageAllAttendees(username, message));
+        messagePresenter.printMessageAllAttendees(messageAllAttendees(username, message));
     }
 
     /**
@@ -213,17 +337,17 @@ public class MessageSystem {
      */
     public void viewFrom(String username){
         Scanner obj = new Scanner(System.in);
-        presenter.printPleaseInputUsername();
+        messagePresenter.generalPrintHelperForMS("printPleaseInputUsername");
         String user = obj.nextLine();
         Optional<Account> obj1 = userManager.usernameToUserObject(user);
         if (!obj1.isPresent()){
-            presenter.printIncorrectUsername();
+            messagePresenter.generalPrintHelperForMS("printIncorrectUsername");
             viewFrom(username);
         } else {
             ArrayList<String> messageF = messageManager.getAllMessagesFrom(username, user);
             if (messageF.size() == 0){
-                presenter.display(presenter.thereAreNoMessForUFrom() + user);
-            } else presenter.displayListOfMessage(messageF);
+                messagePresenter.thereAreNoMessForUFrom(user);
+            } else messagePresenter.displayListOfMessage(messageF);
         }
     }
 

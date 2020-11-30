@@ -7,7 +7,7 @@ import Entities.EventComparators.bySpeakerEventComparator;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.EventComparators.byTitleEventComparator;
 import Entities.UserFactory.*;
-import Presenter.Presenter;
+import Presenter.*;
 import UseCases.*;
 import Entities.Speaker;
 import java.io.IOException;
@@ -76,7 +76,8 @@ public class Controller {
 
             switch (chosen) {
                 case "M":
-                    messageActivity(username);
+                    MessageSystem messageSystem = new MessageSystem(messageManager,userManager,eventManager,this);
+                    messageSystem.messageActivity(username);
                     break;
                 case "E":
                     eventActivity(username);
@@ -253,127 +254,6 @@ public class Controller {
         } while (!done);
         return in;
     }
-
-    /**
-     * Messager menu to view and send messages.
-     * @param username username of <code>Attendee</code>.
-     */
-    private void messageActivity(String username) {
-        MessageSystem messageSystem = new MessageSystem(messageManager,userManager,eventManager);
-        boolean messaging = true;
-        while (messaging) {
-            String chosen = askMenuInput(5);
-            switch (chosen) {
-                case "M":
-                    messageUser(username, messageSystem);
-                    break;
-                case "V":
-                    viewMessages(username, messageSystem);
-                    break;
-                case "B":
-                    messaging = false;
-                    break;
-            }
-        }
-    }
-    public void messageUser(String username, MessageSystem messageSystem){
-        boolean messagingOther = true;
-        Account user = userManager.usernameToUserObject(username).get();
-        while (messagingOther) {
-            String chosen;
-            if (user instanceof TalkAble) {
-                chosen = askMenuInput(11);
-            } else if (user instanceof OrganizeAble) {
-                chosen = askMenuInput(10);
-            } else
-                chosen = askMenuInput(6);
-
-            switch (chosen) {
-                case "U":
-                    messageSystem.messageOneUser(username);
-                    save();
-                    break;
-                case "S":
-                    messageSystem.messageAllSpeaker(username);
-                    save();
-                    break;
-                case "A":
-                    messageSystem.messageAllAtt(username);
-                    save();
-                    break;
-                case "E":
-                    ArrayList<String> events = new ArrayList<>();
-                    messageEventAllAtt(username,messageSystem,events);
-                    save();
-                case "B":
-                    messagingOther = false;
-                    break;
-            }
-        }
-
-    }
-
-    /**
-     * Messages all users attending a specific event.
-     * @param username username of the sender.
-     * @param ms system that manages sending messages.
-     */
-    private void messageEventAllAtt(String username, MessageSystem ms, ArrayList<String> events){
-        Scanner obj = new Scanner(System.in);
-        presenter.printInputEventName();
-        events.add(obj.nextLine().trim());
-        String chosen = askMenuInput(12);
-        switch(chosen){
-            case "S":
-                messageEventAllAtt(username,ms,events);
-                break;
-            case "C":
-                presenter.printInputMessagePlz();
-                String message = obj.nextLine().trim();
-                presenter.printMessageEventsAttendees(ms.messageEventAttendees(events,username,message));
-                break;
-        }
-    }
-
-    /**
-     * View message menu to view sent and received messages, and messages sent to <code>Attendee</code> with username
-     * <code>username</code> by another <code>Attendee</code>.
-     * @param username username of <code>Attendee</code> viewing the messages.
-     * @param messageSystem system that manages sending messages.
-     */
-    private void viewMessages(String username, MessageSystem messageSystem){
-        boolean viewingMessage = true;
-        while (viewingMessage) {
-            String chosen = askMenuInput(7);
-            switch (chosen) {
-                case "S":
-                    ArrayList<String> messagesS = messageManager.getSendBy(username);
-                    if (messagesS.size() == 0){
-                        presenter.printNoSentForU();
-                    } else presenter.displayListOfMessage(messagesS);
-                    break;
-                case "R":
-                    ArrayList<String> messagesR = messageManager.getReceivedBy(username);
-                    if (messagesR.size() == 0){
-                        presenter.printNoRecForU();
-                    } else presenter.displayListOfMessage(messagesR);
-                    break;
-                case "U":
-                    ArrayList<String> messagesU = messageManager.getUnreadMessage(username);
-                    if (messagesU.size() == 0){
-                        presenter.printNoRecForU();
-                    } else presenter.displayListOfMessage(messagesU);
-                    break;
-                case "F":
-                    messageSystem.viewFrom(username);
-                    break;
-                case "B":
-                    viewingMessage = false;
-                    break;
-            }
-        }
-    }
-
 
 
     /**
