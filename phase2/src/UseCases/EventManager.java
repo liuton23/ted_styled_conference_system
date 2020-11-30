@@ -12,7 +12,7 @@ import java.util.Optional;
  * Manages and stores events in this tech conference system.
  */
 public class EventManager implements Serializable {
-    private HashMap<String, Event> masterEventList;
+    private HashMap<String, Event> masterEventDict;
     private HashMap<String, Event> speakerlessEvents;
     private HashMap<String, SpeakerEvent> speakerEvents;
 
@@ -20,7 +20,7 @@ public class EventManager implements Serializable {
      * Constructs an instance of EventManager with empty hashmaps corresponding to the different types of Events.
      */
     public EventManager(){
-        this.masterEventList = new HashMap<>();
+        this.masterEventDict = new HashMap<>();
         this.speakerlessEvents = new HashMap<>();
         this.speakerEvents = new HashMap<>();
     }
@@ -30,7 +30,7 @@ public class EventManager implements Serializable {
      * @return a HashMap<String, Event>  representing all of the events occurring at the tech conference.
      */
     public HashMap<String, Event> getAllEvents() {
-        return masterEventList;
+        return masterEventDict;
     }
 
     /**
@@ -65,7 +65,7 @@ public class EventManager implements Serializable {
     public void createSpeakerEvent(String title, ArrayList<String> speaker, int year, String month, int day, int hour,
                               int minute, int room, int duration){
         SpeakerEvent newEvent = new SpeakerEvent(title, speaker, year, month, day, hour, minute, room, duration);
-        masterEventList.put(title, newEvent);
+        masterEventDict.put(title, newEvent);
         speakerEvents.put(title, newEvent);
     }
 
@@ -84,7 +84,7 @@ public class EventManager implements Serializable {
     public void createSpeakerlessEvent(String title, int year, String month, int day, int hour,
                                    int minute, int room, int duration){
         Event newEvent = new Event(title, year, month, day, hour, minute, room, duration);
-        masterEventList.put(title, newEvent);
+        masterEventDict.put(title, newEvent);
         speakerlessEvents.put(title, newEvent);
     }
 
@@ -121,7 +121,7 @@ public class EventManager implements Serializable {
      * in use.
      */
     public boolean freeTitleCheck(String title) {
-        for (String eventName : masterEventList.keySet()) {
+        for (String eventName : masterEventDict.keySet()) {
             if (eventName.equals(title)) {
                 return false;
             }
@@ -135,9 +135,9 @@ public class EventManager implements Serializable {
      * @return the respective Optional<Event> object.
      */
     public Optional<Event> nameToEvent(String eventName){
-        for (String existingEventName: masterEventList.keySet()) {
+        for (String existingEventName: masterEventDict.keySet()) {
             if(existingEventName.equals(eventName)){
-                return Optional.of(masterEventList.get(existingEventName));
+                return Optional.of(masterEventDict.get(existingEventName));
             }
         }
         return Optional.empty();
@@ -149,7 +149,7 @@ public class EventManager implements Serializable {
      * @return an Arraylist of Attendee usernames who are attending the provided Event.
      */
     public ArrayList<String> eventToAttendees(Event event) {
-        for (Event eventInstance: masterEventList.values()) {
+        for (Event eventInstance: masterEventDict.values()) {
             if (eventInstance == event){
                 return eventInstance.getAttendeeList();
             }
@@ -249,7 +249,7 @@ public class EventManager implements Serializable {
      * */
     //for phase 2
     public void cancelEvent(Event event){
-        masterEventList.remove(event.getTitle());
+        masterEventDict.remove(event.getTitle());
         if (event instanceof SpeakerEvent){
             speakerEvents.remove(event.getTitle());
         }
