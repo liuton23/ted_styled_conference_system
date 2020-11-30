@@ -1,5 +1,6 @@
 package Controller;
 
+import Entities.SpeakerEvent;
 import Entities.UserFactory.AttendAble;
 import Entities.Event;
 import Entities.EventComparators.byTimeEventComparator;
@@ -11,6 +12,7 @@ import UseCases.RoomManager;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Optional;
 
 /**
@@ -47,30 +49,36 @@ public class SignUpSystem {
      * @return list of all stored events.
      */
     public ArrayList<String> viewAllEvents(){
-        ArrayList<Event> eventlist = eventManager.getEvents();
-        ArrayList<Event> eventlistclone = getEventListClone(eventlist);
-        ArrayList<String> stringeventlist = new ArrayList<>();
+        HashMap<String, Event> eventDict = eventManager.getAllEvents();
+        ArrayList<Event> eventDictClone = getEventListClone(eventDict);
+        ArrayList<String> stringEventList = new ArrayList<>();
 
-        eventlistclone.sort(comparator);
+        eventDictClone.sort(comparator);
         int index = 1;
-        for (Event event: eventlistclone){
+        for (Event event: eventDictClone){
             String x = "";
-            x += index + ") " + event.getTitle() + " @ " + event.getEventTime() + " with " + event.getSpeaker() + ", ";
-            stringeventlist.add(x);
+            if(eventManager.getSpeakerEvents().containsKey(event.getTitle())) {
+                SpeakerEvent speakerEvent = (SpeakerEvent) event;
+                x += index + ") " + event.getTitle() + " @ " + event.getEventTime() + " with " + eventManager.getSpeakers(speakerEvent).get(0) + " and more, ";
+            }
+            else{
+                x += index + ") " + event.getTitle() + " @ " + event.getEventTime() +", ";
+            }
+            stringEventList.add(x);
             index += 1;
         }
-        return stringeventlist;
+        return stringEventList;
     }
 
     /**
      * Creates a copy of the list of events.
-     * @param eventList original list of events.
+     * @param eventDict original hashmap of event names to events.
      * @return copy list of events.
      */
-    private ArrayList<Event> getEventListClone(ArrayList<Event> eventList){
-        ArrayList<Event> eventlistclone = new ArrayList<>();
-        eventlistclone.addAll(eventList);
-        return eventlistclone;
+    private ArrayList<Event> getEventListClone(HashMap<String, Event> eventDict){
+        ArrayList<Event> eventListClone = new ArrayList<>();
+        eventListClone.addAll(eventDict.values());
+        return eventListClone;
     }
 
     /**
@@ -81,10 +89,11 @@ public class SignUpSystem {
      * @return boolean value that will be sent to presenter to display corresponding message.
      */
     public int signUpEvent(String username, int eventIndex) {
-        if (eventIndex < 1 || eventIndex > eventManager.getEvents().size()) {
+        if (eventIndex < 1 || eventIndex > eventManager.getAllEvents().size()) {
             return 4;
         }
-        ArrayList<Event> eventList = eventManager.getEvents();
+        ArrayList<Event> eventList = new ArrayList<>();
+        eventList.addAll(eventManager.getAllEvents().values());
         eventList.sort(comparator);
         if (eventIndex > eventList.size()){
             return 1;
@@ -118,10 +127,11 @@ public class SignUpSystem {
      * @return status message saying whether or not the attendee successfully signed up for an event.
      */
     public String dropOutEvent(String username, int eventIndex){
-        if (eventIndex < 1 || eventIndex > eventManager.getEvents().size()){
+        if (eventIndex < 1 || eventIndex > eventManager.getAllEvents().size()){
             return "Incorrect ID. Please try again.";
         }
-        ArrayList<Event> eventList = eventManager.getEvents();
+        ArrayList<Event> eventList = new ArrayList<>();
+        eventList.addAll(eventManager.getAllEvents().values());
         eventList.sort(comparator);
         Event event = eventList.get(eventIndex-1);
         Optional<User> obj = userManager.usernameToUserObject(username);

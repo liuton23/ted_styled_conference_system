@@ -1,9 +1,6 @@
 package UseCases;
 
-import Entities.Attendee;
-import Entities.Event;
-import Entities.Speaker;
-import Entities.SpeakerEvent;
+import Entities.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -15,35 +12,47 @@ import java.util.Optional;
  * Manages and stores events in this tech conference system.
  */
 public class EventManager implements Serializable {
-    private ArrayList<Event> events;
+    private HashMap<String, Event> masterEventList;
+    private HashMap<String, Event> speakerlessEvents;
     private HashMap<String, SpeakerEvent> speakerEvents;
 
     /**
-     * Constructs an instance of EventManager with an empty Arraylist of Events.
+     * Constructs an instance of EventManager with empty hashmaps corresponding to the different types of Events.
      */
     public EventManager(){
-        this.events = new ArrayList<Event>();
+        this.masterEventList = new HashMap<>();
+        this.speakerlessEvents = new HashMap<>();
         this.speakerEvents = new HashMap<>();
     }
 
     /**
-     * This method returns an ArrayList of events.
-     * @return an ArrayList<Event> representing the events occurring at the tech conference.
+     * This method returns a dictionary of all events.
+     * @return a HashMap<String, Event>  representing all of the events occurring at the tech conference.
      */
-    public ArrayList<Event> getEvents() {
-        return events;
+    public HashMap<String, Event> getAllEvents() {
+        return masterEventList;
     }
 
     /**
      * This method returns an ArrayList of speaker events.
-     * @return an ArrayList<Event> representing the events occurring at the tech conference.
+     * @return a HashMap<String, SpeakerEvent>  representing the events occurring at the tech conference.
      */
     public HashMap<String, SpeakerEvent> getSpeakerEvents() {
         return speakerEvents;
     }
+    /**
+     * This method returns an ArrayList of speaker-less events.
+     * @return a HashMap<String, Event>  representing the events occurring at the tech conference.
+     */
+    public HashMap<String, Event> getSpeakerlessEvents() {
+        return speakerlessEvents;
+    }
+
 
     /**
-     * This method creates an event and adds it to EventManager's Arraylist of events.
+     * This method creates an event and adds it to EventManager's hashmap of events (masterEventList) with the event
+     * name as the key and the SpeakerEvent object as the value. It adds the event name as a key to EventManager's hashmap
+     * of speaker events (speakerEvents) and the event object as the value as well.
      * @param title the desired event name.
      * @param speaker the desired speaker username.
      * @param year the year the event starts.
@@ -56,12 +65,14 @@ public class EventManager implements Serializable {
     public void createSpeakerEvent(String title, ArrayList<String> speaker, int year, String month, int day, int hour,
                               int minute, int room, int duration){
         SpeakerEvent newEvent = new SpeakerEvent(title, speaker, year, month, day, hour, minute, room, duration);
-        events.add(newEvent);
+        masterEventList.put(title, newEvent);
         speakerEvents.put(title, newEvent);
     }
 
     /**
-     * This method creates an event and adds it to EventManager's Arraylist of events.
+     * This method creates a speaker-less event and adds it to EventManager's hashmap of events. (masterEventList) with the event
+     * name as the key and the event object as the value. It adds the event name as a key to EventManager's hashmap
+     * of speaker-less events (speakerlessEvents) and the event object as the value as well.
      * @param title the desired event name.
      * @param year the year the event starts.
      * @param month the month the event starts.
@@ -72,7 +83,9 @@ public class EventManager implements Serializable {
      */
     public void createSpeakerlessEvent(String title, int year, String month, int day, int hour,
                                    int minute, int room, int duration){
-        events.add(new Event(title, year, month, day, hour, minute, room, duration));
+        Event newEvent = new Event(title, year, month, day, hour, minute, room, duration);
+        masterEventList.put(title, newEvent);
+        speakerlessEvents.put(title, newEvent);
     }
 
     /**
@@ -108,8 +121,8 @@ public class EventManager implements Serializable {
      * in use.
      */
     public boolean freeTitleCheck(String title) {
-        for (Event eventInstance : events) {
-            if (eventInstance.getTitle().equals(title)) {
+        for (String eventName : masterEventList.keySet()) {
+            if (eventName.equals(title)) {
                 return false;
             }
         }
@@ -117,14 +130,14 @@ public class EventManager implements Serializable {
     }
 
     /**
-     * Method that returns an event object from its name.
+     * Method that returns an Optional<Event> object from its name.
      * @param eventName the name of the event to be returned
-     * @return the respective event object.
+     * @return the respective Optional<Event> object.
      */
     public Optional<Event> nameToEvent(String eventName){
-        for (Event event: events) {
-            if(event.getTitle().equals(eventName)){
-                return Optional.of(event);
+        for (String existingEventName: masterEventList.keySet()) {
+            if(existingEventName.equals(eventName)){
+                return Optional.of(masterEventList.get(existingEventName));
             }
         }
         return Optional.empty();
@@ -136,7 +149,7 @@ public class EventManager implements Serializable {
      * @return an Arraylist of Attendee usernames who are attending the provided Event.
      */
     public ArrayList<String> eventToAttendees(Event event) {
-        for (Event eventInstance: events) {
+        for (Event eventInstance: masterEventList.values()) {
             if (eventInstance == event){
                 return eventInstance.getAttendeeList();
             }
@@ -236,9 +249,12 @@ public class EventManager implements Serializable {
      * */
     //for phase 2
     public void cancelEvent(Event event){
-        events.remove(event);
+        masterEventList.remove(event.getTitle());
         if (event instanceof SpeakerEvent){
             speakerEvents.remove(event.getTitle());
+        }
+        else{
+            speakerlessEvents.remove(event.getTitle());
         }
     }
     //testing
