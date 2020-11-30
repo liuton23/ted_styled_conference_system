@@ -8,6 +8,7 @@ import Entities.SpeakerEvent;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 
 /**
@@ -15,14 +16,14 @@ import java.util.Optional;
  */
 public class EventManager implements Serializable {
     private ArrayList<Event> events;
-    private ArrayList<SpeakerEvent> speakerEvents;
+    private HashMap<String, SpeakerEvent> speakerEvents;
 
     /**
      * Constructs an instance of EventManager with an empty Arraylist of Events.
      */
     public EventManager(){
         this.events = new ArrayList<Event>();
-        this.speakerEvents = new ArrayList<SpeakerEvent>();
+        this.speakerEvents = new HashMap<>();
     }
 
     /**
@@ -37,7 +38,7 @@ public class EventManager implements Serializable {
      * This method returns an ArrayList of speaker events.
      * @return an ArrayList<Event> representing the events occurring at the tech conference.
      */
-    public ArrayList<SpeakerEvent> getSpeakerEvents() {
+    public HashMap<String, SpeakerEvent> getSpeakerEvents() {
         return speakerEvents;
     }
 
@@ -56,7 +57,7 @@ public class EventManager implements Serializable {
                               int minute, int room, int duration){
         SpeakerEvent newEvent = new SpeakerEvent(title, speaker, year, month, day, hour, minute, room, duration);
         events.add(newEvent);
-        speakerEvents.add(newEvent);
+        speakerEvents.put(title, newEvent);
     }
 
     /**
@@ -69,7 +70,7 @@ public class EventManager implements Serializable {
      * @param minute the minute the event starts.
      * @param room the room id of the desired room where the event takes place.
      */
-    public void createNoSpeakerEvent(String title, int year, String month, int day, int hour,
+    public void createSpeakerlessEvent(String title, int year, String month, int day, int hour,
                                    int minute, int room, int duration){
         events.add(new Event(title, year, month, day, hour, minute, room, duration));
     }
@@ -83,7 +84,7 @@ public class EventManager implements Serializable {
     public boolean freeSpeakerCheck(ArrayList<LocalDateTime> eventTime, String speaker) {
         LocalDateTime newEventStart = eventTime.get(0);
         LocalDateTime newEventEnd = eventTime.get(1);
-        for (SpeakerEvent eventInstance : speakerEvents) {
+        for (SpeakerEvent eventInstance : speakerEvents.values()) {
             //checking if already registered event has this speaker speaking
             ArrayList<String> speakerList = eventInstance.getSpeaker();
             for (String speakerName : speakerList) {
@@ -121,10 +122,7 @@ public class EventManager implements Serializable {
      * @return the respective event object.
      */
     public Optional<Event> nameToEvent(String eventName){
-        ArrayList<Event> combinedEvents = new ArrayList<Event>();
-        combinedEvents.addAll(events);
-        combinedEvents.addAll(speakerEvents);
-        for (Event event: combinedEvents) {
+        for (Event event: events) {
             if(event.getTitle().equals(eventName)){
                 return Optional.of(event);
             }
@@ -166,13 +164,12 @@ public class EventManager implements Serializable {
 
     /**
      * return a list of speakers of an event
-     * @param event
-     * @return
+     * @param event object we want the speaker names from
+     * @return an arraylist of speaker usernames
      */
     public ArrayList<String> getSpeakers(SpeakerEvent event){
         return event.getSpeaker();
     }
-
 
     /**
      * This method changes the speaker to the specified new speaker at the specified event.
@@ -225,6 +222,15 @@ public class EventManager implements Serializable {
     }
 
     /**
+     * Returns the room id of a specific event.
+     * @param event the event object.
+     * @return the room id of this event.
+     */
+    public int getEventRoom(Event event){
+        return event.getRoom();
+    }
+
+    /**
      * This method removes the specified event from the list of events at the Tech Conference.
      * @param event the event to be removed.
      * */
@@ -232,7 +238,7 @@ public class EventManager implements Serializable {
     public void cancelEvent(Event event){
         events.remove(event);
         if (event instanceof SpeakerEvent){
-            speakerEvents.remove(event);
+            speakerEvents.remove(event.getTitle());
         }
     }
     //testing

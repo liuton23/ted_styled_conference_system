@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
- * An Instance of this class represents a speakerless event.
+ * An Instance of this class represents a speaker-less event.
  */
 public class Event implements Serializable{
     private String title;

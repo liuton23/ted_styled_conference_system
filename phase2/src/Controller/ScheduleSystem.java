@@ -90,6 +90,35 @@ public class ScheduleSystem {
             return 3;
         }
     }
+    public int scheduleSpeakerlessEvent(String title, int year, String month, int day, int hour, int minute,
+                                    int room, int duration){
+        LocalTime startTime = LocalTime.of(hour, minute);
+        LocalTime endTime = startTime.plusHours(duration);
+        LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
+        LocalDateTime endDateTime = LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute);
+        ArrayList<LocalDateTime> eventTime = new ArrayList<LocalDateTime>();
+        eventTime.add(startDateTime);
+        eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute));
+        Room tempRoom = roomManager.idToRoom(room);
+        if(!roomManager.checkRoomInSystem(room)){
+            //This room is not in the system.
+            return 5;
+        }
+        else if(!roomManager.checkIfRoomAvailable(tempRoom, startDateTime, endDateTime)){
+            //"Room is already booked for this timeslot."
+            return 0 ;
+        }
+        else if(!eventManager.freeTitleCheck(title)){
+            //"This event name has already been taken."
+            return 2;
+        }
+        else {
+            roomManager.book(tempRoom, title, startDateTime, endDateTime);
+            eventManager.createSpeakerlessEvent(title, year, month, day, hour, minute, room, duration);
+            //"Event successfully created."
+            return 3;
+        }
+    }
 
     /**
      * This method adds a room to the system if the room is not already present in the system.
@@ -124,7 +153,7 @@ public class ScheduleSystem {
             // not a registered speaker
             return 5;
         }
-        else if(!eventManager.getSpeakerEvents().contains(eventManager.nameToEvent(eventName))){
+        else if(!eventManager.getSpeakerEvents().containsKey(eventName)){
             //Event name doesn't correspond to an event with speakers.
             return 7;
         }
@@ -152,28 +181,30 @@ public class ScheduleSystem {
         }
     }
 
-    /*
 //for PHASE 2
     public int cancelEvent(String eventName) {
         if (!eventManager.nameToEvent(eventName).isPresent()) {
             // event name does not correspond to an event.
             return 0;
-        } else {
-            Event eventObject = eventManager.nameToEvent(eventName).get();
-            for (String attendeeName : eventObject.getAttendeeList()) {
-                User attendee = userManager.usernameToUserObject(attendeeName).get();
-                userManager.dropOut((AttendAble) attendee, eventName);
-            }
-            //this will change in phase 2 when we can have a variable number of speakers
-            String speakerName = eventObject.getSpeaker();
-            Speaker sp = (Speaker) userManager.usernameToUserObject(speakerName).get();
-            userManager.removeEventFromSpeakerList((TalkAble) sp,eventName);
-            Room room = roomManager.idToRoom(eventObject.getRoom());
-            room.removeBooking(eventName);
-            eventManager.cancelEvent(eventObject);
-            //event removed successfully.
-            return 1;
         }
-    }
-     */
+        else if(eventManager.getSpeakerEvents().containsKey(eventName)) {
+            SpeakerEvent speakerEvent = eventManager.getSpeakerEvents().get(eventName);
+            ArrayList<String> speakerUsernameList = eventManager.getSpeakers(speakerEvent);
+            for (String speakerName : speakerUsernameList) {
+                // these method types don't match... needs to be resolved in UserManager
+                userManager.removeEventFromSpeakerList(userManager.usernameToUserObject(speakerName), eventName);
+            }
+        }
+        Event event = eventManager.nameToEvent(eventName).get();
+        eventManager.cancelEvent(event);
+        Room room = roomManager.idToRoom(eventManager.getEventRoom(event));
+        roomManager.unbook(room, eventName);
+        //removing the event name from all of the attendee's lists
+        for (String attendeeName : eventManager.eventToAttendees(event)) {
+            User attendee = (User) userManager.usernameToUserObject(attendeeName).get();
+            userManager.dropOut((AttendAble) attendee, eventName);
+        }
+        //event removed successfully.
+        return 1;
+        }
 }
