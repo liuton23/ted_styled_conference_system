@@ -6,6 +6,7 @@ import Entities.Event;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.Room;
 import Entities.User;
+import Entities.VipOnly;
 import UseCases.UserManager;
 import UseCases.EventManager;
 import UseCases.RoomManager;
@@ -110,13 +111,27 @@ public class SignUpSystem {
             }
             //checking that there is space at the event
             if(event.getAttendeeList().size() < room.getCapacity()) {
-                eventManager.signUp(event, attendee.getUsername());
-                userManager.signUp((AttendAble) attendee, event.getTitle());
-                return 2;
+                if (checkCanAttend(event, attendee)) {
+                    eventManager.signUp(event, attendee.getUsername());
+                    userManager.signUp((AttendAble) attendee, event.getTitle());
+                    return 2;
+                } else {
+                    return 6;
+                }
             }
         }
         return 3;
 
+    }
+
+    private boolean checkCanAttend(Event event, User attendee){
+        if (userManager.hasVIPAccess(attendee) && event instanceof VipOnly){
+            return true;
+        } else if (!(userManager.hasVIPAccess(attendee)) && event instanceof VipOnly) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**

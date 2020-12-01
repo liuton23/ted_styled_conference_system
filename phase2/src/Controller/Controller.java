@@ -64,10 +64,10 @@ public class Controller {
     private void accountActivity(String username) {
         boolean loggedin = true;
         User user = userManager.usernameToUserObject(username).get();
-        boolean canAttend = user instanceof AttendAble;
-        boolean isOrg = user instanceof Organizer;
-        boolean isSpeaker = user instanceof Speaker;
-        boolean hasVipAccess = user instanceof VIPAccess;
+        boolean canAttend = userManager.checkIsAttendee(user);
+        boolean isOrg = userManager.checkIsOrganizer(user);
+        boolean isSpeaker = userManager.checkIsSpeaker(user);
+        boolean hasVipAccess = userManager.hasVIPAccess(user);
         while (loggedin) {
 
             String chosen;
@@ -109,17 +109,14 @@ public class Controller {
     private void getItinerary(UserManager userManager, String user){
         Optional<User> obj = userManager.usernameToUserObject(user);
         User userObj = obj.get();
-        if (userObj instanceof AttendAble){
+        if (userManager.checkIsAttendee(userObj)){
             //Speaker sp = (Speaker) attendee;
             //presenter.displaySchedule(attendeeManager.getSpeakingList(sp), "speakItinerary");
             //presenter.displaySchedule(attendeeManager.getItinerary(sp), "itinerary");
             presenter.displaySchedule(userManager.getItinerary((AttendAble) userObj), "itinerary");
         } //else presenter.displaySchedule(attendeeManager.getItinerary(attendee), "itinerary");
-        if (userObj instanceof TalkAble){
+        if (userManager.checkIsSpeaker(userObj)){
             presenter.displaySchedule(userManager.getSpeakingList((TalkAble) userObj), "speakItinerary");
-        }
-        if (userObj instanceof VIPAccess){
-            presenter.displaySchedule(userManager.getVipEvents((VIPAccess) userObj), "VIPItinerary");
         }
     }
 

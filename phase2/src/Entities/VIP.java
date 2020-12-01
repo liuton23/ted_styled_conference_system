@@ -27,15 +27,4 @@ public class VIP extends Speaker implements Serializable, AttendAble, TalkAble, 
         return itinerary;
     }
 
-    public void addVIPEvent(String vipEvent){
-        VIPEvents.add(vipEvent);
-    }
-
-    public void removeVIPEvent(String vipEvent){
-        VIPEvents.remove(vipEvent);
-    }
-
-    public ArrayList<String> getVIPEvents(){
-        return VIPEvents;
-    }
 }

@@ -592,6 +592,9 @@ public class Presenter {
         else if (signUpOutput == 4){
             System.out.println("Invalid ID. Please try again.");
         }
+        else if (signUpOutput == 6) {
+            System.out.println("You cannot attend this event. Please select another event and try again.");
+        }
         else {
             System.out.println("There are no such event");
         }
