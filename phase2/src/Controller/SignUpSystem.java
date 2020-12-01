@@ -1,5 +1,6 @@
 package Controller;
 
+import Entities.EventComparators.byTitleEventComparator;
 import Entities.SpeakerEvent;
 import Entities.UserFactory.AttendAble;
 import Entities.Event;
@@ -7,6 +8,7 @@ import Entities.EventComparators.byTimeEventComparator;
 import Entities.Room;
 import Entities.User;
 import Entities.VipOnly;
+import Presenter.Presenter;
 import UseCases.UserManager;
 import UseCases.EventManager;
 import UseCases.RoomManager;
@@ -19,7 +21,7 @@ import java.util.Optional;
 /**
  * Controls sign-ups and drop-outs for events based on user input.
  */
-public class SignUpSystem {
+public class SignUpSystem extends Controller{
     private UserManager userManager;
     private EventManager eventManager;
     private RoomManager roomManager;
@@ -159,6 +161,65 @@ public class SignUpSystem {
         userManager.dropOut((AttendAble) attendee, event.getTitle());
         return "You have successfully dropped " + event.getTitle() + " @ " + event.getEventTime();
     }
+
+    /**
+     * Menu to view, sign up, and drop events.
+     * @param username username of <code>Attendee</code>.
+     */
+    public void eventActivity(String username) {
+        boolean activity = true;
+        while (activity) {
+            String chosen = askMenuInput(8);
+            int index;
+
+            switch (chosen) {
+                case "V":
+                    presenter.displayMessages("viewEvents");
+                    viewAllEvent();
+                    break;
+                case "S":
+                    presenter.displayMessages("signUp");
+                    presenter.displayMessages("requestEventId");
+                    index = getIntInput();
+                    presenter.printSignUpMessage(signUpEvent(username, index));
+                    break;
+                case "D":
+                    presenter.displayMessages("dropOut");
+                    presenter.displayMessages("requestEventIdDropOut");
+                    index = getIntInput();
+                    presenter.display(dropOutEvent(username, index));
+                    save();
+                    break;
+                case "B":
+                    activity = false;
+                    break;
+            }
+        }
+    }
+
+    /**
+     * View all events in a sorted list.
+     */
+    public void viewAllEvent(){
+        String chosen = askMenuInput(9);
+
+        switch (chosen) {
+            case "T":
+                setComparator(new byTimeEventComparator());
+                presenter.displaySchedule(viewAllEvents(), "time");
+                break;
+            case "N":
+                setComparator(new byTitleEventComparator());
+                presenter.displaySchedule(viewAllEvents(), "name");
+                break;
+            case "S":
+                //sus.setComparator(new bySpeakerEventComparator());
+                presenter.displaySchedule(viewAllEvents(), "speaker");
+                break;
+        }
+    }
+
+
 /*
     public static void main(String[] args) {
         AttendeeManager atm = new AttendeeManager();

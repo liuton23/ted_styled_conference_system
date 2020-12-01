@@ -37,7 +37,7 @@ public class UserManager implements Serializable {
      */
     public User createAttendee(String username, String password, UserType type){
         UserFactory userFactory = new UserFactory();
-        User newUser = userFactory.createAccount(username, password,type);
+        User newUser = userFactory.createAccount(username, password, type);
         masterList.add(newUser);
         switch (type){
             case ATTENDEE:

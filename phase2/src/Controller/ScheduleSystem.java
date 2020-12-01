@@ -14,11 +14,12 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Scanner;
 
 /**
  * Controls scheduling tasks based on user input.
  */
-public class ScheduleSystem {
+public class ScheduleSystem extends Controller{
     private EventManager eventManager;// = new EventManager();
     private UserManager userManager;// = new UserManager();
     private RoomManager roomManager;// = new RoomManager();
@@ -179,6 +180,125 @@ public class ScheduleSystem {
             //"One of the users does not exist."
             return 3;
         }
+    }
+
+    /**
+     * Organizer only menu to schedule events, add rooms and change speakers.
+     */
+    public void scheduleActivity(){
+        boolean scheduling = true;
+        while (scheduling) {
+            Scanner input = new Scanner(System.in);
+
+            String chosen = askMenuInput(4);
+
+            switch (chosen) {
+                case "S":
+                    scheduleSpeakerEvent();
+                    save();
+                    break;
+                case "A":
+                    presenter.displayMessages("requestAddRoom");
+                    presenter.displayMessages("requestRoom");
+                    int roomId;
+                    int roomCapacity;
+                    roomId = getIntInput();
+                    presenter.displayMessages("requestCapacity");
+                    roomCapacity = getIntInputGreaterThanEqualTo(1);
+                    presenter.printAddRoomMessage(addRoom(roomId,roomCapacity));
+                    save();
+                    break;
+                case "C":
+                    int index;
+                    presenter.displayMessages("changeSpeaker");
+                    ArrayList<Event> events = new ArrayList<Event>(eventManager.getSpeakerEvents().values());
+                    //events.sort(new bySpeakerEventComparator());
+                    presenter.displayAllEvents(events, "speaker");
+                    presenter.displayMessages("requestRoom");
+                    index = getIntInput();
+                    presenter.displayMessages("requestSpeaker");
+                    // NEED TO ADD A REQUEST FOR THE OLD SPEAKER (vs the new speaker)
+                    String newSpeaker = input.nextLine();
+                    String oldSpeaker = input.nextLine();
+                    String eventName = events.get(index - 1).getTitle();
+                    int message = changeSpeaker(eventName,newSpeaker, oldSpeaker);
+                    presenter.printChangeSpeakerMessage(message);
+                    save();
+                    break;
+                case "B":
+                    scheduling = false;
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Method for organizers to input new event information.
+     */
+    private void scheduleSpeakerEvent(){
+        Scanner input = new Scanner(System.in);
+        presenter.displayMessages("S");
+        String title = input.nextLine().trim();
+        presenter.displayMessages("requestSpeaker");
+        String speaker = input.nextLine();
+        ArrayList<String> speakers = new ArrayList<String>();
+        speakers.add(speaker);
+        presenter.displayMessages("requestYear");
+        int year = getIntInput();
+        presenter.displayMessages("requestMonth"); //***********
+        presenter.viewMonthsMenu();
+        String month = askMenuInput(13); //input.nextLine().toUpperCase();
+        presenter.displayMessages("requestDay");
+        int day = getIntInputInRange(1, 31);
+        presenter.displayMessages("requestHour");
+        int hour = getIntInputInRange(0, 23);
+        presenter.displayMessages("requestMinute");
+        int min = getIntInputInRange(0, 59);
+        presenter.displayMessages("requestDuration");
+        int duration = getIntInput();
+        presenter.displayMessages("requestRoom");
+        int roomID = getIntInput();
+        presenter.printScheduleEventMessage(scheduleSpeakerEvent(title, speakers, year, month, day,
+                hour, min, roomID, duration));
+    }
+
+    /**
+     * Makes sure user enters an int between start and end (inclusive)
+     * @param start start of range
+     * @param end end of range
+     * @return the inputted int
+     */
+    private int getIntInputInRange(int start, int end) {
+        boolean done = false;
+        int in = 0;
+        do {
+            in = getIntInput();
+            if (!(start <= in && in <= end)) {
+                presenter.printInvalidIntRangeMessage(start, end);
+            } else {
+                done = true;
+            }
+        } while (!done);
+        return in;
+    }
+
+    /**
+     * Makes sure user enters an int greater than or equal to start
+     * @param start start of range
+     * @return the inputted int
+     */
+    private int getIntInputGreaterThanEqualTo(int start) {
+        boolean done = false;
+        int in = 0;
+        do {
+            in = getIntInput();
+            if (!(start <= in)) {
+                presenter.printInvalidIntRangeMessage(start);
+            } else {
+                done = true;
+            }
+        } while (!done);
+        return in;
     }
 
 //for PHASE 2

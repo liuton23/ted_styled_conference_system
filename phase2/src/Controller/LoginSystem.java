@@ -2,10 +2,12 @@ package Controller;
 import Entities.UserFactory.UserType;
 import UseCases.UserManager;
 
+import java.util.Scanner;
+
 /**
  * Manages the logging in and registering of users to the system
  */
-public class LoginSystem {
+public class LoginSystem extends Controller{
     UserManager userManager;
 
     /**
@@ -62,4 +64,64 @@ public class LoginSystem {
         }
     }
 
+    /**
+     * Attendee login.
+     * @return username of <code>Attendee</code> if it exists. Otherwise returns an empty string.
+     */
+    public String login(){
+
+        Scanner obj1 = new Scanner(System.in);
+        presenter.printUsernameMessage();
+        String username = obj1.nextLine();
+        presenter.printPasswordMessage();
+        String password = obj1.nextLine();
+        if (canLogin(username, password)){
+            presenter.printLoginSucceedMessage();
+            return username;
+        }
+        presenter.printLoginFailMessage();
+        return "";
+    }
+
+    /**
+     * Attendee registration. Cannot choose a username that is already taken.
+     */
+    public void registerUsers(UserManager userManager){
+        Scanner obj1 = new Scanner(System.in);
+        presenter.printUsernameMessage();
+        String username = obj1.nextLine();
+        presenter.printPasswordMessage();
+        String password = obj1.nextLine();
+        presenter.printAreUAOrg();
+        boolean chosen = askBooleanInput();
+        UserType type;
+        if (chosen){
+            type = UserType.ORGANIZER;
+        } else {
+            type = UserType.ATTENDEE;
+        }
+        if(registerUser(username, password, type)){
+            presenter.printRegisterSucceedMessage();
+        }else{
+            presenter.printRegisterFailMessage();
+        }
+
+    }
+
+    /**
+     * Speaker registration. Cannot choose a username that is already taken.
+     */
+    public void createSpeakers(){
+        Scanner obj1 = new Scanner(System.in);
+        presenter.displayMessages("requestSpeaker");
+        String username = obj1.nextLine();
+        presenter.displayMessages("enterSpeakerPswd");
+        String password = obj1.nextLine();
+        if (registerSpeaker(username, password)){
+            presenter.printSpeakerCreatedMessage();
+        } else {
+            presenter.printRegisterFailMessage();
+        }
+    }
 }
+
