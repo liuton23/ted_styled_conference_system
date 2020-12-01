@@ -63,8 +63,11 @@ public class Controller {
      */
     private void accountActivity(String username) {
         boolean loggedin = true;
-        boolean isOrg = userManager.usernameToUserObject(username).get() instanceof Organizer;
-        boolean isSpeaker = userManager.usernameToUserObject(username).get() instanceof Speaker;
+        User user = userManager.usernameToUserObject(username).get();
+        boolean canAttend = user instanceof AttendAble;
+        boolean isOrg = user instanceof Organizer;
+        boolean isSpeaker = user instanceof Speaker;
+        boolean hasVipAccess = user instanceof VIPAccess;
         while (loggedin) {
 
             String chosen;
@@ -75,20 +78,20 @@ public class Controller {
             }
 
             switch (chosen) {
-                case "M":
+                case "M"://Messaging
                     MessageSystem messageSystem = new MessageSystem(messageManager,userManager,eventManager,this);
                     messageSystem.messageActivity(username);
                     break;
-                case "E":
+                case "E"://View events
                     eventActivity(username);
                     break;
-                case "I":
-                    getItinerary(userManager, username, isSpeaker);
+                case "I"://View Itineraries
+                    getItinerary(userManager, username);
                     break;
-                case "S":
+                case "S"://Schedule activities
                     scheduleActivity();
                     break;
-                case "C":
+                case "C"://Create accounts
                     createSpeaker();
                     break;
                 case "B":
@@ -103,7 +106,7 @@ public class Controller {
      * @param userManager gets the schedule.
      * @param user username of <code>Attendee</code> to which the schedule belongs.
      */
-    private void getItinerary(UserManager userManager, String user, Boolean isSpeaker){
+    private void getItinerary(UserManager userManager, String user){
         Optional<User> obj = userManager.usernameToUserObject(user);
         User userObj = obj.get();
         if (userObj instanceof AttendAble){
@@ -114,6 +117,9 @@ public class Controller {
         } //else presenter.displaySchedule(attendeeManager.getItinerary(attendee), "itinerary");
         if (userObj instanceof TalkAble){
             presenter.displaySchedule(userManager.getSpeakingList((TalkAble) userObj), "speakItinerary");
+        }
+        if (userObj instanceof VIPAccess){
+            presenter.displaySchedule(userManager.getVipEvents((VIPAccess) userObj), "VIPItinerary");
         }
     }
 

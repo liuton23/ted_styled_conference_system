@@ -399,6 +399,9 @@ public class Presenter {
             case "speakItinerary":
                 System.out.println("Your itinerary of event(s) you speaks at:");
                 break;
+            case "VIPItinerary":
+                System.out.println("Your VIP-only list of event(s) you speaks at:");
+                break;
         }
         for (String str: options){
             System.out.println(str);
