@@ -55,18 +55,6 @@ public class UserManager implements Serializable {
                 break;
         }
         return newUser;
-        /*
-        if ( isOrg ) {
-            Organizer org = new Organizer(username, password);
-            organizerList.add(org);
-            return org;
-        } else {
-            Attendee attendee = new Attendee(username, password);
-            attendeeList.add(attendee);
-            return attendee;
-        }
-
-         */
     }
 
     /**
@@ -91,7 +79,7 @@ public class UserManager implements Serializable {
      */
     public boolean registeredSpeaker(String username){
         for (TalkAble speaker: this.getAllSpeakers()) {
-            if(((User) speaker).getUsername().equals(username)){
+            if(speaker.getUsername().equals(username)){
                 return true;
             }
         }
@@ -185,10 +173,10 @@ public class UserManager implements Serializable {
      */
     public void changeSpeaker(String title, String newSpeakerUsername, String oldSpeakerUsername){
         for (TalkAble speaker: speakerList) {
-            if (((User) speaker).getUsername().equals(oldSpeakerUsername)) {
+            if (speaker.getUsername().equals(oldSpeakerUsername)) {
                 speaker.removeTalk(title);
             }
-            if (((User) speaker).getUsername().equals(newSpeakerUsername)) {
+            if (speaker.getUsername().equals(newSpeakerUsername)) {
                 speaker.addTalk(title);
             }
         }
@@ -198,23 +186,23 @@ public class UserManager implements Serializable {
      * @param user attendee object
      * @return true of this attendee is organizer
      */
-    public Boolean checkIsOrganizer(User user){
+    public Boolean checkIsOrganizer(Account user){
         return user instanceof OrganizeAble;
     }
 
-    public Boolean checkIsAttendee(User user) {
+    public Boolean checkIsAttendee(Account user) {
         return user instanceof AttendAble;
     }
 
-    public Boolean checkIsSpeaker(User user) {
+    public Boolean checkIsSpeaker(Account user) {
         return user instanceof AttendAble;
     }
 
-    public Boolean hasVIPAccess(User user){
+    public Boolean hasVIPAccess(Account user){
         return user instanceof VIPAccess;
     }
 
-    public String getUsername(User user) {
+    public String getUsername(Account user) {
         return user.getUsername();
     }
 
@@ -243,25 +231,22 @@ public class UserManager implements Serializable {
      * @return instance of Attendee iff one exists.
      */
     public Optional<User> usernameToUserObject(String username){
-        /*
-        for (AttendAble user: attendeeList) {
-            if(username.equals(((User) user).getUsername())){
-                return Optional.of(user);
-            }
-        }
-        for (User user: speakerList) {
-            if (username.equals(user.getUsername())) {
-                return Optional.of(user);
-            }
-        }
-        for (User user: organizerList){
-            if (username.equals(user.getUsername())) {
-                return Optional.of(user);
-            }
-        }
-
-         */
         for (User user: masterList){
+            if (username.equals(user.getUsername())){
+                return Optional.of(user);
+            }
+        }
+        return Optional.empty();
+    }
+
+    // check this later Optionals are funky
+    /**
+     * Method that takes an user username and returns a stored Attendee instance iff one exists.
+     * @param username username of an attendee.
+     * @return instance of Attendee iff one exists.
+     */
+    public Optional<AttendAble> usernameToAttendeeObject(String username){
+        for (AttendAble user: attendeeList){
             if (username.equals(user.getUsername())){
                 return Optional.of(user);
             }

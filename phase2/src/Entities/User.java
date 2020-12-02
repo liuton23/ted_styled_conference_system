@@ -5,7 +5,7 @@ import Entities.UserFactory.Account;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User implements Serializable {
+public class User implements Serializable,Account {
     private String username;
     private String password;
 
