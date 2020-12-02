@@ -8,20 +8,18 @@ import UseCases.UserManager;
 import UseCases.EventManager;
 import UseCases.MessageManager;
 
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.Scanner;
+import java.beans.PropertyChangeEvent;
+import java.util.*;
 
 /**
  * Control all the messages base on user's input
  */
-public class MessageSystem {
+public class MessageSystem extends Controller {
 
     MessageManager messageManager;
     UserManager userManager;
     EventManager eventManager;
     private MessagePresenter messagePresenter = new MessagePresenter();
-    private Controller controller;
 
     /**
      * Create an instance of MessageSystem
@@ -31,11 +29,10 @@ public class MessageSystem {
      */
 
     public MessageSystem(MessageManager messageManager, UserManager userManager,
-                         EventManager eventManager, Controller controller){
+                         EventManager eventManager){
         this.messageManager = messageManager;
         this.userManager = userManager;
         this.eventManager = eventManager;
-        this.controller = controller;
     }
 
     // General message helper methods (Suitable for all attendees, speakers, and organizers)
@@ -182,7 +179,7 @@ public class MessageSystem {
     public void messageActivity(String username) {
         boolean messaging = true;
         while (messaging) {
-            String chosen = controller.askMenuInput(5);
+            String chosen = askMenuInput(5);
             switch (chosen) {
                 case "M":
                     messageUser(username);
@@ -203,29 +200,29 @@ public class MessageSystem {
         while (messagingOther) {
             String chosen;
             if (user instanceof TalkAble) {
-                chosen = controller.askMenuInput(11);
+                chosen = askMenuInput(11);
             } else if (user instanceof OrganizeAble) {
-                chosen = controller.askMenuInput(10);
+                chosen = askMenuInput(10);
             } else
-                chosen = controller.askMenuInput(6);
+                chosen = askMenuInput(6);
 
             switch (chosen) {
                 case "U":
                     messageOneUser(username);
-                    controller.save();
+                    save();
                     break;
                 case "S":
                     messageAllSpeaker(username);
-                    controller.save();
+                    save();
                     break;
                 case "A":
                     messageAllAtt(username);
-                    controller.save();
+                    save();
                     break;
                 case "E":
                     ArrayList<String> events = new ArrayList<>();
                     messageEventAllAtt(username,events);
-                    controller.save();
+                    save();
                 case "B":
                     messagingOther = false;
                     break;
@@ -242,7 +239,7 @@ public class MessageSystem {
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("printInputEventName");
         events.add(obj.nextLine().trim());
-        String chosen = controller.askMenuInput(12);
+        String chosen = askMenuInput(12);
         switch(chosen){
             case "S":
                 messageEventAllAtt(username,events);
@@ -263,7 +260,7 @@ public class MessageSystem {
     private void viewMessages(String username){
         boolean viewingMessage = true;
         while (viewingMessage) {
-            String chosen = controller.askMenuInput(7);
+            String chosen = askMenuInput(7);
             switch (chosen) {
                 case "S":
                     ArrayList<String> messagesS = messageManager.getSendBy(username);

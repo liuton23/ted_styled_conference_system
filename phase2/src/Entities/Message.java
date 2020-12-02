@@ -19,6 +19,7 @@ public class Message implements Serializable {
     private String text;
     private LocalDateTime messageTime;
     private HashMap<String, Boolean> readDict;
+    private HashMap<String, Boolean> archivedDict;
     private PropertyChangeSupport observable;
     private String messageNumber;
 
@@ -34,7 +35,9 @@ public class Message implements Serializable {
         this.recipients = new ArrayList<String>();
         this.messageTime = LocalDateTime.now();
         this.readDict = new HashMap<String, Boolean>();
+        this.archivedDict = new HashMap<String, Boolean>();
         this.observable = new PropertyChangeSupport(this);
+        archivedDict.put(sender,false);
     }
 
 
@@ -43,7 +46,7 @@ public class Message implements Serializable {
      * @param observer
      */
     public void addObserver(PropertyChangeListener observer) {
-        observable.addPropertyChangeListener("read", observer);
+        observable.addPropertyChangeListener("read status", observer);
     }
 
 
@@ -67,16 +70,20 @@ public class Message implements Serializable {
 
     public void markUnread(String recipient) {
 
-        String oldRead  = "READ";
-        String newRead = "UNREAD";
+        String oldRead  = "Read";
+        String newRead = "unread";
         this.readDict.put(recipient,false);
         PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "read status", oldRead, newRead);
         notifyObservers (newEvent);
 
-        /*
-         * The following line does not work.
-         *  observable.firePropertyChange("The location: ", oldLocation, newLocation);
-         */
+    }
+
+    public void markArchive(String changer) {
+        String oldRead  = "Not archived";
+        String newRead = "archived";
+        this.archivedDict.put(changer,true);
+        PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "archive status", oldRead, newRead);
+        notifyObservers (newEvent);
     }
 
     /**
@@ -87,6 +94,7 @@ public class Message implements Serializable {
     public void setRecipients(String recipient) {
         this.recipients.add(recipient);
         this.readDict.put(recipient, false);
+        this.archivedDict.put(recipient,false);
     }
 
     /**
@@ -154,13 +162,8 @@ public class Message implements Serializable {
 
     @Override
     public String toString() {
-        return "From " + sender + ": " + text + " @ " +
-                messageTime.toString();
+        return messageNumber;
     }
-
-
-
-
 
 
 }

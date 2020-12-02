@@ -1,9 +1,9 @@
 package Controller;
 
-import Controller.Registration.RegistrationPortal;
+//import Controller.Registration.RegistrationPortal;
 import Entities.*;
 import Entities.Event;
-import Entities.EventComparators.bySpeakerEventComparator;
+//import Entities.EventComparators.bySpeakerEventComparator;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.EventComparators.byTitleEventComparator;
 import Entities.UserFactory.*;
@@ -26,7 +26,7 @@ public class Controller {
     private MessageManager messageManager = new MessageManager();
     private RoomManager roomManager = new RoomManager();
 
-    private Presenter presenter = new Presenter();
+    public Presenter presenter = new Presenter();
 
     /**
      * Starts the program. Login menu.
@@ -39,15 +39,16 @@ public class Controller {
             String chosen = askMenuInput(1);
 
             String username;
+            LoginSystem loginSystem = new LoginSystem(userManager);
 
             switch (chosen) {
                 case "R":
-                    registerUser(userManager);
+                    loginSystem.registerUsers(userManager);
                     break;
                 case "L":
-                    username = login();
+                    username = loginSystem.login();
                     if (!username.isEmpty()) {
-                        accountActivity(username);
+                        accountActivity(username, loginSystem);
                     }
                     break;
                 case "EXIT": //only used to prevent infinite loop
@@ -61,7 +62,7 @@ public class Controller {
      * @param username <code>Attendee</code>'s username as <code>String</code>. Username must correspond to an
      *                 <code>Attendee</code> or an error will occur.
      */
-    private void accountActivity(String username) {
+    private void accountActivity(String username, LoginSystem loginSystem) {
         boolean loggedin = true;
         User user = userManager.usernameToUserObject(username).get();
         boolean canAttend = userManager.checkIsAttendee(user);
@@ -79,20 +80,22 @@ public class Controller {
 
             switch (chosen) {
                 case "M"://Messaging
-                    MessageSystem messageSystem = new MessageSystem(messageManager,userManager,eventManager,this);
+                    MessageSystem messageSystem = new MessageSystem(messageManager,userManager,eventManager);
                     messageSystem.messageActivity(username);
                     break;
                 case "E"://View events
-                    eventActivity(username);
+                    SignUpSystem signUpSystem = new SignUpSystem(userManager, eventManager, roomManager);
+                    signUpSystem.eventActivity(username);
                     break;
                 case "I"://View Itineraries
                     getItinerary(userManager, username);
                     break;
                 case "S"://Schedule activities
-                    scheduleActivity();
+                    ScheduleSystem scheduleSystem  = new ScheduleSystem(eventManager,userManager, roomManager);
+                    scheduleSystem.scheduleActivity();
                     break;
                 case "C"://Create accounts
-                    createSpeaker();
+                    loginSystem.createSpeakers();
                     break;
                 case "B":
                     loggedin = false;
@@ -120,91 +123,12 @@ public class Controller {
         }
     }
 
-    /**
-     * Organizer only menu to schedule events, add rooms and change speakers.
-     */
-    private void scheduleActivity(){
-        ScheduleSystem scheduleSystem  = new ScheduleSystem(eventManager,userManager, roomManager);
-        boolean scheduling = true;
-        while (scheduling) {
-            Scanner input = new Scanner(System.in);
-
-            String chosen = askMenuInput(4);
-
-            switch (chosen) {
-                case "S":
-                    scheduleSpeakerEvent(scheduleSystem);
-                    save();
-                    break;
-                case "A":
-                    presenter.displayMessages("requestAddRoom");
-                    presenter.displayMessages("requestRoom");
-                    int roomId;
-                    int roomCapacity;
-                    roomId = getIntInput();
-                    presenter.displayMessages("requestCapacity");
-                    roomCapacity = getIntInputGreaterThanEqualTo(1);
-                    presenter.printAddRoomMessage(scheduleSystem.addRoom(roomId,roomCapacity));
-                    save();
-                    break;
-                case "C":
-                    int index;
-                    presenter.displayMessages("changeSpeaker");
-                    ArrayList<Event> events = new ArrayList<Event>(eventManager.getEvents());
-                    events.sort(new bySpeakerEventComparator());
-                    presenter.displayAllEvents(events, "speaker");
-                    presenter.displayMessages("requestRoom");
-                    index = getIntInput();
-                    presenter.displayMessages("requestSpeaker");
-                    // NEED TO ADD A REQUEST FOR THE OLD SPEAKER (vs the new speaker)
-                    String newSpeaker = input.nextLine();
-                    String oldSpeaker = input.nextLine();
-                    String eventName = events.get(index - 1).getTitle();
-                    int message = scheduleSystem.changeSpeaker(eventName,newSpeaker, oldSpeaker);
-                    presenter.printChangeSpeakerMessage(message);
-                    save();
-                    break;
-                case "B":
-                    scheduling = false;
-                    break;
-            }
-        }
-    }
-
-    /**
-     * Method for organizers to input new event information.
-     * @param scheduleSystem ScheduleSystem created in parent method.
-     */
-    private void scheduleSpeakerEvent(ScheduleSystem scheduleSystem){
-        Scanner input = new Scanner(System.in);
-        presenter.displayMessages("S");
-        String title = input.nextLine().trim();
-        presenter.displayMessages("requestSpeaker");
-        String speaker = input.nextLine();
-        presenter.displayMessages("requestYear");
-        int year = getIntInput();
-        presenter.displayMessages("requestMonth"); //***********
-        presenter.viewMonthsMenu();
-        String month = askMenuInput(13); //input.nextLine().toUpperCase();
-        presenter.displayMessages("requestDay");
-        int day = getIntInputInRange(1, 31);
-        presenter.displayMessages("requestHour");
-        int hour = getIntInputInRange(0, 23);
-        presenter.displayMessages("requestMinute");
-        int min = getIntInputInRange(0, 59);
-        presenter.displayMessages("requestDuration");
-        int duration = getIntInput();
-        presenter.displayMessages("requestRoom");
-        int roomID = getIntInput();
-        presenter.printScheduleEventMessage(scheduleSystem.scheduleSpeakerEvent(title, speaker, year, month, day,
-                hour, min, roomID, duration));
-    }
 
     /**
      * Makes sure user enters an int as input
      * @return the int the user entered
      */
-    private int getIntInput() {
+    public int getIntInput() {
         Scanner input = new Scanner(System.in);
         boolean done = false;
         int in = 0;
@@ -219,104 +143,6 @@ public class Controller {
         return in;
     }
 
-    /**
-     * Makes sure user enters an int between start and end (inclusive)
-     * @param start start of range
-     * @param end end of range
-     * @return the inputted int
-     */
-    private int getIntInputInRange(int start, int end) {
-        boolean done = false;
-        int in = 0;
-        do {
-            in = getIntInput();
-            if (!(start <= in && in <= end)) {
-                presenter.printInvalidIntRangeMessage(start, end);
-            } else {
-                done = true;
-            }
-        } while (!done);
-        return in;
-    }
-
-    /**
-     * Makes sure user enters an int greater than or equal to start
-     * @param start start of range
-     * @return the inputted int
-     */
-    private int getIntInputGreaterThanEqualTo(int start) {
-        boolean done = false;
-        int in = 0;
-        do {
-            in = getIntInput();
-            if (!(start <= in)) {
-                presenter.printInvalidIntRangeMessage(start);
-            } else {
-                done = true;
-            }
-        } while (!done);
-        return in;
-    }
-
-
-    /**
-     * Menu to view, sign up, and drop events.
-     * @param username username of <code>Attendee</code>.
-     */
-    private void eventActivity(String username) {
-        SignUpSystem signUpSystem = new SignUpSystem(userManager, eventManager, roomManager);
-        boolean activity = true;
-        while (activity) {
-            String chosen = askMenuInput(8);
-            int index;
-
-            switch (chosen) {
-                case "V":
-                    presenter.displayMessages("viewEvents");
-                    viewAllEvents(signUpSystem);
-                    break;
-                case "S":
-                    presenter.displayMessages("signUp");
-                    presenter.displayMessages("requestEventId");
-                    index = getIntInput();
-                    presenter.printSignUpMessage(signUpSystem.signUpEvent(username, index));
-                    break;
-                case "D":
-                    presenter.displayMessages("dropOut");
-                    presenter.displayMessages("requestEventIdDropOut");
-                    index = getIntInput();
-                    presenter.display(signUpSystem.dropOutEvent(username, index));
-                    save();
-                    break;
-                case "B":
-                    activity = false;
-                    break;
-            }
-        }
-    }
-
-    /**
-     * View all events in a sorted list.
-     * @param sus system that manages event sign up.
-     */
-    private void viewAllEvents(SignUpSystem sus){
-        String chosen = askMenuInput(9);
-
-        switch (chosen) {
-            case "T":
-                sus.setComparator(new byTimeEventComparator());
-                presenter.displaySchedule(sus.viewAllEvents(), "time");
-                break;
-            case "N":
-                sus.setComparator(new byTitleEventComparator());
-                presenter.displaySchedule(sus.viewAllEvents(), "name");
-                break;
-            case "S":
-                sus.setComparator(new bySpeakerEventComparator());
-                presenter.displaySchedule(sus.viewAllEvents(), "speaker");
-                break;
-        }
-    }
 
     /**
      * Exits the program after saving.
@@ -452,7 +278,6 @@ public class Controller {
         }
     }
 
-
     /**
      * Saves the use case classes and all their fields in a file.
      */
@@ -469,67 +294,4 @@ public class Controller {
         }
     }
 
-
-
-    /**
-     * Attendee login.
-     * @return username of <code>Attendee</code> if it exists. Otherwise returns an empty string.
-     */
-    private String login(){
-        LoginSystem loginSystem = new LoginSystem(userManager);
-        Scanner obj1 = new Scanner(System.in);
-        presenter.printUsernameMessage();
-        String username = obj1.nextLine();
-        presenter.printPasswordMessage();
-        String password = obj1.nextLine();
-        if (loginSystem.canLogin(username, password)){
-            presenter.printLoginSucceedMessage();
-            return username;
-        }
-        presenter.printLoginFailMessage();
-        return "";
-    }
-
-    /**
-     * Attendee registration. Cannot choose a username that is already taken.
-     */
-    private void registerUser(UserManager userManager){
-        LoginSystem loginSystem = new LoginSystem(userManager);
-        Scanner obj1 = new Scanner(System.in);
-        presenter.printUsernameMessage();
-        String username = obj1.nextLine();
-        presenter.printPasswordMessage();
-        String password = obj1.nextLine();
-        presenter.printAreUAOrg();
-        boolean chosen = askBooleanInput();
-        UserType type;
-        if (chosen){
-            type = UserType.ORGANIZER;
-        } else {
-            type = UserType.ATTENDEE;
-        }
-        if(loginSystem.registerUser(username, password, type)){
-            presenter.printRegisterSucceedMessage();
-        }else{
-            presenter.printRegisterFailMessage();
-        }
-
-    }
-
-    /**
-     * Speaker registration. Cannot choose a username that is already taken.
-     */
-    private void createSpeaker(){
-        LoginSystem loginSystem = new LoginSystem(userManager);
-        Scanner obj1 = new Scanner(System.in);
-        presenter.displayMessages("requestSpeaker");
-        String username = obj1.nextLine();
-        presenter.displayMessages("enterSpeakerPswd");
-        String password = obj1.nextLine();
-        if (loginSystem.registerSpeaker(username, password)){
-            presenter.printSpeakerCreatedMessage();
-        } else {
-            presenter.printRegisterFailMessage();
-        }
-    }
 }
