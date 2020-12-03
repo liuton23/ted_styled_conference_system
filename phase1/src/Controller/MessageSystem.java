@@ -6,12 +6,17 @@ import Entities.Speaker;
 import UseCases.AttendeeManager;
 import UseCases.EventManager;
 import UseCases.MessageManager;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 import UseCases.RoomManager;
 
 import javax.swing.text.html.Option;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Properties;
 
 /**
  * Control all the messages base on user's input
@@ -21,6 +26,8 @@ public class MessageSystem {
     MessageManager messageManager;
     AttendeeManager attendeeManager;
     EventManager eventManager;
+    Session session;
+    String email;
 
     /**
      * Create an instance of MessageSystem
@@ -33,6 +40,38 @@ public class MessageSystem {
         this.messageManager = mm;
         this.attendeeManager = am;
         this.eventManager = em;
+        initEmail();
+    }
+
+    private void initEmail(){
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+        final String myEmail = "csc207Group0757@gmail.com";
+        this.email = myEmail;
+        final String myPassword = "T2uring07";
+        Authenticator auth = new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(myEmail, myPassword);
+            }
+        };
+        this.session = Session.getDefaultInstance(properties, auth);
+    }
+
+    public void sendEmail(String receiverEmail, String subject, String content){
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(email));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiverEmail));
+            message.setSubject(subject);
+            message.setText(content);
+            Transport.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     // General message methods (Suitable for all attendees, speakers, and organizers)
@@ -77,7 +116,7 @@ public class MessageSystem {
     public int messageAllSpeakers(String sender, String text){
         Optional<Attendee> obj = attendeeManager.usernameToAttendeeObject(sender);
         ArrayList<Speaker> listOfSpeakers = attendeeManager.getAllSpeakers();
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         for (Speaker s : listOfSpeakers){
             list.add(s.getUsername());
         }
@@ -109,12 +148,12 @@ public class MessageSystem {
         if (!attendeeManager.checkIsOrganizer(org)) {
             return 2; /*"Only Organizer can message all attendees."*/
         }
-        ArrayList<String> allAtt = new ArrayList<String>();
+        ArrayList<String> allAtt = new ArrayList<>();
         ArrayList<Attendee> allAttObj = attendeeManager.getAllAttendees();
         for(Attendee att: allAttObj){
             if (!attendeeManager.checkIsOrganizer(att)){
             allAtt.add(att.getUsername());
-            };
+            }
         }
         messageManager.createMessage(allAtt,sender,text);
         return 3; /*"The message has been successfully sent."*/
@@ -133,9 +172,9 @@ public class MessageSystem {
 
     public int messageEventAttendees(ArrayList<String> eventNames, String sender, String text){
         Optional<Attendee> obj = attendeeManager.usernameToAttendeeObject(sender);
-        ArrayList<String> list = new ArrayList<String>();
-        ArrayList<String> noAtt = new ArrayList<String>();
-        ArrayList<String> notSpeakAt = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
+        ArrayList<String> noAtt = new ArrayList<>();
+        ArrayList<String> notSpeakAt = new ArrayList<>();
 
         if (!obj.isPresent()){
             return 2; //"Incorrect username. Please try again.";
