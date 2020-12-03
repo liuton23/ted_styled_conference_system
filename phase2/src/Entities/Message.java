@@ -20,7 +20,6 @@ public class Message implements Serializable {
     private LocalDateTime messageTime;
     private HashMap<String, Boolean> readDict;
     private HashMap<String, Boolean> archivedDict;
-    private PropertyChangeSupport observable;
     private String messageNumber;
 
     /**
@@ -36,55 +35,9 @@ public class Message implements Serializable {
         this.messageTime = LocalDateTime.now();
         this.readDict = new HashMap<String, Boolean>();
         this.archivedDict = new HashMap<String, Boolean>();
-        this.observable = new PropertyChangeSupport(this);
         archivedDict.put(sender,false);
     }
 
-
-    /*
-     * Add a new observer to observe the changes to this class.
-     * @param observer
-     */
-    public void addObserver(PropertyChangeListener observer) {
-        observable.addPropertyChangeListener("read status", observer);
-    }
-
-
-    /*
-     * Remove an existing observer from the list of observers.
-     * @param observer
-     */
-    public void removeObserver(PropertyChangeListener observer) {
-        observable.removePropertyChangeListener(observer);
-    }
-
-    /*
-     * Notify observers o the change event.
-     * @param newEvent
-     */
-    public void notifyObservers (PropertyChangeEvent newEvent)
-    {
-        for ( PropertyChangeListener observer : observable.getPropertyChangeListeners())
-            observer.propertyChange(newEvent);
-    }
-
-    public void markUnread(String recipient) {
-
-        String oldRead  = "Read";
-        String newRead = "unread";
-        this.readDict.put(recipient,false);
-        PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "read status", oldRead, newRead);
-        notifyObservers (newEvent);
-
-    }
-
-    public void markArchive(String changer) {
-        String oldRead  = "Not archived";
-        String newRead = "archived";
-        this.archivedDict.put(changer,true);
-        PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "archive status", oldRead, newRead);
-        notifyObservers (newEvent);
-    }
 
     /**
      * This method sets the recipient of this message
@@ -105,6 +58,7 @@ public class Message implements Serializable {
     public void setText(String newText){
         this.text = newText;
     }
+
 
 
     /**
@@ -133,14 +87,20 @@ public class Message implements Serializable {
         return text;
     }
 
-    public void setRead(String recipient){
-        if (!readDict.get(recipient)){
-            this.readDict.put(recipient,true);
-        }
+    public void setRead(String recipient, Boolean read){
+        this.readDict.put(recipient,read);
+    }
+
+    public void setArchived(String changer, Boolean archived) {
+        this.archivedDict.put(changer,archived);
     }
 
     public Boolean getRead(String recipient){
         return this.readDict.get(recipient);
+    }
+
+    public Boolean getArchived(String changer) {
+        return this.archivedDict.get(changer);
     }
 
     public void setMessageNumber(String messageNumber) {

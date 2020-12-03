@@ -248,6 +248,8 @@ public class Presenter {
                 choices.add("S");
                 choices.add("R");
                 choices.add("U");
+                choices.add("M");
+                choices.add("A");
                 choices.add("F");
                 choices.add("B");
                 break;

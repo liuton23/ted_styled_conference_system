@@ -1,4 +1,4 @@
-package Entities;
+package UseCases;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -17,7 +17,7 @@ public class MessageListener implements PropertyChangeListener {
                 evt.getPropertyName() + " of " + evt.getSource() + " for " + this.changer);
 
         System.out.println(
-                evt.getOldValue() + " has changed to " + evt.getNewValue() + ". ");
+                "This message has been marked as " + evt.getNewValue() + " for" + this.changer);
 
         System.out.println();
     }

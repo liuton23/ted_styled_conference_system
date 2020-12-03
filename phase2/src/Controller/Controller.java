@@ -88,7 +88,8 @@ public class Controller {
                     signUpSystem.eventActivity(username);
                     break;
                 case "I"://View Itineraries
-                    getItinerary(userManager, username);
+                    Itinerary itinerary = new Itinerary(userManager,presenter);
+                    itinerary.getItinerary(username);
                     break;
                 case "S"://Schedule activities
                     ScheduleSystem scheduleSystem  = new ScheduleSystem(eventManager,userManager, roomManager);
@@ -101,25 +102,6 @@ public class Controller {
                     loggedin = false;
                     break;
             }
-        }
-    }
-
-    /**
-     * Displays a schedule of all the events <code>Attendee</code> with username <code>user</code> is attending.
-     * @param userManager gets the schedule.
-     * @param user username of <code>Attendee</code> to which the schedule belongs.
-     */
-    private void getItinerary(UserManager userManager, String user){
-        Optional<User> obj = userManager.usernameToUserObject(user);
-        User userObj = obj.get();
-        if (userManager.checkIsAttendee(userObj)){
-            //Speaker sp = (Speaker) attendee;
-            //presenter.displaySchedule(attendeeManager.getSpeakingList(sp), "speakItinerary");
-            //presenter.displaySchedule(attendeeManager.getItinerary(sp), "itinerary");
-            presenter.displaySchedule(userManager.getItinerary((AttendAble) userObj), "itinerary");
-        } //else presenter.displaySchedule(attendeeManager.getItinerary(attendee), "itinerary");
-        if (userManager.checkIsSpeaker(userObj)){
-            presenter.displaySchedule(userManager.getSpeakingList((TalkAble) userObj), "speakItinerary");
         }
     }
 
@@ -293,5 +275,4 @@ public class Controller {
             e.printStackTrace();
         }
     }
-
 }

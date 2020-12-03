@@ -280,6 +280,10 @@ public class MessageSystem extends Controller {
                         messagePresenter.generalPrintHelperForMS("printNoRecForU");
                     } else messagePresenter.displayListOfMessage(messagesU);
                     break;
+                case "M":
+                    markAsUnread(username);
+                case "A":
+                    archiveMessage(username);
                 case "F":
                     viewFrom(username);
                     break;
@@ -348,50 +352,30 @@ public class MessageSystem extends Controller {
         }
     }
 
-
-
-
-
-/* Test will be moved to test file
-    public static void main(String[] args){
-        AttendeeManager am = new AttendeeManager();
-        MessageManager mm = new MessageManager();
-        EventManager em = new EventManager();
-        LoginSystem lgs = new LoginSystem(am);
-        MessageSystem ms = new MessageSystem(mm,am,em);
-        lgs.registerUser("liuton23","12345kji",false);
-        lgs.registerUser("ritawon","ilovewon",false);
-        lgs.registerUser("steve","3456fw2",true);
-        am.createSpeaker("lily","jhienc");
-        am.createSpeaker("james","iplayallday");
-        RoomManager rm = new RoomManager();
-        ScheduleSystem sls = new ScheduleSystem(em, am, rm);
-        sls.addRoom(1,2);
-        sls.scheduleEvent("cv workshop","lily",2020, "NOVEMBER",
-                20,14,30,1);
-        SignUpSystem sus = new SignUpSystem(am, em, rm);
-        sus.signUpEvent("ritawon",1);
-        sus.signUpEvent("liuton23",1);
-        sls.scheduleEvent("Harry Potter Fan Conference", "james",2020,"DECEMBER",10,
-                14,0,1);
-        System.out.println(sus.viewAllEvents());
-        sus.signUpEvent("ritawon",2);
-        ms.messageAttendee("ritawon","liuton23","See u at LCBO!");
-        ArrayList<String> evs = new ArrayList<String>();
-        evs.add("cv workshop");
-        System.out.println(ms.messageEventAttendees(evs,
-                "lily","The meeting is gonna be hold online!"));
-        System.out.println(ms.messageAttendee("liuton23","ritawon","I'll bring some coffee:)!"));
-        System.out.println(ms.messageAllSpeakers("steve",
-                "I am looking for an experienced speaker, please DM me!"));
-        System.out.println(ms.messageAllAttendees("steve","System will be down tmrw at 5:00pm!"));
-
-        evs.add("Harry Potter Fan Conference");
-        System.out.println(ms.messageEventAttendees(evs,"james","Don't be late!"));
-        System.out.println(ms.viewReceivedMessage("ritawon"));
-        System.out.println(ms.messageAllSpeakers("liuton23", "lol"));
+    private void markAsUnread(String username){
+        Scanner obj = new Scanner(System.in);
+        messagePresenter.generalPrintHelperForMS("inputMessageNum");
+        String messageNum = obj.nextLine();
+        Optional<Message> obj1 = messageManager.numToMessageObject(messageNum);
+        if (!obj1.isPresent()){
+            messagePresenter.generalPrintHelperForMS("noSuchMessageNum");
+        } else {
+            Message obj2 = obj1.get();
+            messageManager.markUnread(obj2,username);
+        }
     }
 
- */
+    private void archiveMessage(String username){
+        Scanner obj = new Scanner(System.in);
+        messagePresenter.generalPrintHelperForMS("inputMessageNum");
+        String messageNum = obj.nextLine();
+        Optional<Message> obj1 = messageManager.numToMessageObject(messageNum);
+        if (!obj1.isPresent()){
+            messagePresenter.generalPrintHelperForMS("noSuchMessageNum");
+        } else {
+            Message obj2 = obj1.get();
+            messageManager.markArchived(obj2,username);
+        }
+    }
 
 }

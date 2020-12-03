@@ -1,7 +1,6 @@
 package UseCases;
 
 import Entities.Message;
-import Entities.MessageListener;
 import Entities.User;
 import Entities.UserFactory.UserType;
 
@@ -104,7 +103,7 @@ public class MessageManager implements Serializable {
         for (Message m : allMessagesObj){
                 allMessages.add(m.getMessageNumber() + ". From " + m.getSender() + ": " + m.getText() + " @ " +
                         m.getMessageTime().toString());
-                m.setRead(recipient);
+                m.setRead(recipient,true);
             }
         return allMessages;
     }
@@ -126,7 +125,7 @@ public class MessageManager implements Serializable {
             if (!m.getRead(recipient)) {
                 allMessages.add(m.getMessageNumber() + ". From " + m.getSender() + ": " + m.getText() + " @ " +
                         m.getMessageTime().toString());
-                m.setRead(recipient);
+                m.setRead(recipient, true);
             }
         }
         return allMessages;
@@ -144,7 +143,7 @@ public class MessageManager implements Serializable {
         for (Message m : messages){
             if (m.getSender().equals(sender) && m.getRecipients().contains(recipient)){
                 allMessages.add(m.getMessageNumber() + ": " + m.getText() + " @ " + m.getMessageTime().toString());
-                m.setRead(recipient);
+                m.setRead(recipient,true);
             }
         }
         return allMessages;
@@ -153,14 +152,17 @@ public class MessageManager implements Serializable {
     public void markUnread(Message m, String changer){
         // precondition: the changer must be in the recipient list of this message.
         PropertyChangeListener messageListener = new MessageListener(changer);
-        m.addObserver(messageListener);
-        m.markUnread(changer);
+        MessageUpdate messageUpdate = new MessageUpdate(m);
+        messageUpdate.addObserver(messageListener);
+        messageUpdate.markUnread(changer);
     }
 
     public void markArchived(Message m, String changer){
+        // precondition: the changer must be in the recipient list of this message.
         PropertyChangeListener messageListener = new MessageListener(changer);
-        m.addObserver(messageListener);
-        m.markArchive(changer);
+        MessageUpdate messageUpdate = new MessageUpdate(m);
+        messageUpdate.addObserver(messageListener);
+        messageUpdate.markArchive(changer);
     }
 
 
@@ -234,7 +236,7 @@ public class MessageManager implements Serializable {
         Message meeting = mas.createMessage(att,"lisa231","meeting starts in 10mins!!");
         mas.reply(meeting,"ritaishannie","Got it!");
         System.out.println(mas.getReceivedBy("ritaishannie"));
-        meeting.setRead("ritaishannie");
+        meeting.setRead("ritaishannie", true);
         mas.markUnread(meeting, "ritaishannie");
         mas.markArchived(meeting, "ritaishannie");
         System.out.println(mas.getSendBy("lisa231"));

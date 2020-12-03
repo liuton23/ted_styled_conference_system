@@ -1,4 +1,4 @@
-package Controller.Activities;
+package Controller;
 
 import Entities.UserFactory.AttendAble;
 import Entities.UserFactory.TalkAble;

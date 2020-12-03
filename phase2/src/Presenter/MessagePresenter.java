@@ -28,6 +28,12 @@ public class MessagePresenter {
             case "printNoRecForU":
                 System.out.println("There are no received messages for you");
                 break;
+            case "inputMessageNum":
+                System.out.println("Please input a message number");
+                break;
+            case "noSuchMessageNum":
+                System.out.println("There's no such message corresponding to this message number");
+                break;
         }
     }
 
