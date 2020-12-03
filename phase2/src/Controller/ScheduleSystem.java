@@ -216,9 +216,9 @@ public class ScheduleSystem extends Controller{
                     presenter.displayAllEvents(events, "speaker");
                     presenter.displayMessages("requestRoom");
                     index = getIntInput();
-                    presenter.displayMessages("requestSpeaker");
-                    // NEED TO ADD A REQUEST FOR THE OLD SPEAKER (vs the new speaker)
+                    presenter.displayMessages("requestNewSpeaker");
                     String newSpeaker = input.nextLine();
+                    presenter.displayMessages("requestOldSpeaker");
                     String oldSpeaker = input.nextLine();
                     String eventName = events.get(index - 1).getTitle();
                     int message = changeSpeaker(eventName,newSpeaker, oldSpeaker);
@@ -243,6 +243,14 @@ public class ScheduleSystem extends Controller{
         String speaker = input.nextLine();
         ArrayList<String> speakers = new ArrayList<String>();
         speakers.add(speaker);
+        String additionalInput = "Yes";
+        while (!additionalInput.equals("No")){
+            presenter.displayMessages("requestAdditionalSpeaker");
+            additionalInput = input.nextLine();
+            if(!additionalInput.equals("No")){
+                speakers.add(additionalInput);
+            }
+        }
         presenter.displayMessages("requestYear");
         int year = getIntInput();
         presenter.displayMessages("requestMonth"); //***********
@@ -301,7 +309,11 @@ public class ScheduleSystem extends Controller{
         return in;
     }
 
-//for PHASE 2
+    /**
+     * @param eventName Name of the event to be cancelled.
+     * @return an integer value indicating success of this method, (0) if their is no such event in system and (1) for
+     * successful completion.
+     */
     public int cancelEvent(String eventName) {
         if (!eventManager.nameToEvent(eventName).isPresent()) {
             // event name does not correspond to an event.

@@ -326,6 +326,15 @@ public class Presenter {
             case "requestSpeaker":
                 System.out.println("Enter speaker username:");
                 break;
+            case "requestNewSpeaker":
+                System.out.println("Enter username of the new speaker:");
+                break;
+            case "requestOldSpeaker":
+                System.out.println("Enter username of the speaker to be changed:");
+                break;
+            case "requestAdditionalSpeaker":
+                System.out.println("If you would like to add an additional speaker input their username-- otherwise type 'No'");
+                break;
             case "requestYear":
                 System.out.println("Enter starting year of the event:");
                 break;
