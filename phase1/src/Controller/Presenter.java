@@ -106,6 +106,7 @@ public class Presenter {
         ArrayList<String> options = new ArrayList<>();
         options.add("(M)essage users");
         options.add("(V)iew messages");
+        options.add("(A)dd email");
         options.add("(B)ack");
         prompt(options);
     }
@@ -226,18 +227,19 @@ public class Presenter {
                 choices.add("M");
                 choices.add("E");
                 choices.add("I");
-                choices.add(("B"));
+                choices.add("B");
                 break;
             case 4:
                 choices.add("S");
                 choices.add("A");
                 choices.add("C");
-                choices.add(("B"));
+                choices.add("B");
                 break;
             case 5:
                 choices.add("M");
                 choices.add("V");
-                choices.add(("B"));
+                choices.add("A");
+                choices.add("B");
                 break;
             case 6:
                 choices.add("U");
@@ -253,7 +255,7 @@ public class Presenter {
                 choices.add("V");
                 choices.add("S");
                 choices.add("D");
-                choices.add(("B"));
+                choices.add("B");
                 break;
             case 9:
                 choices.add("T");
@@ -370,6 +372,13 @@ public class Presenter {
             case "enterSpeakerPswd":
                 System.out.println("Enter Speaker Password:");
                 break;
+            case "enterEmail":
+                System.out.println("Enter email or enter \"B\" to go back:");
+                break;
+            case "yourEmail":
+                System.out.println("You already have an email associated with this account.");
+            case "takenEmail":
+                System.out.println("There is another account associated with this email.");
         }
     }
 

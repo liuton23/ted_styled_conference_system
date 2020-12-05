@@ -210,7 +210,7 @@ public class AttendeeManager implements Serializable {
      * @return list of attendees who will attend the event.
      */
     public ArrayList<Attendee> eventToAttendees(Event event){
-        ArrayList<Attendee> list = new ArrayList<Attendee>();
+        ArrayList<Attendee> list = new ArrayList<>();
         String title = event.getTitle();
         for (Attendee a: attendeeList){
             if (a.getItinerary().contains(title)){
@@ -218,6 +218,31 @@ public class AttendeeManager implements Serializable {
             }
         }
         return list;
+    }
+
+    public short checkValidEmail(String username, String email){
+        for(Attendee attendee: attendeeList){
+            if(attendee.getUsername().equals(username) && !attendee.getEmail().isEmpty()){
+                return 0;
+            }
+            if(attendee.getEmail().equals(email)){
+                return -1;
+            }
+        }
+        for(Attendee attendee: speakerList){
+            if(attendee.getUsername().equals(username) && !attendee.getEmail().isEmpty()){
+                return 0;
+            }
+            if(attendee.getEmail().equals(email)){
+                return -1;
+            }
+        }
+        return 1;
+    }
+
+    public void setAttendeeEmail(String username, String email){
+        Optional<Attendee> attendee = usernameToAttendeeObject(username);
+        attendee.ifPresent(value -> value.setEmail(email));
     }
 
     /*

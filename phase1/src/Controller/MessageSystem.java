@@ -9,13 +9,12 @@ import UseCases.MessageManager;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.Properties;
+import java.util.*;
+
 import UseCases.RoomManager;
 
 import javax.swing.text.html.Option;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -26,6 +25,7 @@ public class MessageSystem {
     MessageManager messageManager;
     AttendeeManager attendeeManager;
     EventManager eventManager;
+    Presenter presenter;
     Session session;
     String email;
 
@@ -40,6 +40,7 @@ public class MessageSystem {
         this.messageManager = mm;
         this.attendeeManager = am;
         this.eventManager = em;
+        this.presenter = new Presenter();
         initEmail();
     }
 
@@ -74,6 +75,29 @@ public class MessageSystem {
         }
     }
 
+    public void addEmail(String username){
+        Scanner input = new Scanner(System.in);
+        boolean invInput;
+        do {
+            invInput = true;
+            presenter.displayMessages("enterEmail");
+            String email = input.nextLine();
+            if(email.toUpperCase().equals("BACK") || email.toUpperCase().equals("B")){
+                break;
+            }
+            if(!email.matches("\\w+@\\w+.com}")){
+                presenter.invalidInput();
+            }else if(attendeeManager.checkValidEmail(username, email) == 0){
+                presenter.displayMessages("yourEmail");
+                break;
+            }else if(attendeeManager.checkValidEmail(username, email) == -1){
+                presenter.displayMessages("takenEmail");
+            }else{
+                attendeeManager.setAttendeeEmail(username, email);
+                invInput = false;
+            }
+        }while(invInput);
+    }
     // General message methods (Suitable for all attendees, speakers, and organizers)
 
     /**

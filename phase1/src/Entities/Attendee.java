@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Attendee implements Serializable {
     private String username;
     private String password;
+    private String email;
     private boolean isOrganizer = false;
     private ArrayList<String> itinerary;
 
@@ -21,6 +22,7 @@ public class Attendee implements Serializable {
         this.username = username;
         this.password = password;
         this.itinerary = new ArrayList<>();
+        this.email = "";
     }
 
     /**
@@ -79,7 +81,13 @@ public class Attendee implements Serializable {
         return itinerary;
     }
 
+    public void setEmail(String email){
+        this.email = email;
+    }
 
+    public String getEmail(){
+        return email;
+    }
 
     /*
     public static void main(String[] args) {

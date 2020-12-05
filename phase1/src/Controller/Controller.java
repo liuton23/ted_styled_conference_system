@@ -213,7 +213,7 @@ public class Controller {
      */
     private int getIntInputInRange(int start, int end) {
         boolean done = false;
-        int in = 0;
+        int in;
         do {
             in = getIntInput();
             if (!(start <= in && in <= end)) {
@@ -232,7 +232,7 @@ public class Controller {
      */
     private int getIntInputGreaterThanEqualTo(int start) {
         boolean done = false;
-        int in = 0;
+        int in;
         do {
             in = getIntInput();
             if (!(start <= in)) {
@@ -259,6 +259,9 @@ public class Controller {
                     break;
                 case "V":
                     viewMessages(username, ms);
+                    break;
+                case "A":
+                    ms.addEmail(username);
                     break;
                 case "B":
                     messaging = false;
