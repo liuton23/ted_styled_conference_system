@@ -12,9 +12,13 @@ public class BasicMenu2 extends BasicMenu1{
     }
 
     public ArrayList<String> getAllChoices(){
-        ArrayList<String> choices = super.getAllChoices();
+        ArrayList<String> choices = new ArrayList<>();
+        choices.add("M");
+        choices.add("E");
+        choices.add("I");
         choices.add("C");
         choices.add("S");
+        choices.add(("B"));
         return choices;
     }
 }

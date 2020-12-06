@@ -3,6 +3,7 @@ import Controller.PromptBuilder.*;
 import Entities.UserFactory.UserType;
 import UseCases.UserManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -102,7 +103,8 @@ public class LoginSystem extends Controller {
         presenter.printAreUAOrg();
         PromptBuilder promptBuilder = new PromptBuilder();
         Prompt booleanPrompt = promptBuilder.buildPrompt(presenter, PromptType.booleanPrompt);
-        boolean chosen = booleanPrompt.booleanAsk();
+        try {
+            boolean chosen = booleanPrompt.booleanAsk();
         UserType type;
         if (chosen) {
             type = UserType.ORGANIZER;
@@ -114,7 +116,9 @@ public class LoginSystem extends Controller {
         } else {
             presenter.printRegisterFailMessage();
         }
-
+        } catch (IOException e){
+            exit();
+        }
     }
 
     /**

@@ -1,6 +1,9 @@
 package Controller;
 
 //import Controller.Registration.RegistrationPortal;
+import Controller.PromptBuilder.Prompt;
+import Controller.PromptBuilder.PromptBuilder;
+import Controller.PromptBuilder.PromptType;
 import Entities.*;
 import Entities.Event;
 //import Entities.EventComparators.bySpeakerEventComparator;
@@ -35,29 +38,35 @@ public class Controller {
         init();
         presenter.welcomeMessage();
         boolean running = true;
-        while (running) {
-            String chosen = askMenuInput(1);
+        PromptBuilder promptBuilder = new PromptBuilder();
+        try {
+            Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.loginPrompt);
+            while (running) {
+                String chosen = prompt.ask();
 
-            String username;
-            LoginSystem loginSystem = new LoginSystem(userManager);
+                String username;
+                LoginSystem loginSystem = new LoginSystem(userManager);
 
-            switch (chosen) {
-                case "R":
-                    loginSystem.registerUsers(userManager);
-                    break;
-                case "L":
-                    username = loginSystem.login();
-                    if (!username.isEmpty()) {
-                        accountActivity(username, loginSystem);
-                    }
-                    break;
-                case "P":
-                    resetPassword();
-                    break;
-                case "EXIT": //only used to prevent infinite loop
-                    running = false;
-                    exit();
+                switch (chosen) {
+                    case "R":
+                        loginSystem.registerUsers(userManager);
+                        break;
+                    case "L":
+                        username = loginSystem.login();
+                        if (!username.isEmpty()) {
+                            accountActivity(username, loginSystem);
+                        }
+                        break;
+                    case "P":
+                        resetPassword();
+                        break;
+                    case "EXIT": //only used to prevent infinite loop
+                        running = false;
+                        exit();
+                }
             }
+        } catch (IOException e){
+            exit();
         }
     }
 
@@ -74,37 +83,44 @@ public class Controller {
         //boolean isSpeaker = userManager.checkIsSpeaker(user);
         //boolean hasVipAccess = userManager.hasVIPAccess(user);
         while (loggedin) {
+            try {
+                String chosen;
+                PromptBuilder promptBuilder = new PromptBuilder();
+                if (isOrg){
+                    Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.basicMenu2);
+                    chosen = prompt.ask();
 
-            String chosen;
-            if (isOrg){
-                chosen = askMenuInput(3);
-            }else{
-                chosen = askMenuInput(2);
-            }
+                }else{
+                    Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.basicMenu1);
+                    chosen = prompt.ask();
+                }
 
-            switch (chosen) {
-                case "M"://Messaging
-                    MessageSystem messageSystem = new MessageSystem(messageManager,userManager,eventManager);
-                    messageSystem.messageActivity(username);
-                    break;
-                case "E"://View events
-                    SignUpSystem signUpSystem = new SignUpSystem(userManager, eventManager, roomManager);
-                    signUpSystem.eventActivity(username);
-                    break;
-                case "I"://View Itineraries
-                    Itinerary itinerary = new Itinerary(userManager,presenter);
-                    itinerary.getItinerary(username);
-                    break;
-                case "S"://Schedule activities
-                    ScheduleSystem scheduleSystem  = new ScheduleSystem(eventManager,userManager, roomManager);
-                    scheduleSystem.scheduleActivity();
-                    break;
-                case "C"://Create accounts
-                    loginSystem.createAccounts();
-                    break;
-                case "B":
-                    loggedin = false;
-                    break;
+                switch (chosen) {
+                    case "M"://Messaging
+                        MessageSystem messageSystem = new MessageSystem(messageManager,userManager,eventManager);
+                        messageSystem.messageActivity(username);
+                        break;
+                    case "E"://View events
+                        SignUpSystem signUpSystem = new SignUpSystem(userManager, eventManager, roomManager);
+                        signUpSystem.eventActivity(username);
+                        break;
+                    case "I"://View Itineraries
+                        Itinerary itinerary = new Itinerary(userManager,presenter);
+                        itinerary.getItinerary(username);
+                        break;
+                    case "S"://Schedule activities
+                        ScheduleSystem scheduleSystem  = new ScheduleSystem(eventManager,userManager, roomManager);
+                        scheduleSystem.scheduleActivity();
+                        break;
+                    case "C"://Create accounts
+                        loginSystem.createAccounts();
+                        break;
+                    case "B":
+                        loggedin = false;
+                        break;
+                }
+            } catch (IOException e){
+                exit();
             }
         }
     }
