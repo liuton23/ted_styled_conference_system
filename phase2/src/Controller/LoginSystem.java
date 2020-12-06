@@ -1,4 +1,5 @@
 package Controller;
+import Controller.PromptBuilder.*;
 import Entities.UserFactory.UserType;
 import UseCases.UserManager;
 
@@ -99,7 +100,9 @@ public class LoginSystem extends Controller {
         presenter.printPasswordMessage();
         String password = obj1.nextLine();
         presenter.printAreUAOrg();
-        boolean chosen = askBooleanInput();
+        PromptBuilder promptBuilder = new PromptBuilder();
+        Prompt booleanPrompt = promptBuilder.buildPrompt(presenter, PromptType.booleanPrompt);
+        boolean chosen = booleanPrompt.booleanAsk();
         UserType type;
         if (chosen) {
             type = UserType.ORGANIZER;
@@ -135,7 +138,7 @@ public class LoginSystem extends Controller {
         String username = obj1.nextLine();
         presenter.printPasswordMessage();//"Enter your password"
         String password = obj1.nextLine();
-        presenter.printSelectUserType();
+        //presenter.printSelectUserType();
         String chosen = askMenuInput(16);
         UserType type = null;
         switch (chosen) {

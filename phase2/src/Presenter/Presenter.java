@@ -226,6 +226,7 @@ public class Presenter {
         options.add("Organizer account");
         options.add("Speaker account");
         options.add("VIP account");
+        prompt(options);
     }
 
     /**
