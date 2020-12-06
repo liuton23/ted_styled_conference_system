@@ -82,7 +82,7 @@ public class Presenter {
         options.add("(E)vents");
         options.add("(I)tinerary");
         options.add("(S)chedule events");
-        options.add("(C)reate speaker account");
+        options.add("(C)reate user account");
         options.add("(B)ack");
         prompt(options);
     }
@@ -208,6 +208,14 @@ public class Presenter {
         prompt(options);
     }
 
+    public void userTypeMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Attendee account");
+        options.add("Organizer account");
+        options.add("Speaker account");
+        options.add("VIP account");
+    }
+
     /**
      * Chooses which options are valid input options for a menu given <code>menu_id</code>.
      * @param menu_id determines which menu choices are needed.
@@ -301,6 +309,11 @@ public class Presenter {
                 choices.add("F");
                 choices.add("NO");
                 choices.add("FALSE");
+            case 16: //user type options for organizers
+                choices.add("A");//Attendee
+                choices.add("O");//Organizer
+                choices.add("S");//Speaker
+                choices.add("V");//VIP
         }
         return choices;
     }
@@ -506,6 +519,13 @@ public class Presenter {
      */
     public void printAreUAOrg(){
         System.out.println("Are you an organizer?");
+    }
+
+    /**
+     * Displays that "Are u an organizer".
+     */
+    public void printSelectUserType(){
+        System.out.println("Select (A)ttendee, (O)rganizer, (S)peaker, (V)IP");
     }
 
     /**
