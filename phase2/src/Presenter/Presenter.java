@@ -59,6 +59,7 @@ public class Presenter {
         ArrayList<String> options = new ArrayList<>();
         options.add("(L)ogin");
         options.add("(R)egister");
+        options.add("(P)assword Reset");
         prompt(options);
     }
 
@@ -242,6 +243,7 @@ public class Presenter {
             case 1:
                 choices.add("L");
                 choices.add("R");
+                choices.add("P");
                 break;
             case 3:
                 choices.add("C");

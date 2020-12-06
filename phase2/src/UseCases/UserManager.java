@@ -56,7 +56,7 @@ public class UserManager implements Serializable {
         }
         return newUser;
     }
-
+    /*
     /**
      * Method that creates an instance of Attendee and stores it in an instance of AttendeeManager
      * @param username the new speaker account login username.
@@ -270,6 +270,29 @@ public class UserManager implements Serializable {
         return list;
     }
 
+    public short checkValidEmail(String username, String email){
+        for(User user: masterList){
+            if(user.getUsername().equals(username) && !user.getEmail().isEmpty()){
+                return 0;
+            }
+            if(user.getEmail().equals(email)){
+                return -1;
+            }
+        }
+        return 1;
+    }
+
+    public void setUserEmail(String username, String email){
+        Optional<User> user = usernameToUserObject(username);
+        user.ifPresent(value -> value.setEmail(email));
+    }
+
+    public void setAttendeePassword(String username, String password){
+        Optional<User> user = usernameToUserObject(username);
+        if(user.isPresent()){
+            user.get().setPassword(password);
+        }
+    }
     /*
 
     public static void main(String[] args) {
