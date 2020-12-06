@@ -34,6 +34,11 @@ public class MessagePresenter {
             case "noSuchMessageNum":
                 System.out.println("There's no such message corresponding to this message number");
                 break;
+            case "cantMark":
+                System.out.println("You can not mark a message you did not send or received");
+                break;
+            case "cantEdit":
+                System.out.println("You can not edit a message you did not send");
         }
     }
 
@@ -138,6 +143,11 @@ public class MessagePresenter {
         for (String m: messages) {
             System.out.println(m);
         }
+    }
+
+    public void displayOriginalMessage(String text){
+        System.out.println("Your Original Message is: {" + text + "}.");
+        System.out.println("Please enter your new message:");
     }
 
 }

@@ -3,6 +3,9 @@ package UseCases;
 import Entities.Message;
 import Entities.User;
 import Entities.UserFactory.UserType;
+import UseCases.MessageObserver.MarkType;
+import UseCases.MessageObserver.MessageListener;
+import UseCases.MessageObserver.MessageUpdate;
 
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
@@ -85,8 +88,8 @@ public class MessageManager implements Serializable {
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : messages){
             if (m.getSender().equals(sender)){
-                allMessages.add(m.getMessageNumber() + ". To " + recipientsBuilder(m.getRecipients()) + ": " + m.getText() +
-                        " @ " + m.getMessageTime().toString());
+                allMessages.add(m.getMessageNumber() + ": To " + recipientsBuilder(m.getRecipients()) + " {" + m.getText() +
+                        "} @ " + m.getMessageTime().toString());
             }
         }
         return allMessages;
@@ -101,7 +104,7 @@ public class MessageManager implements Serializable {
         ArrayList<Message> allMessagesObj = getAllReceivedBy(recipient);
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : allMessagesObj){
-                allMessages.add(m.getMessageNumber() + ". From " + m.getSender() + ": " + m.getText() + " @ " +
+                allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " {" + m.getText() + "} @ " +
                         m.getMessageTime().toString());
                 m.setRead(recipient,true);
             }
@@ -123,7 +126,7 @@ public class MessageManager implements Serializable {
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : allMessagesObj) {
             if (!m.getRead(recipient)) {
-                allMessages.add(m.getMessageNumber() + ". From " + m.getSender() + ": " + m.getText() + " @ " +
+                allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " {" + m.getText() + "} @ " +
                         m.getMessageTime().toString());
                 m.setRead(recipient, true);
             }
@@ -142,27 +145,50 @@ public class MessageManager implements Serializable {
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : messages){
             if (m.getSender().equals(sender) && m.getRecipients().contains(recipient)){
-                allMessages.add(m.getMessageNumber() + ": " + m.getText() + " @ " + m.getMessageTime().toString());
+                allMessages.add(m.getMessageNumber() + ": {" + m.getText() + "} @ " + m.getMessageTime().toString());
                 m.setRead(recipient,true);
             }
         }
         return allMessages;
     }
 
-    public void markUnread(Message m, String changer){
+    public void markAs(Message m, String changer, MarkType type){
         // precondition: the changer must be in the recipient list of this message.
         PropertyChangeListener messageListener = new MessageListener(changer);
         MessageUpdate messageUpdate = new MessageUpdate(m);
         messageUpdate.addObserver(messageListener);
-        messageUpdate.markUnread(changer);
+        switch (type){
+            case UNREAD:
+                m.setRead(changer,false);
+                messageUpdate.markUnread(changer);
+                break;
+            case ARCHIVED:
+                m.setArchived(changer,true);
+                messageUpdate.markArchive(changer);
+                break;
+        }
+        messageUpdate.removeObserver(messageListener);
     }
 
-    public void markArchived(Message m, String changer){
-        // precondition: the changer must be in the recipient list of this message.
-        PropertyChangeListener messageListener = new MessageListener(changer);
+    public void editMessage(Message m, String newText){
+        PropertyChangeListener messageListener = new MessageListener(m.getSender());
         MessageUpdate messageUpdate = new MessageUpdate(m);
         messageUpdate.addObserver(messageListener);
-        messageUpdate.markArchive(changer);
+        m.setText(newText);
+        m.reset();
+        messageUpdate.editMessage(m.getSender(),newText);
+        messageUpdate.removeObserver(messageListener);
+    }
+
+    public ArrayList<String> getSenderAndRecipients(Message m){
+        ArrayList<String> combined = new ArrayList<String>();
+        combined.add(m.getSender()); // at index 0, is the sender of this message
+        combined.addAll(m.getRecipients());
+        return combined;
+    }
+
+    public String getContent(Message m){
+        return m.getText();
     }
 
 
@@ -236,11 +262,12 @@ public class MessageManager implements Serializable {
         Message meeting = mas.createMessage(att,"lisa231","meeting starts in 10mins!!");
         mas.reply(meeting,"ritaishannie","Got it!");
         System.out.println(mas.getReceivedBy("ritaishannie"));
-        meeting.setRead("ritaishannie", true);
-        mas.markUnread(meeting, "ritaishannie");
-        mas.markArchived(meeting, "ritaishannie");
+        m.setRead("iamjosh", true);
+        mas.markAs(m, "iamjosh",MarkType.UNREAD);
+        mas.markAs(meeting, "ritaishannie",MarkType.ARCHIVED);
+        mas.editMessage(m,"I am here");
+        System.out.println(m.getRead("iamjosh"));
         System.out.println(mas.getSendBy("lisa231"));
         System.out.println(mas.getAllMessagesFrom("ritaishannie","iamjosh"));
     }
-
 }

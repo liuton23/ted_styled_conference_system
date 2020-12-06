@@ -1,6 +1,7 @@
-package UseCases;
+package UseCases.MessageObserver;
 
 import Entities.Message;
+import sun.management.jmxremote.ConnectorBootstrap;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -22,10 +23,8 @@ public class MessageUpdate {
 
 
     public void addObserver(PropertyChangeListener observer) {
-        observable.addPropertyChangeListener("read status", observer);
-        observable.addPropertyChangeListener("archive status", observer);
+        observable.addPropertyChangeListener(observer);
     }
-
 
     /*
      * Remove an existing observer from the list of observers.
@@ -52,7 +51,6 @@ public class MessageUpdate {
         message.setRead(recipient, false);
         PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "read status", oldRead, newRead);
         notifyObservers (newEvent);
-
     }
 
     public void markArchive(String changer) {
@@ -60,6 +58,14 @@ public class MessageUpdate {
         String newRead = "archived";
         message.setArchived(changer,true);
         PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "archive status", oldRead, newRead);
+        notifyObservers (newEvent);
+    }
+
+    public void editMessage(String sender, String newText){
+        String oldMessage = message.getText();
+        message.setText(newText);
+        PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "message content",
+                oldMessage, newText);
         notifyObservers (newEvent);
     }
 }
