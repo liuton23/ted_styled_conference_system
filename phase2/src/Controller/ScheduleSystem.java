@@ -5,6 +5,7 @@ import Entities.*;
 import Entities.Event;
 import Entities.UserFactory.AttendAble;
 import Entities.UserFactory.TalkAble;
+import Presenter.SchedulePresenter;
 import UseCases.EventManager;
 import UseCases.UserManager;
 import UseCases.RoomManager;
@@ -24,6 +25,9 @@ public class ScheduleSystem extends Controller{
     private UserManager userManager;// = new UserManager();
     private RoomManager roomManager;// = new RoomManager();
 
+    //Private?
+    public SchedulePresenter schedulePresenter = new SchedulePresenter();
+
     /**
      * Constructs an instance of ScheduleSystem with the provided EventManger, UserManager, and RoomManager.
      * @param eventManager the EventManager being manipulated.
@@ -37,10 +41,9 @@ public class ScheduleSystem extends Controller{
     }
 
     /**
-     * This method schedules an event if all necessary conditions are satisfied and returns an integer representing
-     * a successful event creation or a specific error message.
+     * This method checks if creating this SpeakerlessEvent would violate a rule of the TechConference. It returns an integer value
+     * signifying if this event is allowed to be created or a value signifying why it shouldn't be.
      * @param title the desired name for the event to be created.
-     * @param speakerList the arrayList of usernames of the desired speakers for the event to be created.
      * @param year the desired starting year of the event to be created.
      * @param month the desired starting month of the event to be created.
      * @param day the desired starting day of the event to be created.
@@ -48,51 +51,10 @@ public class ScheduleSystem extends Controller{
      * @param minute the desired starting minute of the event to be created.
      * @param room the id of the desired room of the event to be created.
      * @param duration the length of time (in hours) of the event.
-     * @return an integer signaling the successful creation of an event or a relevant error message.
+     * @return an integer signaling that this SpeakerlessEvent may be created or a relevant message signifying why it shouldn't be.
      */
-    public int scheduleSpeakerEvent(String title, ArrayList<String> speakerList, int year, String month, int day, int hour, int minute,
-                                int room, int duration){
-        LocalTime startTime = LocalTime.of(hour, minute);
-        LocalTime endTime = startTime.plusHours(duration);
-        LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
-        LocalDateTime endDateTime = LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute);
-        ArrayList<LocalDateTime> eventTime = new ArrayList<LocalDateTime>();
-        eventTime.add(startDateTime);
-        eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute));
-        Room tempRoom = roomManager.idToRoom(room);
-        if(!roomManager.checkRoomInSystem(room)){
-            //This room is not in the system.
-            return 5;
-        }
-        else if(!roomManager.checkIfRoomAvailable(tempRoom, startDateTime, endDateTime)){
-                //"Room is already booked for this timeslot."
-                return 0 ;
-        }
-        else if(!eventManager.freeTitleCheck(title)){
-            //"This event name has already been taken."
-            return 2;
-        }
-        else {
-            for (String speakerName: speakerList) {
-                if(!userManager.registeredSpeaker(speakerName)){
-                    //the username provided does not belong to a speaker in the system.
-                    return 4;
-                }
-                else if(!eventManager.freeSpeakerCheck(eventTime, speakerName))
-                    return 1;
-            }
-            for (String speakerName: speakerList) {
-                Speaker sp = (Speaker) userManager.usernameToUserObject(speakerName).get();
-                userManager.addEventToSpeakerList((TalkAble) sp, title);
-            }
-            roomManager.book(tempRoom, title, startDateTime, endDateTime);
-            eventManager.createSpeakerEvent(title, speakerList, year, month, day, hour, minute, room, duration);
-            //"Event successfully created."
-            return 3;
-        }
-    }
-    public int scheduleSpeakerlessEvent(String title, int year, String month, int day, int hour, int minute,
-                                    int room, int duration){
+    private int scheduleSpeakerlessEventCheck(String title, int year, String month, int day, int hour, int minute,
+                                             int room, int duration){
         LocalTime startTime = LocalTime.of(hour, minute);
         LocalTime endTime = startTime.plusHours(duration);
         LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
@@ -113,13 +75,121 @@ public class ScheduleSystem extends Controller{
             //"This event name has already been taken."
             return 2;
         }
+        return 3;
+    }
+
+    /**
+     * This method checks if creating this SpeakerEvent would violate a rule of the TechConference. It returns an integer value
+     * signifying if this event is allowed to be created or a value signifying why it shouldn't be.
+     * @param title the desired name for the event to be created.
+     * @param speakerList the arrayList of usernames of the desired speakers for the event to be created.
+     * @param year the desired starting year of the event to be created.
+     * @param month the desired starting month of the event to be created.
+     * @param day the desired starting day of the event to be created.
+     * @param hour the desired starting hour of the event to be created.
+     * @param minute the desired starting minute of the event to be created.
+     * @param room the id of the desired room of the event to be created.
+     * @param duration the length of time (in hours) of the event.
+     * @return an integer signaling that a  SpeakerEvent may be created or a relevant message signifying why it shouldn't be.
+     */
+    private int scheduleSpeakerEventCheck(String title, ArrayList<String> speakerList, int year, String month, int day, int hour, int minute,
+                                         int room, int duration) {
+        LocalTime startTime = LocalTime.of(hour, minute);
+        LocalTime endTime = startTime.plusHours(duration);
+        LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
+        LocalDateTime endDateTime = LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute);
+        ArrayList<LocalDateTime> eventTime = new ArrayList<LocalDateTime>();
+        eventTime.add(startDateTime);
+        eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute));
+        Room tempRoom = roomManager.idToRoom(room);
+        int speakerlessEventCheckValue = scheduleSpeakerlessEventCheck(title, year, month, day, hour, minute, room, duration);
+        if (speakerlessEventCheckValue != 3){
+            return speakerlessEventCheckValue;
+        }
         else {
-            roomManager.book(tempRoom, title, startDateTime, endDateTime);
-            eventManager.createSpeakerlessEvent(title, year, month, day, hour, minute, room, duration);
-            //"Event successfully created."
+            for (String speakerName : speakerList) {
+                if (!userManager.registeredSpeaker(speakerName)) {
+                    //the username provided does not belong to a speaker in the system.
+                    return 4;
+                } else if (!eventManager.freeSpeakerCheck(eventTime, speakerName))
+                    return 1;
+            }
+            //"Event is ready to be created."
             return 3;
         }
     }
+
+    /**
+     * This method schedules a SpeakerEvent if all necessary conditions are satisfied and returns an integer representing
+     * a successful event creation or a specific error message.
+     * @param title the desired name for the event to be created.
+     * @param speakerList the arrayList of usernames of the desired speakers for the event to be created.
+     * @param year the desired starting year of the event to be created.
+     * @param month the desired starting month of the event to be created.
+     * @param day the desired starting day of the event to be created.
+     * @param hour the desired starting hour of the event to be created.
+     * @param minute the desired starting minute of the event to be created.
+     * @param room the id of the desired room of the event to be created.
+     * @param duration the length of time (in hours) of the event.
+     * @return an integer signaling the successful creation of an event or a relevant error message.
+     */
+    public int scheduleSpeakerEvent(String title, ArrayList<String> speakerList, int year, String month, int day, int hour, int minute,
+                                int room, int duration){
+        LocalTime startTime = LocalTime.of(hour, minute);
+        LocalTime endTime = startTime.plusHours(duration);
+        LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
+        LocalDateTime endDateTime = LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute);
+        Room tempRoom = roomManager.idToRoom(room);
+        int eventCheckValue = scheduleSpeakerEventCheck(title, speakerList, year, month, day, hour, minute, room, duration);
+        if (eventCheckValue != 3) {
+            return eventCheckValue;
+        }
+        for (String speakerName: speakerList) {
+            Speaker speaker = (Speaker) userManager.usernameToUserObject(speakerName).get();
+            userManager.addEventToSpeakerList((TalkAble) speaker, title);
+        }
+        roomManager.book(tempRoom, title, startDateTime, endDateTime);
+        eventManager.createSpeakerEvent(title, speakerList, year, month, day, hour, minute, room, duration);
+        //"Event successfully created."
+        return 3;
+    }
+
+    // TODO: add helper to deal with the localtime repetitive code
+    /**
+     * This method schedules a VIPSpeakerEvent if all necessary conditions are satisfied and returns an integer representing
+     * a successful event creation or a specific error message.
+     * @param title the desired name for the event to be created.
+     * @param speakerList the arrayList of usernames of the desired speakers for the event to be created.
+     * @param year the desired starting year of the event to be created.
+     * @param month the desired starting month of the event to be created.
+     * @param day the desired starting day of the event to be created.
+     * @param hour the desired starting hour of the event to be created.
+     * @param minute the desired starting minute of the event to be created.
+     * @param room the id of the desired room of the event to be created.
+     * @param duration the length of time (in hours) of the event.
+     * @return an integer signaling the successful creation of an event or a relevant error message.
+     */
+    public int scheduleVIPSpeakerEvent(String title, ArrayList<String> speakerList, int year, String month, int day, int hour, int minute,
+                                       int room, int duration){
+        LocalTime startTime = LocalTime.of(hour, minute);
+        LocalTime endTime = startTime.plusHours(duration);
+        LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
+        LocalDateTime endDateTime = LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute);
+        Room tempRoom = roomManager.idToRoom(room);
+        int eventCheckValue = scheduleSpeakerEventCheck(title, speakerList, year, month, day, hour, minute, room, duration);
+        if (eventCheckValue != 3) {
+            return eventCheckValue;
+        }
+        for (String speakerName: speakerList) {
+            Speaker speaker = (Speaker) userManager.usernameToUserObject(speakerName).get();
+            userManager.addEventToSpeakerList((TalkAble) speaker, title);
+        }
+        roomManager.book(tempRoom, title, startDateTime, endDateTime);
+        eventManager.createVIPSpeakerEvent(title, speakerList, year, month, day, hour, minute, room, duration);
+        //"Event successfully created."
+        return 3;
+    }
+
 
     /**
      * This method adds a room to the system if the room is not already present in the system.
@@ -194,7 +264,7 @@ public class ScheduleSystem extends Controller{
 
             switch (chosen) {
                 case "S":
-                    scheduleSpeakerEvent();
+                    scheduleEvent();
                     save();
                     break;
                 case "A":
@@ -235,22 +305,10 @@ public class ScheduleSystem extends Controller{
     /**
      * Method for organizers to input new event information.
      */
-    private void scheduleSpeakerEvent(){
+    private void scheduleEvent(){
         Scanner input = new Scanner(System.in);
         presenter.displayMessages("S");
         String title = input.nextLine().trim();
-        presenter.displayMessages("requestSpeaker");
-        String speaker = input.nextLine();
-        ArrayList<String> speakers = new ArrayList<String>();
-        speakers.add(speaker);
-        String additionalInput = "Yes";
-        while (!additionalInput.equals("No")){
-            presenter.displayMessages("requestAdditionalSpeaker");
-            additionalInput = input.nextLine();
-            if(!additionalInput.equals("No")){
-                speakers.add(additionalInput);
-            }
-        }
         presenter.displayMessages("requestYear");
         int year = getIntInput();
         presenter.displayMessages("requestMonth"); //***********
@@ -266,8 +324,45 @@ public class ScheduleSystem extends Controller{
         int duration = getIntInput();
         presenter.displayMessages("requestRoom");
         int roomID = getIntInput();
-        presenter.printScheduleEventMessage(scheduleSpeakerEvent(title, speakers, year, month, day,
-                hour, min, roomID, duration));
+        // input the options etc in controller and presenter
+        presenter.displayMessages("requestEventType");
+        String eventType = input.nextLine();
+        switch (eventType) {
+            case "Speaker Event": {
+                ArrayList<String> speakers = scheduleSpeakerEventHelper();
+                schedulePresenter.printScheduleEventMessage(scheduleSpeakerEvent(title, speakers, year, month, day,
+                        hour, min, roomID, duration));
+                break;
+            }
+            case "VIP Speaker Event": {
+                ArrayList<String> speakers = scheduleSpeakerEventHelper();
+                schedulePresenter.printScheduleEventMessage(scheduleVIPSpeakerEvent(title, speakers, year, month, day,
+                        hour, min, roomID, duration));
+                break;
+            }
+            case "VIP Event":
+                eventManager.createVIPEvent(title, year, month, day, hour, min, roomID, duration);
+                break;
+            default:
+                eventManager.createSpeakerlessEvent(title, year, month, day, hour, min, roomID, duration);
+                break;
+        }
+    }
+    private ArrayList<String> scheduleSpeakerEventHelper(){
+        Scanner input = new Scanner(System.in);
+        presenter.displayMessages("requestSpeaker");
+        String speaker = input.nextLine();
+        ArrayList<String> speakers = new ArrayList<String>();
+        speakers.add(speaker);
+        String additionalInput = "Yes";
+        while (!additionalInput.equals("No")) {
+            presenter.displayMessages("requestAdditionalSpeaker");
+            additionalInput = input.nextLine();
+            if (!additionalInput.equals("No")) {
+                speakers.add(additionalInput);
+            }
+        }
+        return speakers;
     }
 
     /**
