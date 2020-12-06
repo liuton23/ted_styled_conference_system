@@ -88,6 +88,20 @@ public class EventManager implements Serializable {
         speakerlessEvents.put(title, newEvent);
     }
 
+    public void createVIPSpeakerEvent(String title, ArrayList<String> speaker, int year, String month, int day, int hour,
+                                      int minute, int room, int duration){
+        VipSpeakerEvent newEvent = new VipSpeakerEvent(title, speaker, year, month, day, hour, minute, room, duration);
+        masterEventDict.put(title, newEvent);
+        speakerEvents.put(title, newEvent);
+    }
+
+    public void createVIPEvent(String title, int year, String month, int day, int hour,
+                               int minute, int room, int duration){
+        VipEvent newEvent = new VipEvent(title, year, month, day, hour, minute, room, duration);
+        masterEventDict.put(title, newEvent);
+        speakerlessEvents.put(title, newEvent);
+    }
+
     /**
      * This method checks the availability of the speaker whose username is provided.
      * @param eventTime the time the speaker's availability is being checked.
