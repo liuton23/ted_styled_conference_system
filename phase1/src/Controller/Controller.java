@@ -48,6 +48,9 @@ public class Controller {
                         accountActivity(username);
                     }
                     break;
+                case "P":
+                    resetPassword();
+                    break;
                 case "EXIT": //only used to prevent infinite loop
                     running = false;
             }
@@ -261,7 +264,7 @@ public class Controller {
                     viewMessages(username, ms);
                     break;
                 case "A":
-                    ms.addEmail(username);
+                    gateway.addEmail(username);
                     break;
                 case "B":
                     messaging = false;
@@ -605,12 +608,14 @@ public class Controller {
         try {
             listOfObj = gateway.readFromFile(4);
             attendeeManager = (AttendeeManager) listOfObj.get(0);
+            gateway.setAttendeeManager(attendeeManager);
             eventManager = (EventManager) listOfObj.get(1);
             messageManager = (MessageManager) listOfObj.get(2);
             roomManager = (RoomManager) listOfObj.get(3);
         } catch (IOException e) {
             presenter.printNoSaveFile();
             attendeeManager = new AttendeeManager();
+            gateway.setAttendeeManager(attendeeManager);
             eventManager = new EventManager();
             messageManager = new MessageManager();
             roomManager = new RoomManager();
@@ -678,7 +683,49 @@ public class Controller {
         }
 
     }
+    //TODO Fix this method
+    private void resetPassword(){
+        Scanner input = new Scanner(System.in);
+        String username = "";
+        boolean isAttendee = true;
+        do {
+            isAttendee = true;
+            presenter.printUsernameMessage();
+            username = input.nextLine();
+            if(!attendeeManager.usernameToAttendeeObject(username).isPresent()){
+                isAttendee = false;
+                presenter.invalidInput();
+            }
+        }while(!isAttendee);
 
+        Attendee attendee = attendeeManager.usernameToAttendeeObject(username).get();
+
+        if(attendee.getEmail().isEmpty()){
+            System.out.println("No email with this account.");
+            return;
+        }
+        String code = gateway.passwordReset(username);
+        String userCode;
+        boolean correct;
+        do{
+            correct = true;
+            presenter.displayMessages("requestCode");
+            System.out.println("Enter the code that has been sent to your email.");
+            userCode = input.nextLine();
+            if(userCode.toUpperCase().equals("EXIT")){
+                exit();
+            }else if(userCode.toUpperCase().equals("B")){
+                return;
+            }else if(!code.equals(userCode)){
+                correct = false;
+                presenter.invalidInput();
+            }
+        }while(!correct);
+        String password;
+        presenter.printPasswordMessage();
+        password = input.nextLine();
+        attendeeManager.setAttendeePassword(username, password);
+    }
     /**
      * Speaker registration. Cannot choose a username that is already taken.
      */

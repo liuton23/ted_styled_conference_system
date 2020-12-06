@@ -26,8 +26,6 @@ public class MessageSystem {
     AttendeeManager attendeeManager;
     EventManager eventManager;
     Presenter presenter;
-    Session session;
-    String email;
 
     /**
      * Create an instance of MessageSystem
@@ -41,63 +39,9 @@ public class MessageSystem {
         this.attendeeManager = am;
         this.eventManager = em;
         this.presenter = new Presenter();
-        initEmail();
     }
 
-    private void initEmail(){
-        Properties properties = new Properties();
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
-        final String myEmail = "csc207Group0757@gmail.com";
-        this.email = myEmail;
-        final String myPassword = "T2uring07";
-        Authenticator auth = new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(myEmail, myPassword);
-            }
-        };
-        this.session = Session.getDefaultInstance(properties, auth);
-    }
 
-    public void sendEmail(String receiverEmail, String subject, String content){
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(email));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiverEmail));
-            message.setSubject(subject);
-            message.setText(content);
-            Transport.send(message);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addEmail(String username){
-        Scanner input = new Scanner(System.in);
-        boolean invInput;
-        do {
-            invInput = true;
-            presenter.displayMessages("enterEmail");
-            String email = input.nextLine();
-            if(email.toUpperCase().equals("BACK") || email.toUpperCase().equals("B")){
-                break;
-            }
-            if(!email.matches("\\w+@\\w+.com}")){
-                presenter.invalidInput();
-            }else if(attendeeManager.checkValidEmail(username, email) == 0){
-                presenter.displayMessages("yourEmail");
-                break;
-            }else if(attendeeManager.checkValidEmail(username, email) == -1){
-                presenter.displayMessages("takenEmail");
-            }else{
-                attendeeManager.setAttendeeEmail(username, email);
-                invInput = false;
-            }
-        }while(invInput);
-    }
     // General message methods (Suitable for all attendees, speakers, and organizers)
 
     /**

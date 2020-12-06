@@ -83,7 +83,7 @@ public class Presenter {
         options.add("(E)vents");
         options.add("(I)tinerary");
         options.add("(S)chedule events");
-        options.add("(C)reate speaker account");
+        options.add("(C)reate user account");
         options.add("(B)ack");
         prompt(options);
     }
@@ -210,7 +210,7 @@ public class Presenter {
     }
 
     /**
-     * Displays the month options menu.
+     * Displays the event type options menu.
      */
     public void viewEventTypeMenu(){
         ArrayList<String> options = new ArrayList<>();
@@ -220,6 +220,14 @@ public class Presenter {
         options.add("VIP Event");
         prompt(options);
     }
+    public void userTypeMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Attendee account");
+        options.add("Organizer account");
+        options.add("Speaker account");
+        options.add("VIP account");
+    }
+
     /**
      * Chooses which options are valid input options for a menu given <code>menu_id</code>.
      * @param menu_id determines which menu choices are needed.
@@ -313,7 +321,12 @@ public class Presenter {
                 choices.add("F");
                 choices.add("NO");
                 choices.add("FALSE");
-            case 16: // event options
+            case 16: //user type options for organizers
+                choices.add("A");//Attendee
+                choices.add("O");//Organizer
+                choices.add("S");//Speaker
+                choices.add("V");//VIP
+            case 17: // event options
                 choices.add("SPEAKER EVENT");
                 choices.add("VIP SPEAKER EVENT");
                 choices.add("VIP EVENT");
@@ -353,7 +366,6 @@ public class Presenter {
                 System.out.println("Enter username of the speaker to be changed:");
                 break;
             case "requestAdditionalSpeaker":
-                //TODO: did I add this in schedule system?
                 System.out.println("If you would like to add an additional speaker input their username-- otherwise type 'No'");
                 break;
             case "requestYear":
@@ -416,15 +428,6 @@ public class Presenter {
      */
     public void displaySchedule(ArrayList<String> options, String way){
         switch(way){
-            case "time":
-                System.out.println("Sort events by time");
-                break;
-            case "name":
-                System.out.println("Sort events by name");
-                break;
-            case "speaker":
-                System.out.println("Sort events by speaker");
-                break;
             case "itinerary":
                 System.out.println("Your itinerary of event(s) you are attending:");
                 break;
@@ -530,6 +533,13 @@ public class Presenter {
     }
 
     /**
+     * Displays that "Are u an organizer".
+     */
+    public void printSelectUserType(){
+        System.out.println("Select (A)ttendee, (O)rganizer, (S)peaker, (V)IP");
+    }
+
+    /**
      * Displays failed registration message.
      */
     public void printRegisterFailMessage(){
@@ -538,30 +548,34 @@ public class Presenter {
     }
 
     /**
-     * Displays message reflecting whether or not an Attendee was successfully signed up for an event or a message
-     * indicating error.
-     * @param signUpOutput is a boolean value outputted by EventManager.signUp() signalling successful or unsuccessful sign up.
+     * Displays message reflecting whether a speaker was successfully changed.
+     * @param changeSpeakerOutput output of the ScheduleSystem.changeSpeaker() method.
      */
-    public void printSignUpMessage(int signUpOutput){
-        if (signUpOutput == 2){
-            System.out.println("User was successfully signed up.");
-        }
-        else if (signUpOutput == 3) {
-            System.out.println("Event is at capacity: unable to sign up user.");
-        }
-        else if (signUpOutput == 5){
-            System.out.println("User is already signed up for this event.");
-            }
-        else if (signUpOutput == 4){
-            System.out.println("Invalid ID. Please try again.");
-        }
-        else if (signUpOutput == 6) {
-            System.out.println("You cannot attend this event. Please select another event and try again.");
-        }
-        else {
-            System.out.println("There are no such event");
+    public void printChangeSpeakerMessage(int changeSpeakerOutput){
+        switch (changeSpeakerOutput) {
+            case 0:
+                System.out.println("Speaker changed successfully.");
+                break;
+            case 1:
+                System.out.println("Speaker is already booked at this time.");
+                break;
+            case 2:
+                System.out.println("This person is not a speaker.");
+                break;
+            case 3:
+                System.out.println("This user does not exist.");
+                break;
+            case 4:
+                System.out.println("This event name does not correspond to an event in the system.");
+                break;
+            case 5:
+                System.out.println("The username provided does not match a speaker in the system.");
+                break;
         }
     }
+
+
+
 
 
     /**

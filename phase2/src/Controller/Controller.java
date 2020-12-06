@@ -65,10 +65,10 @@ public class Controller {
     private void accountActivity(String username, LoginSystem loginSystem) {
         boolean loggedin = true;
         User user = userManager.usernameToUserObject(username).get();
-        boolean canAttend = userManager.checkIsAttendee(user);
+        //boolean canAttend = userManager.checkIsAttendee(user);
         boolean isOrg = userManager.checkIsOrganizer(user);
-        boolean isSpeaker = userManager.checkIsSpeaker(user);
-        boolean hasVipAccess = userManager.hasVIPAccess(user);
+        //boolean isSpeaker = userManager.checkIsSpeaker(user);
+        //boolean hasVipAccess = userManager.hasVIPAccess(user);
         while (loggedin) {
 
             String chosen;
@@ -96,7 +96,7 @@ public class Controller {
                     scheduleSystem.scheduleActivity();
                     break;
                 case "C"://Create accounts
-                    loginSystem.createSpeakers();
+                    loginSystem.createAccounts();
                     break;
                 case "B":
                     loggedin = false;
@@ -230,10 +230,12 @@ public class Controller {
             case 12:
                 presenter.wishToSendMoreEvent();
                 break;
-            case 16:
+            case 17:
                 presenter.viewEventTypeMenu();
                 break;
-
+            case 16:
+                presenter.userTypeMenu();
+                break;
         }
     }
 

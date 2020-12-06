@@ -1,8 +1,13 @@
 package Controller;
 
+import Entities.Attendee;
+import UseCases.AttendeeManager;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Manages file saving and persistence of information.
@@ -11,6 +16,10 @@ public class Gateway {
 
     private String filepath;
     private File file;
+    private Presenter presenter;
+    private AttendeeManager attendeeManager;
+    Session session;
+    String email;
 
     /**
      * Constructs a gateway path with <code>filepath</code>.
@@ -20,6 +29,8 @@ public class Gateway {
     public Gateway(String filepath){
         this.filepath = filepath;
         this.file = new File(filepath);
+        this.presenter = new Presenter();
+        initEmail();
     }
 
     /**
@@ -62,5 +73,86 @@ public class Gateway {
         return serialized;
     }
 
+    private void initEmail(){
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+        final String myEmail = "csc207Group0757@gmail.com";
+        this.email = myEmail;
+        final String myPassword = "T2uring07";
+        Authenticator auth = new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(myEmail, myPassword);
+            }
+        };
+        this.session = Session.getDefaultInstance(properties, auth);
+    }
 
+    public void sendEmail(String username, String subject, String content) throws MessagingException {
+        Attendee attendee = attendeeManager.usernameToAttendeeObject(username).get();
+        String receiverEmail = attendee.getEmail();
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(email));
+        message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiverEmail));
+        message.setSubject(subject);
+        message.setContent(content, "text/html; charset=utf-8");
+        Transport.send(message);
+    }
+
+    public void addEmail(String username){
+        Scanner input = new Scanner(System.in);
+        boolean invInput;
+        do {
+            invInput = true;
+            presenter.displayMessages("enterEmail");
+            String email = input.nextLine();
+            if(email.toUpperCase().equals("BACK") || email.toUpperCase().equals("B")){
+                return;
+            }else if(email.isEmpty()){
+                attendeeManager.setAttendeeEmail(username, email);
+            }
+            if(!email.matches("[\\w.]+@\\w+(.com)|(.ca)|(.co.uk)}")){
+                presenter.invalidInput();
+            }else if(attendeeManager.checkValidEmail(username, email) == 0){
+                presenter.displayMessages("yourEmail");
+                break;
+            }else if(attendeeManager.checkValidEmail(username, email) == -1){
+                presenter.displayMessages("takenEmail");
+            }else{
+                attendeeManager.setAttendeeEmail(username, email);
+                invInput = false;
+            }
+        }while(invInput);
+        String subject = "CSC207 Tech Conference!";
+        String message = "Your email is now linked with CSC207 Tech Conference account" + username + "\n If you did " +
+                "not do this or would like to unsubscribe to emails, login to CSC 207 Tech Conference go to Messages " +
+                "-> Add email and enter nothing.";
+        try {
+            sendEmail(username, subject, message);
+        }catch (Exception e){
+            presenter.invalidInput();
+        }
+    }
+
+    public String passwordReset(String username){
+        Random random = new Random();
+        int code = random.nextInt(9000) + 1000;
+        String subject = "CSC207 Password Reset Request.";
+        String message = "The account associated with this email:" + username + "has requested a password change." +
+                "If you recognize this account then please enter the code below into the program, otherwise please"+
+                " ignore this message." + "\n\n\n<b>" + code + "</b>";
+        try {
+            sendEmail(username, subject, message);
+        } catch (MessagingException e) {
+        }
+        return Integer.toString(code);
+    }
+
+    public void setAttendeeManager(AttendeeManager attendeeManager){
+        this.attendeeManager = attendeeManager;
+    }
 }

@@ -7,6 +7,7 @@ import javax.activation.*;
 public class EmailSystem {
 
     public static void main(String[] args) {
+        /*
         String host = "smtp.gmail.com";
         final String user = "csc207Group0757@javatpoint.com";//change accordingly
         final String password = "T2uring07";//change accordingly
@@ -43,6 +44,6 @@ public class EmailSystem {
         }
     }
 
-}
+         */
 
- */
+
