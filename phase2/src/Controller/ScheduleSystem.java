@@ -189,7 +189,39 @@ public class ScheduleSystem extends Controller{
         //"Event successfully created."
         return 3;
     }
+    public int scheduleVIPEvent(String title, int year, String month, int day, int hour, int minute,
+                                int room, int duration) {
+        LocalTime startTime = LocalTime.of(hour, minute);
+        LocalTime endTime = startTime.plusHours(duration);
+        LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
+        LocalDateTime endDateTime = LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute);
+        Room tempRoom = roomManager.idToRoom(room);
+        int eventCheckValue = scheduleSpeakerlessEventCheck(title, year, month, day, hour, minute, room, duration);
+        if (eventCheckValue != 3) {
+            return eventCheckValue;
+        }
+        roomManager.book(tempRoom, title, startDateTime, endDateTime);
+        eventManager.createVIPEvent(title, year, month, day, hour, minute, room, duration);
+        //"Event successfully created."
+        return 3;
+    }
 
+    public int scheduleSpeakerlessEvent(String title, int year, String month, int day, int hour, int minute,
+                                int room, int duration) {
+        LocalTime startTime = LocalTime.of(hour, minute);
+        LocalTime endTime = startTime.plusHours(duration);
+        LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
+        LocalDateTime endDateTime = LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute);
+        Room tempRoom = roomManager.idToRoom(room);
+        int eventCheckValue = scheduleSpeakerlessEventCheck(title, year, month, day, hour, minute, room, duration);
+        if (eventCheckValue != 3) {
+            return eventCheckValue;
+        }
+        roomManager.book(tempRoom, title, startDateTime, endDateTime);
+        eventManager.createSpeakerlessEvent(title, year, month, day, hour, minute, room, duration);
+        //"Event successfully created."
+        return 3;
+    }
 
     /**
      * This method adds a room to the system if the room is not already present in the system.
@@ -275,7 +307,7 @@ public class ScheduleSystem extends Controller{
                     roomId = getIntInput();
                     presenter.displayMessages("requestCapacity");
                     roomCapacity = getIntInputGreaterThanEqualTo(1);
-                    presenter.printAddRoomMessage(addRoom(roomId,roomCapacity));
+                    schedulePresenter.printAddRoomMessage(addRoom(roomId,roomCapacity));
                     save();
                     break;
                 case "C":
@@ -292,7 +324,7 @@ public class ScheduleSystem extends Controller{
                     String oldSpeaker = input.nextLine();
                     String eventName = events.get(index - 1).getTitle();
                     int message = changeSpeaker(eventName,newSpeaker, oldSpeaker);
-                    presenter.printChangeSpeakerMessage(message);
+                    schedulePresenter.printChangeSpeakerMessage(message);
                     save();
                     break;
                 case "B":
@@ -319,6 +351,7 @@ public class ScheduleSystem extends Controller{
         presenter.displayMessages("requestHour");
         int hour = getIntInputInRange(0, 23);
         presenter.displayMessages("requestMinute");
+        // TODO: minute input keeps glitching on me...
         int min = getIntInputInRange(0, 59);
         presenter.displayMessages("requestDuration");
         int duration = getIntInput();
@@ -326,28 +359,32 @@ public class ScheduleSystem extends Controller{
         int roomID = getIntInput();
         // input the options etc in controller and presenter
         presenter.displayMessages("requestEventType");
-        String eventType = input.nextLine();
+        String eventType = askMenuInput(16);
         switch (eventType) {
-            case "Speaker Event": {
+            case "SPEAKER EVENT": {
                 ArrayList<String> speakers = scheduleSpeakerEventHelper();
                 schedulePresenter.printScheduleEventMessage(scheduleSpeakerEvent(title, speakers, year, month, day,
                         hour, min, roomID, duration));
                 break;
             }
-            case "VIP Speaker Event": {
+            case "VIP SPEAKER EVENT": {
                 ArrayList<String> speakers = scheduleSpeakerEventHelper();
                 schedulePresenter.printScheduleEventMessage(scheduleVIPSpeakerEvent(title, speakers, year, month, day,
                         hour, min, roomID, duration));
                 break;
             }
-            case "VIP Event":
-                eventManager.createVIPEvent(title, year, month, day, hour, min, roomID, duration);
+            case "VIP EVENT":
+                schedulePresenter.printScheduleEventMessage(scheduleVIPEvent(title, year, month, day,
+                        hour, min, roomID, duration));
+
                 break;
-            default:
-                eventManager.createSpeakerlessEvent(title, year, month, day, hour, min, roomID, duration);
+            case "EVENT":
+                schedulePresenter.printScheduleEventMessage(scheduleSpeakerlessEvent(title, year, month, day,
+                        hour, min, roomID, duration));
                 break;
         }
     }
+
     private ArrayList<String> scheduleSpeakerEventHelper(){
         Scanner input = new Scanner(System.in);
         presenter.displayMessages("requestSpeaker");

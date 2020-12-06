@@ -230,6 +230,10 @@ public class Controller {
             case 12:
                 presenter.wishToSendMoreEvent();
                 break;
+            case 16:
+                presenter.viewEventTypeMenu();
+                break;
+
         }
     }
 
@@ -256,6 +260,7 @@ public class Controller {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }finally {
+            // TODO: add new presenters?
             presenter = new Presenter();
         }
     }

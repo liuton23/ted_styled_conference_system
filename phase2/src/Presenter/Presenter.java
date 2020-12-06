@@ -210,6 +210,17 @@ public class Presenter {
     }
 
     /**
+     * Displays the month options menu.
+     */
+    public void viewEventTypeMenu(){
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Speaker Event");
+        options.add("VIP Speaker Event");
+        options.add("Event");
+        options.add("VIP Event");
+        prompt(options);
+    }
+    /**
      * Chooses which options are valid input options for a menu given <code>menu_id</code>.
      * @param menu_id determines which menu choices are needed.
      * @return list of valid input choices for a menu.
@@ -302,6 +313,11 @@ public class Presenter {
                 choices.add("F");
                 choices.add("NO");
                 choices.add("FALSE");
+            case 16: // event options
+                choices.add("SPEAKER EVENT");
+                choices.add("VIP SPEAKER EVENT");
+                choices.add("VIP EVENT");
+                choices.add("EVENT");
         }
         return choices;
     }
@@ -337,6 +353,7 @@ public class Presenter {
                 System.out.println("Enter username of the speaker to be changed:");
                 break;
             case "requestAdditionalSpeaker":
+                //TODO: did I add this in schedule system?
                 System.out.println("If you would like to add an additional speaker input their username-- otherwise type 'No'");
                 break;
             case "requestYear":
@@ -518,50 +535,6 @@ public class Presenter {
     public void printRegisterFailMessage(){
         System.out.println("Your username or password is invalid.");
         System.out.println("Please check that username or password is non-empty and username is not already taken.");
-    }
-
-    /**
-     * Displays message reflecting whether a speaker was successfully changed.
-     * @param changeSpeakerOutput output of the ScheduleSystem.changeSpeaker() method.
-     */
-    public void printChangeSpeakerMessage(int changeSpeakerOutput){
-        switch (changeSpeakerOutput) {
-            case 0:
-                System.out.println("Speaker changed successfully.");
-                break;
-            case 1:
-                System.out.println("Speaker is already booked at this time.");
-                break;
-            case 2:
-                System.out.println("This person is not a speaker.");
-                break;
-            case 3:
-                System.out.println("This user does not exist.");
-                break;
-            case 4:
-                System.out.println("This event name does not correspond to an event in the system.");
-                break;
-            case 5:
-                System.out.println("The username provided does not match a speaker in the system.");
-                break;
-        }
-    }
-
-
-
-    /**
-     * Displays message reflecting whether a room was successfully added or a message indicating error.
-     * @param addRoomMessage output from the ScheduleSystem.addRoom() method
-     */
-    public void printAddRoomMessage(int addRoomMessage){
-        switch (addRoomMessage){
-            case 0:
-                System.out.println("Room successfully added.");
-                break;
-            case 1:
-                System.out.println("Room already exists in System.");
-                break;
-        }
     }
 
     /**
