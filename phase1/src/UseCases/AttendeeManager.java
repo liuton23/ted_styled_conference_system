@@ -245,6 +245,12 @@ public class AttendeeManager implements Serializable {
         attendee.ifPresent(value -> value.setEmail(email));
     }
 
+    public void setAttendeePassword(String username, String password){
+        Optional<Attendee> attendee = usernameToAttendeeObject(username);
+        if(attendee.isPresent()){
+            attendee.get().setPassword(password);
+        }
+    }
     /*
 
     public static void main(String[] args) {

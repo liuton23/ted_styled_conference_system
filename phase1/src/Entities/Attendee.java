@@ -41,6 +41,8 @@ public class Attendee implements Serializable {
         return password;
     }
 
+    public void setPassword(String password){ this.password = password; }
+
     /**
      * Method that adds an event to an attendee's itinerary.
      * @param event upcoming event that the attendee will attend.
