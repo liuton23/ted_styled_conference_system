@@ -412,15 +412,6 @@ public class Presenter {
      */
     public void displaySchedule(ArrayList<String> options, String way){
         switch(way){
-            case "time":
-                System.out.println("Sort events by time");
-                break;
-            case "name":
-                System.out.println("Sort events by name");
-                break;
-            case "speaker":
-                System.out.println("Sort events by speaker");
-                break;
             case "itinerary":
                 System.out.println("Your itinerary of event(s) you are attending:");
                 break;
@@ -584,31 +575,7 @@ public class Presenter {
         }
     }
 
-    /**
-     * Displays message reflecting whether or not an Attendee was successfully signed up for an event or a message
-     * indicating error.
-     * @param signUpOutput is a boolean value outputted by EventManager.signUp() signalling successful or unsuccessful sign up.
-     */
-    public void printSignUpMessage(int signUpOutput){
-        if (signUpOutput == 2){
-            System.out.println("User was successfully signed up.");
-        }
-        else if (signUpOutput == 3) {
-            System.out.println("Event is at capacity: unable to sign up user.");
-        }
-        else if (signUpOutput == 5){
-            System.out.println("User is already signed up for this event.");
-            }
-        else if (signUpOutput == 4){
-            System.out.println("Invalid ID. Please try again.");
-        }
-        else if (signUpOutput == 6) {
-            System.out.println("You cannot attend this event. Please select another event and try again.");
-        }
-        else {
-            System.out.println("There are no such event");
-        }
-    }
+
 
 
     /**

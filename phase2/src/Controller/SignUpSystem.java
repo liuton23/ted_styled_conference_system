@@ -8,7 +8,7 @@ import Entities.EventComparators.byTimeEventComparator;
 import Entities.Room;
 import Entities.User;
 import Entities.VipOnly;
-import Presenter.Presenter;
+import Presenter.*;
 import UseCases.UserManager;
 import UseCases.EventManager;
 import UseCases.RoomManager;
@@ -25,6 +25,7 @@ public class SignUpSystem extends Controller{
     private UserManager userManager;
     private EventManager eventManager;
     private RoomManager roomManager;
+    private SignUpPresenter signUpPresenter;
     private Comparator<Event> comparator = new byTimeEventComparator();
 
     /**
@@ -37,6 +38,7 @@ public class SignUpSystem extends Controller{
         this.userManager = userManager;
         this.eventManager = eventManager;
         this.roomManager = roomManager;
+        this.signUpPresenter = new SignUpPresenter();
     }
 
     /**
@@ -143,9 +145,9 @@ public class SignUpSystem extends Controller{
      * @param eventIndex index of the selected event from a sorted list of events.
      * @return status message saying whether or not the attendee successfully signed up for an event.
      */
-    public String dropOutEvent(String username, int eventIndex){
+    public MessageType dropOutEvent(String username, int eventIndex){
         if (eventIndex < 1 || eventIndex > eventManager.getAllEvents().size()){
-            return "Incorrect ID. Please try again.";
+            return MessageType.incorrectID;
         }
         ArrayList<Event> eventList = new ArrayList<>();
         eventList.addAll(eventManager.getAllEvents().values());
@@ -154,12 +156,12 @@ public class SignUpSystem extends Controller{
         Optional<User> obj = userManager.usernameToUserObject(username);
         //check if username is valid
         if (!obj.isPresent()){
-            return "Incorrect username. Please try again.";
+            return MessageType.incorrectUsername;
         }
         User attendee = obj.get();
         eventManager.dropOut(event, attendee.getUsername());
         userManager.dropOut((AttendAble) attendee, event.getTitle());
-        return "You have successfully dropped " + event.getTitle() + " @ " + event.getEventTime();
+        return MessageType.successfulDropOut;
     }
 
     /**
@@ -174,20 +176,20 @@ public class SignUpSystem extends Controller{
 
             switch (chosen) {
                 case "V":
-                    presenter.displayMessages("viewEvents");
+                    signUpPresenter.printSignUpMessage(MessageType.viewAllEvents);
                     viewAllEvent();
                     break;
                 case "S":
-                    presenter.displayMessages("signUp");
-                    presenter.displayMessages("requestEventId");
+                    signUpPresenter.printSignUpMessage(MessageType.signUp);
+                    signUpPresenter.printSignUpMessage(MessageType.enterEventId);
                     index = getIntInput();
-                    presenter.printSignUpMessage(signUpEvent(username, index));
+                    signUpPresenter.printSignUpMessage(signUpEvent(username, index));
                     break;
                 case "D":
-                    presenter.displayMessages("dropOut");
-                    presenter.displayMessages("requestEventIdDropOut");
+                    signUpPresenter.printSignUpMessage(MessageType.dropOut);
+                    signUpPresenter.printSignUpMessage(MessageType.enterEventId);
                     index = getIntInput();
-                    presenter.display(dropOutEvent(username, index));
+                    signUpPresenter.printSignUpMessage(dropOutEvent(username, index));
                     save();
                     break;
                 case "B":
@@ -206,15 +208,15 @@ public class SignUpSystem extends Controller{
         switch (chosen) {
             case "T":
                 setComparator(new byTimeEventComparator());
-                presenter.displaySchedule(viewAllEvents(), "time");
+                signUpPresenter.displaySortedEvents(viewAllEvents(), "time");
                 break;
             case "N":
                 setComparator(new byTitleEventComparator());
-                presenter.displaySchedule(viewAllEvents(), "name");
+                signUpPresenter.displaySortedEvents(viewAllEvents(), "name");
                 break;
             case "S":
                 //sus.setComparator(new bySpeakerEventComparator());
-                presenter.displaySchedule(viewAllEvents(), "speaker");
+                signUpPresenter.displaySortedEvents(viewAllEvents(), "speaker");
                 break;
         }
     }
