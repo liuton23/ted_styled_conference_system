@@ -4,11 +4,11 @@ import Entities.*;
 import Entities.Event;
 import Entities.UserFactory.*;
 import Presenter.*;
+import UseCases.MessageObserver.MarkType;
 import UseCases.UserManager;
 import UseCases.EventManager;
 import UseCases.MessageManager;
 
-import java.beans.PropertyChangeEvent;
 import java.util.*;
 
 /**
@@ -173,7 +173,7 @@ public class MessageSystem extends Controller {
     // Activity main controller method below (depends on user input)
 
     /**
-     * Messager menu to view and send messages.
+     * Message menu to view and send messages.
      * @param username username of <code>Attendee</code>.
      */
     public void messageActivity(String username) {
@@ -281,9 +281,11 @@ public class MessageSystem extends Controller {
                     } else messagePresenter.displayListOfMessage(messagesU);
                     break;
                 case "M":
-                    markAsUnread(username);
+                    markAs(username,MarkType.UNREAD);
                 case "A":
-                    archiveMessage(username);
+                    markAs(username,MarkType.ARCHIVED);
+                case "E":
+                    editMessage(username);
                 case "F":
                     viewFrom(username);
                     break;
@@ -352,30 +354,36 @@ public class MessageSystem extends Controller {
         }
     }
 
-    private void markAsUnread(String username){
+    private void markAs(String username, MarkType type){
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("inputMessageNum");
         String messageNum = obj.nextLine();
         Optional<Message> obj1 = messageManager.numToMessageObject(messageNum);
         if (!obj1.isPresent()){
             messagePresenter.generalPrintHelperForMS("noSuchMessageNum");
-        } else {
-            Message obj2 = obj1.get();
-            messageManager.markUnread(obj2,username);
         }
+        Message obj2 = obj1.get();
+        if (messageManager.getSenderAndRecipients(obj2).contains(username)){
+            messageManager.markAs(obj2,username,type);
+        } else messagePresenter.generalPrintHelperForMS("cantMark");
     }
 
-    private void archiveMessage(String username){
+    private void editMessage(String username){
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("inputMessageNum");
         String messageNum = obj.nextLine();
         Optional<Message> obj1 = messageManager.numToMessageObject(messageNum);
         if (!obj1.isPresent()){
             messagePresenter.generalPrintHelperForMS("noSuchMessageNum");
+        }
+        Message obj2 = obj1.get();
+        if (messageManager.getSenderAndRecipients(obj2).get(0).equals(username)){
+            messagePresenter.displayOriginalMessage(messageManager.getContent(obj2));
+            String newText = obj.nextLine();
+            messageManager.editMessage(obj2,newText);
         } else {
-            Message obj2 = obj1.get();
-            messageManager.markArchived(obj2,username);
+            messagePresenter.generalPrintHelperForMS("cantEdit");
         }
     }
-
 }
+

@@ -59,6 +59,7 @@ public class Presenter {
         ArrayList<String> options = new ArrayList<>();
         options.add("(L)ogin");
         options.add("(R)egister");
+        options.add("(P)assword Reset");
         prompt(options);
     }
 
@@ -106,7 +107,7 @@ public class Presenter {
     public void mainMessageMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("(M)essage users");
-        options.add("(V)iew messages");
+        options.add("(V)iew, mark and edit messages");
         options.add("(B)ack");
         prompt(options);
     }
@@ -160,6 +161,9 @@ public class Presenter {
         options.add("View (R)eceived messages");
         options.add("View (U)nread messages");
         options.add("View messages (F)rom another user");
+        options.add("(M)ark as Unread");
+        options.add("Mark as (A)rchive");
+        options.add("(E)dit message");
         options.add("(B)ack");
         prompt(options);
     }
@@ -240,6 +244,7 @@ public class Presenter {
             case 1:
                 choices.add("L");
                 choices.add("R");
+                choices.add("P");
                 break;
             case 3:
                 choices.add("C");
@@ -272,6 +277,7 @@ public class Presenter {
                 choices.add("M");
                 choices.add("A");
                 choices.add("F");
+                choices.add("E");
                 choices.add("B");
                 break;
             case 8:
@@ -548,32 +554,6 @@ public class Presenter {
         System.out.println("Please check that username or password is non-empty and username is not already taken.");
     }
 
-    /**
-     * Displays message reflecting whether a speaker was successfully changed.
-     * @param changeSpeakerOutput output of the ScheduleSystem.changeSpeaker() method.
-     */
-    public void printChangeSpeakerMessage(int changeSpeakerOutput){
-        switch (changeSpeakerOutput) {
-            case 0:
-                System.out.println("Speaker changed successfully.");
-                break;
-            case 1:
-                System.out.println("Speaker is already booked at this time.");
-                break;
-            case 2:
-                System.out.println("This person is not a speaker.");
-                break;
-            case 3:
-                System.out.println("This user does not exist.");
-                break;
-            case 4:
-                System.out.println("This event name does not correspond to an event in the system.");
-                break;
-            case 5:
-                System.out.println("The username provided does not match a speaker in the system.");
-                break;
-        }
-    }
 
 
 

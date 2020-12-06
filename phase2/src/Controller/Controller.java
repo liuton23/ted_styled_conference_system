@@ -51,8 +51,12 @@ public class Controller {
                         accountActivity(username, loginSystem);
                     }
                     break;
+                case "P":
+                    resetPassword();
+                    break;
                 case "EXIT": //only used to prevent infinite loop
                     running = false;
+                    exit();
             }
         }
     }
@@ -105,6 +109,48 @@ public class Controller {
         }
     }
 
+    private void resetPassword(){
+        Scanner input = new Scanner(System.in);
+        String username = "";
+        boolean isUser = true;
+        do {
+            isUser = true;
+            presenter.printUsernameMessage();
+            username = input.nextLine();
+            if(!userManager.usernameToUserObject(username).isPresent()){
+                isUser = false;
+                presenter.invalidInput();
+            }
+        }while(!isUser);
+
+        User user = userManager.usernameToUserObject(username).get();
+
+        if(user.getEmail().isEmpty()){
+            System.out.println("No email with this account.");
+            return;
+        }
+        String code = gateway.passwordReset(username);
+        String userCode;
+        boolean correct;
+        do{
+            correct = true;
+            presenter.displayMessages("requestCode");
+            System.out.println("Enter the code that has been sent to your email.");
+            userCode = input.nextLine();
+            if(userCode.toUpperCase().equals("EXIT")){
+                exit();
+            }else if(userCode.toUpperCase().equals("B")){
+                return;
+            }else if(!code.equals(userCode)){
+                correct = false;
+                presenter.invalidInput();
+            }
+        }while(!correct);
+        String password;
+        presenter.printPasswordMessage();
+        password = input.nextLine();
+        userManager.setAttendeePassword(username, password);
+    }
 
     /**
      * Makes sure user enters an int as input

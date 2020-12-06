@@ -8,10 +8,12 @@ import java.util.ArrayList;
 public class User implements Serializable,Account {
     private String username;
     private String password;
+    private String email;
 
     public User(String username, String password){
         this.username = username;
         this.password = password;
+        this.email = "";
     }
 
     /**
@@ -29,4 +31,10 @@ public class User implements Serializable,Account {
     public String getPassword(){
         return password;
     }
+
+    public void setEmail(String email){ this.email = email; }
+
+    public String getEmail(){ return email;  }
+
+    public void setPassword(String password){ this.password = password; }
 }

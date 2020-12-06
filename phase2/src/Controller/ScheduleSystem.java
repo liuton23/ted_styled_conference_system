@@ -359,7 +359,7 @@ public class ScheduleSystem extends Controller{
         int roomID = getIntInput();
         // input the options etc in controller and presenter
         presenter.displayMessages("requestEventType");
-        String eventType = askMenuInput(16);
+        String eventType = askMenuInput(17);
         switch (eventType) {
             case "SPEAKER EVENT": {
                 ArrayList<String> speakers = scheduleSpeakerEventHelper();
@@ -455,7 +455,6 @@ public class ScheduleSystem extends Controller{
             SpeakerEvent speakerEvent = eventManager.getSpeakerEvents().get(eventName);
             ArrayList<String> speakerUsernameList = eventManager.getSpeakers(speakerEvent);
             for (String speakerName : speakerUsernameList) {
-                // these method types don't match... needs to be resolved in UserManager
                 TalkAble speaker = (TalkAble) userManager.usernameToUserObject(speakerName).get();
                 userManager.removeEventFromSpeakerList(speaker, eventName);
             }

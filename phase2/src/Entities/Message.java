@@ -111,6 +111,13 @@ public class Message implements Serializable {
         return this.messageNumber;
     }
 
+    public void reset(){
+        for (String recipient: recipients){
+            this.readDict.put(recipient,false);
+            this.archivedDict.put(recipient,false);
+        }
+    }
+
     /**
      * Return the message time.
      * @return the time of this message
