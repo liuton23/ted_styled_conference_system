@@ -38,14 +38,14 @@ public class MessageManager implements Serializable {
      * @param text content of the message
      * @return an message object
      */
-    public Message createMessage(ArrayList<String> recipients, String sender, String text) {
+    public String createMessage(ArrayList<String> recipients, String sender, String text) {
         Message currMessage = new Message(sender, text);
         for (String a : recipients) {
             currMessage.setRecipients(a);
         }
         messageNumGenerator(currMessage);
         messages.add(currMessage);
-        return currMessage;
+        return currMessage.getMessageNumber();
     }
 
     public Boolean deleteMessage(String messageNum){
@@ -263,7 +263,7 @@ public class MessageManager implements Serializable {
         MessageManager mas = new MessageManager();
         ArrayList<String> rs = new ArrayList<String>();
         rs.add("iamjosh");
-        Message m = mas.createMessage(rs,"ritaishannie","hello jesus");
+        Message m = mas.numToMessageObject(mas.createMessage(rs,"ritaishannie","hello jesus")).get();
         Message newm = mas.reply(m, "iamjosh","hello, rita");
         Message c = mas.reply(newm, "ritaishannie", "I'll go to eaton tomorrow");
         mas.reply(c, "iamjosh", "I'm watching start up.");
@@ -275,7 +275,8 @@ public class MessageManager implements Serializable {
         att.add("ritaishannie");
         att.add("Bob");
         att.add("sam");
-        Message meeting = mas.createMessage(att,"lisa231","meeting starts in 10mins!!");
+        Message meeting = mas.numToMessageObject(mas.createMessage
+                (att,"lisa231","meeting starts in 10mins!!")).get();
         mas.reply(meeting,"ritaishannie","Got it!");
         System.out.println(mas.getReceivedBy("ritaishannie"));
         m.setRead("iamjosh", true);

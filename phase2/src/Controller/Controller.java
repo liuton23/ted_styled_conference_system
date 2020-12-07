@@ -6,7 +6,7 @@ import Controller.PromptBuilder.PromptBuilder;
 import Controller.PromptBuilder.PromptType;
 import Entities.*;
 import Entities.Event;
-//import Entities.EventComparators.bySpeakerEventComparator;
+import Entities.EventComparators.bySpeakerEventComparator;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.EventComparators.byTitleEventComparator;
 import Entities.UserFactory.*;
