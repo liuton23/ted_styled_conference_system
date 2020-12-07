@@ -20,6 +20,7 @@ public class Message implements Serializable {
     private LocalDateTime messageTime;
     private HashMap<String, Boolean> readDict;
     private HashMap<String, Boolean> archivedDict;
+    private Boolean edited;
     private String messageNumber;
 
     /**
@@ -36,6 +37,7 @@ public class Message implements Serializable {
         this.readDict = new HashMap<String, Boolean>();
         this.archivedDict = new HashMap<String, Boolean>();
         archivedDict.put(sender,false);
+        this.edited = false;
     }
 
 
@@ -116,6 +118,11 @@ public class Message implements Serializable {
             this.readDict.put(recipient,false);
             this.archivedDict.put(recipient,false);
         }
+        this.edited = true;
+    }
+
+    public Boolean getEdited(){
+        return this.edited;
     }
 
     /**

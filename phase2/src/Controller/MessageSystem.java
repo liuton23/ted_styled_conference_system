@@ -42,24 +42,24 @@ public class MessageSystem extends Controller {
      * @param sender username of the sender
      * @param attendee username of the attendee's the sender want to send message to
      * @param text the content of the message
-     * @return integer which will send to presenter and present corresponding message
      */
-    private int messageAttendee(String sender, String attendee, String text){
+    private void messageAttendee(String sender, String attendee, String text){
         Optional<User> obj1 = userManager.usernameToUserObject(sender);
         Optional<User> obj2 = userManager.usernameToUserObject(attendee);
         if (!obj1.isPresent()){
-            return 1; //"Incorrect username. Please try again."
+            messagePresenter.printMessageAttendee(1);
         } else if (!obj2.isPresent()){
-            return 1; //"Incorrect username. Please try again.";
-        }
-        User recipient = obj2.get();
-        if (userManager.checkIsOrganizer(recipient)){
-            return 2; //"The message can not be sent to an Organizer."
+            messagePresenter.printMessageAttendee(1);
         } else {
-            ArrayList<String> att = new ArrayList<String>();
-            att.add(attendee);
-            messageManager.createMessage(att, sender, text);
-            return 3; //"The message has been successfully sent."
+            User recipient = obj2.get();
+            if (userManager.checkIsOrganizer(recipient)) {
+                messagePresenter.printMessageAttendee(2); //"The message can not be sent to an Organizer."
+            } else {
+                ArrayList<String> att = new ArrayList<String>();
+                att.add(attendee);
+                String messageNum = messageManager.createMessage(att, sender, text);
+                messagePresenter.displayNewMessageNum(messageNum); //"The message has been successfully sent."
+            }
         }
     }
 
@@ -73,25 +73,25 @@ public class MessageSystem extends Controller {
      * This helper method will let only organizer sends message to all speakers at once.
      * @param sender the username of the sender
      * @param text the content of the message
-     * @return integer which will send to presenter and presents the corresponding messages
      */
 
-    private int messageAllSpeakers(String sender, String text){
+    private void messageAllSpeakers(String sender, String text){
         Optional<User> obj = userManager.usernameToUserObject(sender);
         ArrayList<TalkAble> listOfSpeakers = userManager.getAllSpeakers();
         ArrayList<String> list = new ArrayList<String>();
         for (TalkAble s : listOfSpeakers){
-            list.add(userManager.getUsername((User) s));
+            list.add(userManager.getUsername(s));
         }
         if (!obj.isPresent()){
-            return 1; /*"Incorrect username. Please try again."*/
-        }
-        User org = (User) obj.get();
-        if (!userManager.checkIsOrganizer(org)){
-            return 2;/*"Only Organizer can message all speakers."*/
+            messagePresenter.printMessageAllSpeakers(1); /*"Incorrect username. Please try again."*/
         } else {
-            messageManager.createMessage(list, sender, text);
-            return 3; /*"The message has been successfully sent."*/
+            User org = obj.get();
+            if (!userManager.checkIsOrganizer(org)) {
+                messagePresenter.printMessageAllSpeakers(2);/*"Only Organizer can message all speakers."*/
+            } else {
+                String newMessage = messageManager.createMessage(list, sender, text);
+                messagePresenter.displayNewMessageNum(newMessage); /*"The message has been successfully sent."*/
+            }
         }
     }
 
@@ -99,26 +99,25 @@ public class MessageSystem extends Controller {
      * This helper method only let organizer sends message to all attendees in the system at once.
      * @param sender username of sender
      * @param text the content of the message
-     * @return integer which will send to presenter and presents the crresponding messages
      */
 
-    private int messageAllAttendees(String sender, String text){
+    private void messageAllAttendees(String sender, String text){
         Optional<User> obj = userManager.usernameToUserObject(sender);
         if (!obj.isPresent()){
-            return 1; /*"Incorrect username. Please try again."*/
+            messagePresenter.printMessageAllAttendees(1); /*"Incorrect username. Please try again."*/
+        }else {
+            User org = obj.get();
+            if (!userManager.checkIsOrganizer(org)) {
+                messagePresenter.printMessageAllAttendees(2); /*"Only Organizer can message all attendees."*/
+            }
+            ArrayList<String> allAtt = new ArrayList<String>();
+            ArrayList<AttendAble> allAttObj = userManager.getAllAttendees();
+            for (AttendAble att : allAttObj) {
+                allAtt.add(userManager.getUsername(att));
+            }
+            String num = messageManager.createMessage(allAtt, sender, text);
+            messagePresenter.displayNewMessageNum(num); /*"The message has been successfully sent."*/
         }
-        User org = obj.get();
-        if (!userManager.checkIsOrganizer(org)) {
-            return 2; /*"Only Organizer can message all attendees."*/
-        }
-        ArrayList<String> allAtt = new ArrayList<String>();
-        ArrayList<AttendAble> allAttObj = userManager.getAllAttendees();
-        for(AttendAble att: allAttObj){
-            allAtt.add(userManager.getUsername((User) att));
-        }
-        messageManager.createMessage(allAtt,sender,text);
-        return 3; /*"The message has been successfully sent."*/
-
     }
 
     //All the Speaker helper methods
@@ -128,44 +127,51 @@ public class MessageSystem extends Controller {
      * @param eventNames a list of names of events
      * @param sender username of the sender
      * @param text the content of the message
-     * @return integer which will send to presenter and presents the corresponding messages
      */
 
-    private int messageEventAttendees(ArrayList<String> eventNames, String sender, String text){
+    private void messageEventAttendees(ArrayList<String> eventNames, String sender, String text){
         Optional<User> obj = userManager.usernameToUserObject(sender);
         ArrayList<String> list = new ArrayList<String>();
         ArrayList<String> noAtt = new ArrayList<String>();
         ArrayList<String> notSpeakAt = new ArrayList<String>();
 
         if (!obj.isPresent()){
-            return 2; //"Incorrect username. Please try again.";
-        }
-        User se = obj.get();
-        if (!(se instanceof Speaker)){
-            return 3; //"Only speakers can sent messages to all attendees of their talks they give.";
-        }
-        for (String i : eventNames){
-            Optional<Event> eve = eventManager.nameToEvent(i);
-            if (!eve.isPresent()){
-                return 4; //"Event do not exist or spell the name wrong
-            }
-            Event eventF = eve.get();
-            if (!(eventF instanceof SpeakerEvent)){
-                return 1; // event with no speaker == event you do not speak at
-            }
-            if (((SpeakerEvent) eventF).getSpeaker().contains(sender)) {
-                if (eventManager.eventToAttendees(eventF).size() != 0) {
-                    list.addAll(eventManager.eventToAttendees(eventF));
-                } else noAtt.add(i);
-            } else notSpeakAt.add(i);
-        }
-        if (notSpeakAt.size() != 0){
-            return 1; //contain event you do not speak at
-        } else if (noAtt.size() != 0){
-            return 6; //"no attendee at this event"
+            messagePresenter.printMessageEventsAttendees(2);
+            //"Incorrect username. Please try again.";
         } else {
-            messageManager.createMessage(list, sender, text);
-            return 5; //"The message has been successfully sent.";
+            User se = obj.get();
+            if (!(se instanceof Speaker)) {
+                messagePresenter.printMessageEventsAttendees(3);
+                //"Only speakers can sent messages to all attendees of their talks they give.";
+            }
+            for (String i : eventNames) {
+                Optional<Event> eve = eventManager.nameToEvent(i);
+                if (!eve.isPresent()) {
+                    messagePresenter.printMessageEventsAttendees(4);
+                    //"Event do not exist or spell the name wrong
+                } else {
+                    Event eventF = eve.get();
+                    if (!(eventF instanceof SpeakerEvent)) {
+                        messagePresenter.printMessageEventsAttendees(1);
+                        // event with no speaker == event you do not speak at
+                    }
+                    if (((SpeakerEvent) eventF).getSpeaker().contains(sender)) {
+                        if (eventManager.eventToAttendees(eventF).size() != 0) {
+                            list.addAll(eventManager.eventToAttendees(eventF));
+                        } else noAtt.add(i);
+                    } else notSpeakAt.add(i);
+                }
+            }
+            if (notSpeakAt.size() != 0) {
+                messagePresenter.printMessageEventsAttendees(1);
+                //contain event you do not speak at
+            } else if (noAtt.size() != 0) {
+                messagePresenter.printMessageEventsAttendees(6);
+                //"no attendee at this event"
+            } else {
+                String num = messageManager.createMessage(list, sender, text);
+                messagePresenter.displayNewMessageNum(num); //"The message has been successfully sent.";
+            }
         }
     }
 
@@ -197,6 +203,7 @@ public class MessageSystem extends Controller {
     public void messageUser(String username){
         boolean messagingOther = true;
         User user = userManager.usernameToUserObject(username).get();
+        // username which do not exist will not access this function
         while (messagingOther) {
             String chosen;
             if (user instanceof TalkAble) {
@@ -247,7 +254,7 @@ public class MessageSystem extends Controller {
             case "C":
                 messagePresenter.generalPrintHelperForMS("printInputMessagePlz");
                 String message = obj.nextLine().trim();
-                messagePresenter.printMessageEventsAttendees(messageEventAttendees(events,username,message));
+                messageEventAttendees(events,username,message);
                 break;
         }
     }
@@ -282,10 +289,13 @@ public class MessageSystem extends Controller {
                     break;
                 case "M":
                     markAs(username,MarkType.UNREAD);
+                    break;
                 case "A":
                     markAs(username,MarkType.ARCHIVED);
+                    break;
                 case "E":
                     editMessage(username);
+                    break;
                 case "F":
                     viewFrom(username);
                     break;
@@ -308,7 +318,7 @@ public class MessageSystem extends Controller {
         String user = obj.nextLine();
         messagePresenter.generalPrintHelperForMS("printInputMessagePlz");
         String message = obj.nextLine();
-        messagePresenter.printMessageAttendee(messageAttendee(username,user,message));
+        messageAttendee(username,user,message);
     }
 
     /**
@@ -319,7 +329,7 @@ public class MessageSystem extends Controller {
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("printPleaseInputUsername");
         String message = obj.nextLine();
-        messagePresenter.printMessageAllSpeakers(messageAllSpeakers(username, message));
+        messageAllSpeakers(username, message);
     }
 
     /**
@@ -330,7 +340,7 @@ public class MessageSystem extends Controller {
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("printInputMessagePlz");
         String message = obj.nextLine();
-        messagePresenter.printMessageAllAttendees(messageAllAttendees(username, message));
+        messageAllAttendees(username, message);
     }
 
     /**
@@ -361,11 +371,12 @@ public class MessageSystem extends Controller {
         Optional<Message> obj1 = messageManager.numToMessageObject(messageNum);
         if (!obj1.isPresent()){
             messagePresenter.generalPrintHelperForMS("noSuchMessageNum");
+        }else {
+            Message obj2 = obj1.get();
+            if (messageManager.getSenderAndRecipients(obj2).contains(username)) {
+                messageManager.markAs(obj2, username, type);
+            } else messagePresenter.generalPrintHelperForMS("cantMark");
         }
-        Message obj2 = obj1.get();
-        if (messageManager.getSenderAndRecipients(obj2).contains(username)){
-            messageManager.markAs(obj2,username,type);
-        } else messagePresenter.generalPrintHelperForMS("cantMark");
     }
 
     private void editMessage(String username){
@@ -375,14 +386,15 @@ public class MessageSystem extends Controller {
         Optional<Message> obj1 = messageManager.numToMessageObject(messageNum);
         if (!obj1.isPresent()){
             messagePresenter.generalPrintHelperForMS("noSuchMessageNum");
-        }
-        Message obj2 = obj1.get();
-        if (messageManager.getSenderAndRecipients(obj2).get(0).equals(username)){
-            messagePresenter.displayOriginalMessage(messageManager.getContent(obj2));
-            String newText = obj.nextLine();
-            messageManager.editMessage(obj2,newText);
-        } else {
-            messagePresenter.generalPrintHelperForMS("cantEdit");
+        }else {
+            Message obj2 = obj1.get();
+            if (messageManager.getSenderAndRecipients(obj2).get(0).equals(username)) {
+                messagePresenter.displayOriginalMessage(messageManager.getContent(obj2));
+                String newText = obj.nextLine();
+                messageManager.editMessage(obj2, newText);
+            } else {
+                messagePresenter.generalPrintHelperForMS("cantEdit");
+            }
         }
     }
 }

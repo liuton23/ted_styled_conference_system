@@ -38,14 +38,14 @@ public class MessageManager implements Serializable {
      * @param text content of the message
      * @return an message object
      */
-    public Message createMessage(ArrayList<String> recipients, String sender, String text) {
+    public String createMessage(ArrayList<String> recipients, String sender, String text) {
         Message currMessage = new Message(sender, text);
         for (String a : recipients) {
             currMessage.setRecipients(a);
         }
         messageNumGenerator(currMessage);
         messages.add(currMessage);
-        return currMessage;
+        return currMessage.getMessageNumber();
     }
 
     public Boolean deleteMessage(String messageNum){
@@ -103,11 +103,16 @@ public class MessageManager implements Serializable {
     public ArrayList<String> getReceivedBy(String recipient){
         ArrayList<Message> allMessagesObj = getAllReceivedBy(recipient);
         ArrayList<String> allMessages = new ArrayList<String>();
-        for (Message m : allMessagesObj){
+        for (Message m : allMessagesObj) {
+            if (m.getEdited()) {
+                allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " {" + m.getText() + "} @ " +
+                        m.getMessageTime().toString() + " (edited)");
+            } else {
                 allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " {" + m.getText() + "} @ " +
                         m.getMessageTime().toString());
-                m.setRead(recipient,true);
             }
+            m.setRead(recipient, true);
+        }
         return allMessages;
     }
 
@@ -126,8 +131,13 @@ public class MessageManager implements Serializable {
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : allMessagesObj) {
             if (!m.getRead(recipient)) {
-                allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " {" + m.getText() + "} @ " +
-                        m.getMessageTime().toString());
+                if (m.getEdited()){
+                    allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " {" + m.getText() + "} @ " +
+                            m.getMessageTime().toString() + " (edited)");
+                } else {
+                    allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " {" + m.getText() + "} @ " +
+                            m.getMessageTime().toString());
+                }
                 m.setRead(recipient, true);
             }
         }
@@ -145,7 +155,13 @@ public class MessageManager implements Serializable {
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : messages){
             if (m.getSender().equals(sender) && m.getRecipients().contains(recipient)){
-                allMessages.add(m.getMessageNumber() + ": {" + m.getText() + "} @ " + m.getMessageTime().toString());
+                if (m.getEdited()) {
+                    allMessages.add(m.getMessageNumber() + ": {" + m.getText() + "} @ " + m.getMessageTime().toString()
+                    + " (edited)");
+                } else {
+                    allMessages.add(m.getMessageNumber() + ": {" + m.getText() + "} @ " + m.getMessageTime().toString());
+                }
+
                 m.setRead(recipient,true);
             }
         }
@@ -220,7 +236,7 @@ public class MessageManager implements Serializable {
     public void messageNumGenerator(Message message){
         String x = "";
         int num = 10000 + (int)(Math.random() * (90000));
-        x = "MSG" + message.getSender().toUpperCase().charAt(0) + num;
+        x = "MSG" + num;
         if (messageNumStorage.contains(x)){
             messageNumGenerator(message);
         } else {
@@ -247,7 +263,7 @@ public class MessageManager implements Serializable {
         MessageManager mas = new MessageManager();
         ArrayList<String> rs = new ArrayList<String>();
         rs.add("iamjosh");
-        Message m = mas.createMessage(rs,"ritaishannie","hello jesus");
+        Message m = mas.numToMessageObject(mas.createMessage(rs,"ritaishannie","hello jesus")).get();
         Message newm = mas.reply(m, "iamjosh","hello, rita");
         Message c = mas.reply(newm, "ritaishannie", "I'll go to eaton tomorrow");
         mas.reply(c, "iamjosh", "I'm watching start up.");
@@ -259,14 +275,15 @@ public class MessageManager implements Serializable {
         att.add("ritaishannie");
         att.add("Bob");
         att.add("sam");
-        Message meeting = mas.createMessage(att,"lisa231","meeting starts in 10mins!!");
+        Message meeting = mas.numToMessageObject(mas.createMessage
+                (att,"lisa231","meeting starts in 10mins!!")).get();
         mas.reply(meeting,"ritaishannie","Got it!");
         System.out.println(mas.getReceivedBy("ritaishannie"));
         m.setRead("iamjosh", true);
         mas.markAs(m, "iamjosh",MarkType.UNREAD);
         mas.markAs(meeting, "ritaishannie",MarkType.ARCHIVED);
         mas.editMessage(m,"I am here");
-        System.out.println(m.getRead("iamjosh"));
+        System.out.println(mas.getReceivedBy("iamjosh"));
         System.out.println(mas.getSendBy("lisa231"));
         System.out.println(mas.getAllMessagesFrom("ritaishannie","iamjosh"));
     }

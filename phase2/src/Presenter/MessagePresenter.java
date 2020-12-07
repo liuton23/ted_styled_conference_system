@@ -29,7 +29,7 @@ public class MessagePresenter {
                 System.out.println("There are no received messages for you");
                 break;
             case "inputMessageNum":
-                System.out.println("Please input a message number");
+                System.out.println("Please input an 8-digit message number");
                 break;
             case "noSuchMessageNum":
                 System.out.println("There's no such message corresponding to this message number");
@@ -39,6 +39,7 @@ public class MessagePresenter {
                 break;
             case "cantEdit":
                 System.out.println("You can not edit a message you did not send");
+                break;
         }
     }
 
@@ -148,6 +149,10 @@ public class MessagePresenter {
     public void displayOriginalMessage(String text){
         System.out.println("Your Original Message is: {" + text + "}.");
         System.out.println("Please enter your new message:");
+    }
+
+    public void displayNewMessageNum(String num){
+        System.out.println("You have successfully create this message, message number is " + num);
     }
 
 }
