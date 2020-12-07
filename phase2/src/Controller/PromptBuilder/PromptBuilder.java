@@ -1,9 +1,6 @@
 package Controller.PromptBuilder;
 
-import Controller.Menus.BasicMenu1;
-import Controller.Menus.BasicMenu2;
-import Controller.Menus.BooleanMenu;
-import Controller.Menus.LoginMenu;
+import Controller.Menus.*;
 import Presenter.Presenter;
 
 public class PromptBuilder {
@@ -23,10 +20,34 @@ public class PromptBuilder {
                 booleanPrompt.setMenu(new BooleanMenu());
                 booleanPrompt.setText("Yes or No?");
                 return booleanPrompt;
+            case eventsMenu:
+                StringPrompt eventsPrompt = new StringPrompt(presenter);
+                eventsPrompt.setMenu(new EventsMenu());
+                return eventsPrompt;
             case loginPrompt:
                 StringPrompt loginPrompt = new StringPrompt(presenter);
                 loginPrompt.setMenu(new LoginMenu());
                 return loginPrompt;
+            case organizerMenu:
+                StringPrompt organizePrompt = new StringPrompt(presenter);
+                organizePrompt.setMenu(new OrganizerMenu());
+                return organizePrompt;
+            case userTypeMenu:
+                StringPrompt userTypes = new StringPrompt(presenter);
+                userTypes.setMenu(new UserTypeMenu());
+                return userTypes;
+            case viewEventsMenu:
+                StringPrompt eventPrompt = new StringPrompt(presenter);
+                eventPrompt.setMenu(new ViewEventsMenu());
+                return eventPrompt;
+            case viewEventTypeMenu:
+                StringPrompt eventTypes = new StringPrompt(presenter);
+                eventTypes.setMenu(new ViewEventTypeMenu());
+                return eventTypes;
+            case viewMonthMenu:
+                StringPrompt monthPrompt = new StringPrompt(presenter);
+                monthPrompt.setMenu(new ViewMonthsMenu());
+                return monthPrompt;
         }
         return null;
     }

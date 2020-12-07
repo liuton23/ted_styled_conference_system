@@ -1,6 +1,9 @@
 package Controller;
 
 
+import Controller.PromptBuilder.Prompt;
+import Controller.PromptBuilder.PromptBuilder;
+import Controller.PromptBuilder.PromptType;
 import Entities.*;
 import Entities.Event;
 import Entities.UserFactory.AttendAble;
@@ -10,6 +13,7 @@ import UseCases.EventManager;
 import UseCases.UserManager;
 import UseCases.RoomManager;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
@@ -287,12 +291,15 @@ public class ScheduleSystem extends Controller{
     /**
      * Organizer only menu to schedule events, add rooms and change speakers.
      */
-    public void scheduleActivity(){
+    public void scheduleActivity() throws IOException {
         boolean scheduling = true;
         while (scheduling) {
             Scanner input = new Scanner(System.in);
 
-            String chosen = askMenuInput(4);
+            //String chosen = askMenuInput(4);
+            PromptBuilder promptBuilder = new PromptBuilder();
+            Prompt organizerPrompt = promptBuilder.buildPrompt(presenter, PromptType.organizerMenu);
+            String chosen = organizerPrompt.ask();
 
             switch (chosen) {
                 case "S":
@@ -337,7 +344,7 @@ public class ScheduleSystem extends Controller{
     /**
      * Method for organizers to input new event information.
      */
-    private void scheduleEvent(){
+    private void scheduleEvent() throws IOException {
         Scanner input = new Scanner(System.in);
         presenter.displayMessages("S");
         String title = input.nextLine().trim();
@@ -345,7 +352,10 @@ public class ScheduleSystem extends Controller{
         int year = getIntInput();
         presenter.displayMessages("requestMonth"); //***********
         presenter.viewMonthsMenu();
-        String month = askMenuInput(13); //input.nextLine().toUpperCase();
+        //String month = askMenuInput(13); //input.nextLine().toUpperCase();
+        PromptBuilder promptBuilder = new PromptBuilder();
+        Prompt monthPrompt = promptBuilder.buildPrompt(presenter, PromptType.viewMonthMenu);
+        String month = monthPrompt.ask();
         presenter.displayMessages("requestDay");
         int day = getIntInputInRange(1, 31);
         presenter.displayMessages("requestHour");
@@ -359,7 +369,9 @@ public class ScheduleSystem extends Controller{
         int roomID = getIntInput();
         // input the options etc in controller and presenter
         presenter.displayMessages("requestEventType");
-        String eventType = askMenuInput(17);
+        //String eventType = askMenuInput(17);
+        Prompt eventTypePrompt = promptBuilder.buildPrompt(presenter, PromptType.viewEventTypeMenu);
+        String eventType = eventTypePrompt.ask();
         switch (eventType) {
             case "SPEAKER EVENT": {
                 ArrayList<String> speakers = scheduleSpeakerEventHelper();

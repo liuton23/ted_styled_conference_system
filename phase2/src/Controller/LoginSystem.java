@@ -124,7 +124,7 @@ public class LoginSystem extends Controller {
     /**
      * Speaker registration. Cannot choose a username that is already taken.
      */
-    public void createAccounts() {
+    public void createAccounts() throws IOException {
         /*
         Scanner obj1 = new Scanner(System.in);
         presenter.displayMessages("requestSpeaker");
@@ -143,7 +143,10 @@ public class LoginSystem extends Controller {
         presenter.printPasswordMessage();//"Enter your password"
         String password = obj1.nextLine();
         //presenter.printSelectUserType();
-        String chosen = askMenuInput(16);
+        //String chosen = askMenuInput(16);
+        PromptBuilder promptBuilder = new PromptBuilder();
+        Prompt userTypePrompt = promptBuilder.buildPrompt(presenter, PromptType.userTypeMenu);
+        String chosen = userTypePrompt.ask();
         UserType type = null;
         switch (chosen) {
             case "A":

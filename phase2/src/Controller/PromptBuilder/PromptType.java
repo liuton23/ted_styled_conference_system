@@ -4,5 +4,11 @@ public enum PromptType {
     basicMenu1,
     basicMenu2,
     booleanPrompt,
-    loginPrompt
+    eventsMenu,
+    loginPrompt,
+    organizerMenu,
+    userTypeMenu,
+    viewEventsMenu,
+    viewEventTypeMenu,
+    viewMonthMenu
 }

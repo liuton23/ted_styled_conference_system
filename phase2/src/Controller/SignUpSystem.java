@@ -1,5 +1,8 @@
 package Controller;
 
+import Controller.PromptBuilder.Prompt;
+import Controller.PromptBuilder.PromptBuilder;
+import Controller.PromptBuilder.PromptType;
 import Entities.EventComparators.byTitleEventComparator;
 import Entities.SpeakerEvent;
 import Entities.UserFactory.AttendAble;
@@ -13,6 +16,7 @@ import UseCases.UserManager;
 import UseCases.EventManager;
 import UseCases.RoomManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -168,10 +172,13 @@ public class SignUpSystem extends Controller{
      * Menu to view, sign up, and drop events.
      * @param username username of <code>Attendee</code>.
      */
-    public void eventActivity(String username) {
+    public void eventActivity(String username) throws IOException {
         boolean activity = true;
         while (activity) {
-            String chosen = askMenuInput(8);
+            //String chosen = askMenuInput(8);
+            PromptBuilder promptBuilder = new PromptBuilder();
+            Prompt eventPrompt = promptBuilder.buildPrompt(presenter, PromptType.eventsMenu);
+            String chosen = eventPrompt.ask();
             int index;
 
             switch (chosen) {
@@ -202,8 +209,11 @@ public class SignUpSystem extends Controller{
     /**
      * View all events in a sorted list.
      */
-    public void viewAllEvent(){
-        String chosen = askMenuInput(9);
+    public void viewAllEvent() throws IOException {
+        //String chosen = askMenuInput(9);
+        PromptBuilder promptBuilder = new PromptBuilder();
+        Prompt eventPrompt = promptBuilder.buildPrompt(presenter, PromptType.viewEventsMenu);
+        String chosen = eventPrompt.ask();
 
         switch (chosen) {
             case "T":
