@@ -22,7 +22,7 @@ public class MessageListener implements PropertyChangeListener {
             System.out.println("Message system observed a change in " +
                     evt.getPropertyName() + " of this message." );
             System.out.println(
-                    "This message content has been changed to: {" + evt.getNewValue() + "}.");
+                    "This message content has been changed to: {" + evt.getNewValue() + "} by " + this.changer);
         }
         System.out.println();
     }

@@ -55,7 +55,7 @@ public class MessageSystem extends Controller {
             if (userManager.checkIsOrganizer(recipient)) {
                 messagePresenter.printMessageAttendee(2); //"The message can not be sent to an Organizer."
             } else {
-                ArrayList<String> att = new ArrayList<String>();
+                ArrayList<String> att = new ArrayList<>();
                 att.add(attendee);
                 String messageNum = messageManager.createMessage(att, sender, text);
                 messagePresenter.displayNewMessageNum(messageNum); //"The message has been successfully sent."
@@ -78,7 +78,7 @@ public class MessageSystem extends Controller {
     private void messageAllSpeakers(String sender, String text){
         Optional<User> obj = userManager.usernameToUserObject(sender);
         ArrayList<TalkAble> listOfSpeakers = userManager.getAllSpeakers();
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         for (TalkAble s : listOfSpeakers){
             list.add(userManager.getUsername(s));
         }
@@ -110,7 +110,7 @@ public class MessageSystem extends Controller {
             if (!userManager.checkIsOrganizer(org)) {
                 messagePresenter.printMessageAllAttendees(2); /*"Only Organizer can message all attendees."*/
             }
-            ArrayList<String> allAtt = new ArrayList<String>();
+            ArrayList<String> allAtt = new ArrayList<>();
             ArrayList<AttendAble> allAttObj = userManager.getAllAttendees();
             for (AttendAble att : allAttObj) {
                 allAtt.add(userManager.getUsername(att));
@@ -131,9 +131,9 @@ public class MessageSystem extends Controller {
 
     private void messageEventAttendees(ArrayList<String> eventNames, String sender, String text){
         Optional<User> obj = userManager.usernameToUserObject(sender);
-        ArrayList<String> list = new ArrayList<String>();
-        ArrayList<String> noAtt = new ArrayList<String>();
-        ArrayList<String> notSpeakAt = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
+        ArrayList<String> noAtt = new ArrayList<>();
+        ArrayList<String> notSpeakAt = new ArrayList<>();
 
         if (!obj.isPresent()){
             messagePresenter.printMessageEventsAttendees(2);
@@ -183,6 +183,7 @@ public class MessageSystem extends Controller {
      * @param username username of <code>Attendee</code>.
      */
     public void messageActivity(String username) {
+        messagePresenter.displayNumOfNew(messageManager.getNumOfUnreadMessage(username));
         boolean messaging = true;
         while (messaging) {
             String chosen = askMenuInput(5);
@@ -274,18 +275,21 @@ public class MessageSystem extends Controller {
                     if (messagesS.size() == 0){
                         messagePresenter.generalPrintHelperForMS("printNoSentForU");
                     } else messagePresenter.displayListOfMessage(messagesS);
+                    System.out.println();
                     break;
                 case "R":
                     ArrayList<String> messagesR = messageManager.getReceivedBy(username);
                     if (messagesR.size() == 0){
                         messagePresenter.generalPrintHelperForMS("printNoRecForU");
                     } else messagePresenter.displayListOfMessage(messagesR);
+                    System.out.println();
                     break;
                 case "U":
                     ArrayList<String> messagesU = messageManager.getUnreadMessage(username);
                     if (messagesU.size() == 0){
-                        messagePresenter.generalPrintHelperForMS("printNoRecForU");
+                        messagePresenter.displayNumOfNew(0);
                     } else messagePresenter.displayListOfMessage(messagesU);
+                    System.out.println();
                     break;
                 case "M":
                     markAs(username,MarkType.UNREAD);
@@ -299,6 +303,12 @@ public class MessageSystem extends Controller {
                 case "F":
                     viewFrom(username);
                     break;
+                case "H":
+                    ArrayList<String> messagesH = messageManager.getArchiveMessages(username);
+                    if (messagesH.size() == 0){
+                        messagePresenter.generalPrintHelperForMS("noArchive");
+                    } else messagePresenter.displayListOfMessage(messagesH);
+                    System.out.println();
                 case "B":
                     viewingMessage = false;
                     break;
@@ -362,6 +372,7 @@ public class MessageSystem extends Controller {
                 messagePresenter.thereAreNoMessForUFrom(user);
             } else messagePresenter.displayListOfMessage(messageF);
         }
+        System.out.println();
     }
 
     private void markAs(String username, MarkType type){

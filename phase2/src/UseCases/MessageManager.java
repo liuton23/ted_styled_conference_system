@@ -48,13 +48,13 @@ public class MessageManager implements Serializable {
         return currMessage.getMessageNumber();
     }
 
-    public Boolean deleteMessage(String messageNum){
-        if (!messageNumStorage.contains(messageNum)){
+    public Boolean deleteMessage(String messageNum) {
+        if (!messageNumStorage.contains(messageNum)) {
             return false;
         }
         Message currMessage = null;
-        for (Message m: messages){
-            if (m.getMessageNumber().equals(messageNum)){
+        for (Message m : messages) {
+            if (m.getMessageNumber().equals(messageNum)) {
                 currMessage = m;
             }
         }
@@ -77,6 +77,20 @@ public class MessageManager implements Serializable {
         messages.add(message);
         return message;
     } //This is not used for phase 1, but may be useful in phase 2
+
+    public ArrayList<String> getArchiveMessages(String username){
+        ArrayList<String> allMessages = new ArrayList<String>();
+        for (Message m : messages){
+            if (username.equals(m.getSender()) || m.getRecipients().contains(username)){
+                if (m.getArchived(username)) {
+                    allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " To " +
+                            recipientsBuilder(m.getRecipients()) + " {" + m.getText() +
+                            "} @ " + m.getMessageTime().toString());
+                }
+            }
+        }
+        return allMessages;
+    }
 
 
     /**
@@ -143,6 +157,19 @@ public class MessageManager implements Serializable {
         }
         return allMessages;
     }
+
+    public int getNumOfUnreadMessage(String recipient){
+        ArrayList<Message> allMessagesObj = getAllReceivedBy(recipient);
+        int i = 0;
+        for (Message m: allMessagesObj){
+            if (!m.getRead(recipient)){
+                i++;
+            }
+        }
+        return i;
+    }
+
+
 
     /**
      * Gets all messages from sender to recipient.

@@ -40,6 +40,9 @@ public class MessagePresenter {
             case "cantEdit":
                 System.out.println("You can not edit a message you did not send");
                 break;
+            case "noArchive":
+                System.out.println("You have no archived messages");
+                break;
         }
     }
 
@@ -152,7 +155,15 @@ public class MessagePresenter {
     }
 
     public void displayNewMessageNum(String num){
-        System.out.println("You have successfully create this message, message number is " + num);
+        System.out.println("You have successfully create this message, message number is MSG" + num);
+    }
+
+    public void displayNumOfNew(int num){
+        if (num == 1) {
+            System.out.println("You have a new message");
+        } else {
+            System.out.println("You have " + num + " new messages");
+        }
     }
 
 }
