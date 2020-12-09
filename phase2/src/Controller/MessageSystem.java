@@ -1,5 +1,8 @@
 package Controller;
 
+import Controller.PromptBuilder.Prompt;
+import Controller.PromptBuilder.PromptBuilder;
+import Controller.PromptBuilder.PromptType;
 import Entities.*;
 import Entities.Event;
 import Entities.UserFactory.*;
@@ -9,6 +12,7 @@ import UseCases.UserManager;
 import UseCases.EventManager;
 import UseCases.MessageManager;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -182,11 +186,14 @@ public class MessageSystem extends Controller {
      * Message menu to view and send messages.
      * @param username username of <code>Attendee</code>.
      */
-    public void messageActivity(String username) {
+    public void messageActivity(String username) throws IOException {
         messagePresenter.displayNumOfNew(messageManager.getNumOfUnreadMessage(username));
         boolean messaging = true;
+        PromptBuilder promptBuilder = new PromptBuilder();
+        Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.mainMessageMenu);
         while (messaging) {
-            String chosen = askMenuInput(5);
+            //String chosen = askMenuInput(5);
+            String chosen = prompt.ask();
             switch (chosen) {
                 case "M":
                     messageUser(username);
@@ -201,18 +208,26 @@ public class MessageSystem extends Controller {
         }
     }
 
-    public void messageUser(String username){
+    public void messageUser(String username) throws IOException {
         boolean messagingOther = true;
         User user = userManager.usernameToUserObject(username).get();
+        PromptBuilder promptBuilder = new PromptBuilder();
         // username which do not exist will not access this function
         while (messagingOther) {
             String chosen;
             if (user instanceof TalkAble) {
-                chosen = askMenuInput(11);
+                //chosen = askMenuInput(11);
+                Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.sendMessageSpeakerMenu);
+                chosen = prompt.ask();
             } else if (user instanceof OrganizeAble) {
-                chosen = askMenuInput(10);
-            } else
-                chosen = askMenuInput(6);
+                //chosen = askMenuInput(10);
+                Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.sendMessageOrganizerMenu);
+                chosen = prompt.ask();
+            } else {
+                //chosen = askMenuInput(6);
+                Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.sendMessageAttendeeMenu);
+                chosen = prompt.ask();
+            }
 
             switch (chosen) {
                 case "U":
@@ -243,11 +258,14 @@ public class MessageSystem extends Controller {
      * Messages all users attending a specific event.
      * @param username username of the sender.
      */
-    private void messageEventAllAtt(String username, ArrayList<String> events){
+    private void messageEventAllAtt(String username, ArrayList<String> events) throws IOException {
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("printInputEventName");
         events.add(obj.nextLine().trim());
-        String chosen = askMenuInput(12);
+        //String chosen = askMenuInput(12);
+        PromptBuilder promptBuilder = new PromptBuilder();
+        Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.wishToSendMoreEventMenu);
+        String chosen = prompt.ask();
         switch(chosen){
             case "S":
                 messageEventAllAtt(username,events);
@@ -265,10 +283,13 @@ public class MessageSystem extends Controller {
      * <code>username</code> by another <code>Attendee</code>.
      * @param username username of <code>Attendee</code> viewing the messages.
      */
-    private void viewMessages(String username){
+    private void viewMessages(String username) throws IOException {
         boolean viewingMessage = true;
         while (viewingMessage) {
-            String chosen = askMenuInput(7);
+            //String chosen = askMenuInput(7);
+            PromptBuilder promptBuilder = new PromptBuilder();
+            Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.viewMessageMenu);
+            String chosen = prompt.ask();
             switch (chosen) {
                 case "S":
                     ArrayList<String> messagesS = messageManager.getSendBy(username);

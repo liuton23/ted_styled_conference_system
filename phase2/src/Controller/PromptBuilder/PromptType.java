@@ -6,9 +6,15 @@ public enum PromptType {
     booleanPrompt,
     eventsMenu,
     loginPrompt,
+    mainMessageMenu,
     organizerMenu,
+    sendMessageAttendeeMenu,
+    sendMessageOrganizerMenu,
+    sendMessageSpeakerMenu,
     userTypeMenu,
     viewEventsMenu,
     viewEventTypeMenu,
-    viewMonthMenu
+    viewMessageMenu,
+    viewMonthMenu,
+    wishToSendMoreEventMenu
 }
