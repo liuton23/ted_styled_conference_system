@@ -96,6 +96,15 @@ public class Controller {
                 }
 
                 switch (chosen) {
+                    case "U"://Change account email
+                        presenter.display("Please enter new account email.");
+                        Scanner scanner = new Scanner(System.in);
+                        String newEmail = scanner.nextLine();
+                        if (newEmail.toUpperCase().equals(presenter.getExit())){
+                            throw new IOException();
+                        }
+                        userManager.setUserEmail(username, newEmail);
+                        break;
                     case "M"://Messaging
                         MessageSystem messageSystem = new MessageSystem(messageManager,userManager,eventManager);
                         messageSystem.messageActivity(username);

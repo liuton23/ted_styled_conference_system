@@ -8,6 +8,7 @@ public class LoginMenu extends Menu{
         ArrayList<String> options = new ArrayList<>();
         options.add("(L)ogin");
         options.add("(R)egister");
+        options.add("Reset (P)assword");
         return options;
     }
 
@@ -15,6 +16,7 @@ public class LoginMenu extends Menu{
         ArrayList<String> choices = new ArrayList<>();
         choices.add("L");
         choices.add("R");
+        choices.add("P");
         return choices;
     }
 }

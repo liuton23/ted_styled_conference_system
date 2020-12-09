@@ -6,6 +6,7 @@ public class BasicMenu1 extends Menu{
 
     public ArrayList<String> getMenuOptions(){
         ArrayList<String> options = new ArrayList<>();
+        options.add("(U)pdate Account Email");
         options.add("(M)essages");
         options.add("(E)vents");
         options.add("(I)tinerary");
@@ -15,6 +16,7 @@ public class BasicMenu1 extends Menu{
 
     public ArrayList<String> getAllChoices(){
         ArrayList<String> choices = new ArrayList<>();
+        choices.add("U");
         choices.add("M");
         choices.add("E");
         choices.add("I");
