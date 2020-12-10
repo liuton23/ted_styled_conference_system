@@ -56,6 +56,7 @@ public class ScheduleDownloaderPresenter {
         headers.put("Title", "Title");
         headers.put("Start", "Start");
         headers.put("End", "End");
+        headers.put("Room", "Room");
         headers.put("Speaker", "Speaker(s)");
         return headers;
     }
@@ -90,5 +91,12 @@ public class ScheduleDownloaderPresenter {
     public void displayFinishedMessage(String filepath) {
         System.out.println("Your PDF was successfully generated");
         System.out.println("You can find the PDF at " + filepath);
+    }
+
+    /**
+     * Displays an error message for when there are no events in the system
+     */
+    public void displayNoEventsMessage() {
+        System.out.println("Error: there are no events in the system!");
     }
 }
