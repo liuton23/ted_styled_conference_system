@@ -5,14 +5,11 @@ import Controller.PromptBuilder.Prompt;
 import Controller.PromptBuilder.PromptBuilder;
 import Controller.PromptBuilder.PromptType;
 import Entities.*;
-import Entities.Event;
-import Entities.EventComparators.bySpeakerEventComparator;
-import Entities.EventComparators.byTimeEventComparator;
-import Entities.EventComparators.byTitleEventComparator;
-import Entities.UserFactory.*;
+import Gateway.Gateway;
+import Gateway.ScheduleDownloader;
 import Presenter.*;
 import UseCases.*;
-import Entities.Speaker;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;

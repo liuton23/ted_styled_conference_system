@@ -1,4 +1,4 @@
-package Controller;
+package Gateway;
 
 import Presenter.Presenter;
 import UseCases.UserManager;
