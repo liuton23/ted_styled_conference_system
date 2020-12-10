@@ -6,10 +6,10 @@ public class UserTypeMenu extends Menu{
 
     public ArrayList<String> getMenuOptions(){
         ArrayList<String> options = new ArrayList<>();
-        options.add("Attendee account");
-        options.add("Organizer account");
-        options.add("Speaker account");
-        options.add("VIP account");
+        options.add("(A)ttendee account");
+        options.add("(O)rganizer account");
+        options.add("(S)peaker account");
+        options.add("(V)IP account");
         return options;
     }
 
