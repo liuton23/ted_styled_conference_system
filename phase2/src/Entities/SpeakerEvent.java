@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  * An instance of this class represent an event at the tech conference that has at least one speaker speaking.
@@ -78,5 +79,22 @@ public class SpeakerEvent extends Event implements Serializable {
                     this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + " with : " +
                     this.getSpeaker().get(0) + "and more.");
         }
+    }
+
+    /**
+     * Gets a linked hash map of string representations of this event's properties (title, room, etc.)
+     * mapped to the corresponding part of event info they represent
+     * @return a linked hash map of string representations of this event's properties
+     */
+    @Override
+    public LinkedHashMap<String, String> toStringLinkedHashMap()  {
+        LinkedHashMap<String, String> info = super.toStringLinkedHashMap(); //get info from parent class
+        if(this.speaker.size() == 1) { //add speaker(s)
+            info.put("Speaker", this.speaker.get(0));
+        }
+        else{
+            info.put("Speaker", this.getSpeaker().get(0) + "and more.");
+        }
+        return info;
     }
 }
