@@ -124,6 +124,7 @@ public class Controller {
                         break;
                     case "D"://Download PDF of conference schedule
                         scheduleDownloader = new ScheduleDownloader(eventManager);
+                        scheduleDownloader.generatePDF();
                         break;
                     case "B":
                         loggedin = false;
