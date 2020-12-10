@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Optional;
 
 /**
@@ -271,6 +272,20 @@ public class EventManager implements Serializable {
             speakerlessEvents.remove(event.getTitle());
         }
     }
+
+    /**
+     * Returns a list containing the linked hash maps of the event info for each event in a list of events
+     * @param events the list of events
+     * @return the list containing the linked hash maps of of event info
+     */
+    public ArrayList<LinkedHashMap<String, String>> getEventInfoLists(ArrayList<Event> events) {
+        ArrayList<LinkedHashMap<String, String>> eventInfos = new ArrayList<>();
+        for (Event event : events) {
+            eventInfos.add(event.toStringLinkedHashMap());
+        }
+        return eventInfos;
+    }
+
     //testing
     public static void main(String[] args) {
         EventManager eventManager = new EventManager();

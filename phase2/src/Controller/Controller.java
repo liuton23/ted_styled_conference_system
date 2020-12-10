@@ -5,14 +5,11 @@ import Controller.PromptBuilder.Prompt;
 import Controller.PromptBuilder.PromptBuilder;
 import Controller.PromptBuilder.PromptType;
 import Entities.*;
-import Entities.Event;
-import Entities.EventComparators.bySpeakerEventComparator;
-import Entities.EventComparators.byTimeEventComparator;
-import Entities.EventComparators.byTitleEventComparator;
-import Entities.UserFactory.*;
+import Gateway.Gateway;
+import Gateway.ScheduleDownloader;
 import Presenter.*;
 import UseCases.*;
-import Entities.Speaker;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
@@ -24,6 +21,7 @@ import java.util.List;
 public class Controller {
 
     private Gateway gateway = new Gateway("save.ser");
+    private ScheduleDownloader scheduleDownloader = new ScheduleDownloader(new EventManager());
     private UserManager userManager = new UserManager();
     private EventManager eventManager = new EventManager();
     private MessageManager messageManager = new MessageManager();
@@ -123,6 +121,9 @@ public class Controller {
                         break;
                     case "C"://Create accounts
                         loginSystem.createAccounts();
+                        break;
+                    case "D"://Download PDF of conference schedule
+                        scheduleDownloader = new ScheduleDownloader(eventManager);
                         break;
                     case "B":
                         loggedin = false;

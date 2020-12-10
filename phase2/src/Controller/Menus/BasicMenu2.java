@@ -12,6 +12,7 @@ public class BasicMenu2 extends BasicMenu1{
         options.add("(I)tinerary");
         options.add("(S)chedule events");
         options.add("(C)reate user account");
+        options.add("(D)ownload Schedule as PDF");
         options.add("(B)ack");
         return options;
     }
@@ -19,7 +20,9 @@ public class BasicMenu2 extends BasicMenu1{
     public ArrayList<String> getAllChoices(){
         ArrayList<String> choices = super.getAllChoices();
         choices.add("S");
-        choices.add(("B"));
+        choices.add("C");
+        choices.add("D");
+        //choices.add(("B"));
         return choices;
     }
 }

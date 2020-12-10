@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  * An Instance of this class represents a speaker-less event.
@@ -112,7 +113,24 @@ public class Event implements Serializable{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
         return String.format(this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
                 this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + ".");
-}
+    }
+
+    /**
+     * Gets a linked hash map of string representations of this event's properties (title, room, etc.)
+     * mapped to the corresponding part of event info they represent
+     * @return a linked hash map of string representations of this event's properties
+     */
+    public LinkedHashMap<String, String> toStringLinkedHashMap() {
+        LinkedHashMap<String, String> info = new LinkedHashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
+
+        info.put("Title", this.title); //title
+        info.put("Start", this.eventTime.get(0).format(formatter)); //start
+        info.put("End", this.eventTime.get(1).format(formatter)); //end
+        info.put("Room", String.valueOf(this.room)); //room id
+
+        return info;
+    }
 
     //testing
     public static void main(String[] args) {
