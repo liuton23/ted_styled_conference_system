@@ -24,6 +24,7 @@ import java.util.List;
 public class Controller {
 
     private Gateway gateway = new Gateway("save.ser");
+    private ScheduleDownloader scheduleDownloader = new ScheduleDownloader(new EventManager());
     private UserManager userManager = new UserManager();
     private EventManager eventManager = new EventManager();
     private MessageManager messageManager = new MessageManager();
@@ -123,6 +124,9 @@ public class Controller {
                         break;
                     case "C"://Create accounts
                         loginSystem.createAccounts();
+                        break;
+                    case "D"://Download PDF of conference schedule
+                        scheduleDownloader = new ScheduleDownloader(eventManager);
                         break;
                     case "B":
                         loggedin = false;

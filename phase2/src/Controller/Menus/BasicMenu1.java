@@ -10,6 +10,7 @@ public class BasicMenu1 extends Menu{
         options.add("(M)essages");
         options.add("(E)vents");
         options.add("(I)tinerary");
+        options.add("(D)ownload Schedule as PDF");
         options.add("(B)ack");
         return options;
     }
@@ -20,6 +21,7 @@ public class BasicMenu1 extends Menu{
         choices.add("M");
         choices.add("E");
         choices.add("I");
+        choices.add("D");
         choices.add("B");
         return choices;
     }
