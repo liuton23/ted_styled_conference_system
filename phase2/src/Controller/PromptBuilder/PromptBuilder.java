@@ -24,6 +24,22 @@ public class PromptBuilder {
                 StringPrompt eventsPrompt = new StringPrompt(presenter);
                 eventsPrompt.setMenu(new EventsMenu());
                 return eventsPrompt;
+            case intPrompt://require manual setting of display message
+                return new IntPrompt(presenter);
+            case intDayPrompt:
+                IntPrompt dayPrompt = new IntDayPrompt(presenter);
+                dayPrompt.setText("Enter day of month (1-31):");
+                return dayPrompt;
+            case intHourPrompt:
+                IntHourPrompt hrPrompt = new IntHourPrompt(presenter);
+                hrPrompt.setText("Enter hour of day (0-23):");
+                return hrPrompt;
+            case intMinutePrompt:
+                IntMinutePrompt minPrompt = new IntMinutePrompt(presenter);
+                minPrompt.setText("Enter minute of hour (0-59):");
+                return minPrompt;
+            case intAtLeastOnePrompt://require manual setting of display message
+                return new IntAtLeastOnePrompt(presenter);
             case loginPrompt:
                 StringPrompt loginPrompt = new StringPrompt(presenter);
                 loginPrompt.setMenu(new LoginMenu());

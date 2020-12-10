@@ -53,5 +53,6 @@ public abstract class Prompt {
     }
 
     public boolean booleanAsk() throws IOException {return false;}
+    public int intAsk() throws IOException {return 0;}
     public String ask() throws IOException {return "";}
 }

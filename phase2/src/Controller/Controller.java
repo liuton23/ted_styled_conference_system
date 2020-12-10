@@ -181,6 +181,7 @@ public class Controller {
      * Makes sure user enters an int as input
      * @return the int the user entered
      */
+    /*
     public int getIntInput() {
         Scanner input = new Scanner(System.in);
         boolean done = false;
@@ -196,6 +197,8 @@ public class Controller {
         return in;
     }
 
+     */
+
 
     /**
      * Exits the program after saving.
@@ -209,6 +212,7 @@ public class Controller {
      * Asks the user yes or no and receives input.
      * @return  true if the user inputs Y/YES/T/True and false if the user inputs N/NO/F/FALSE.
      */
+    /*
     public boolean askBooleanInput(){
         Scanner input = new Scanner(System.in);
         ArrayList<String> choices = new ArrayList<>();
@@ -222,6 +226,8 @@ public class Controller {
         return presenter.chooseMenuOptions(14).contains(chosen);
     }
 
+     */
+
     /**
      * Checks if <code>chosen</code> is a valid input in <code>choices</code>. If input is "EXIT", <code>exit</code>
      * will be called.
@@ -229,6 +235,7 @@ public class Controller {
      * @param chosen input the user entered.
      * @return true iff <code>chosen</code> is an invalid input. False if it is valid.
      */
+    /*
     public boolean invalidInput(List<String> choices, String chosen) {
         for(String choice: choices){
             if(choice.equals(chosen)){
@@ -241,11 +248,14 @@ public class Controller {
         return true;
     }
 
+     */
+
     /**
      * Asks the user for input and checks its validity.
      * @param i the menu id.
      * @return Uppercase String that is valid input from user.
      */
+    /*
     public String askMenuInput(int i){
         Scanner input = new Scanner(System.in);
         ArrayList<String> choices = presenter.chooseMenuOptions(i);
@@ -257,12 +267,15 @@ public class Controller {
         return chosen;
     }
 
+     */
+
 
 
     /**
      * Displays a menu given <code>menu_id</code>.
      * @param menu_id determines which menu is needed.
      */
+    /*
     public void chooseMenuPrompt(int menu_id){
         switch (menu_id){
             case 1:
@@ -309,6 +322,8 @@ public class Controller {
                 break;
         }
     }
+
+     */
 
     /**
      * Initializes the use case classes. If the program has not been run before, or the save file has been corrupted,

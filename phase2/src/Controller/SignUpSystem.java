@@ -189,13 +189,17 @@ public class SignUpSystem extends Controller{
                 case "S":
                     signUpPresenter.printSignUpMessage(MessageType.signUp);
                     signUpPresenter.printSignUpMessage(MessageType.enterEventId);
-                    index = getIntInput();
+                    //index = getIntInput();
+                    Prompt indexPrompt = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
+                    index = indexPrompt.intAsk();
                     signUpPresenter.printSignUpMessage(signUpEvent(username, index));
                     break;
                 case "D":
                     signUpPresenter.printSignUpMessage(MessageType.dropOut);
                     signUpPresenter.printSignUpMessage(MessageType.enterEventId);
-                    index = getIntInput();
+                    //index = getIntInput();
+                    Prompt indexPrompt1 = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
+                    index = indexPrompt1.intAsk();
                     signUpPresenter.printSignUpMessage(dropOutEvent(username, index));
                     save();
                     break;

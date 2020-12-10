@@ -51,7 +51,7 @@ public class Presenter {
     }
 
     //MENU METHODS
-
+    /*
     /**
      * Displays the login menu.
      */
@@ -66,6 +66,7 @@ public class Presenter {
     /**
      * Displays the main menu for attendees.
      */
+    /*
     public void basicMenu1(){
         ArrayList<String> options = new ArrayList<>();
         options.add("(M)essages");
@@ -78,6 +79,7 @@ public class Presenter {
     /**
      * Displays the main menu for organizers.
      */
+    /*
     public void basicMenu2(){
         ArrayList<String> options = new ArrayList<>();
         options.add("(M)essages");
@@ -92,6 +94,7 @@ public class Presenter {
     /**
      * Displays an organizer only menu.
      */
+    /*
     public void organizerMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("(S)chedule Event");
@@ -104,6 +107,7 @@ public class Presenter {
     /**
      * Displays the main message menu.
      */
+    /*
     public void mainMessageMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("(M)essage users");
@@ -115,6 +119,7 @@ public class Presenter {
     /**
      * Displays the send message menu for attendee.
      */
+    /*
     public void sendMessageMenuAtt(){
         ArrayList<String> options = new ArrayList<>();
         options.add("Send to a (U)ser");
@@ -125,6 +130,7 @@ public class Presenter {
     /**
      * Displays the send message menu for organizer.
      */
+    /*
     public void sendOrgMessageOrg(){
         ArrayList<String> options = new ArrayList<>();
         options.add("Send to a (U)ser");
@@ -155,6 +161,7 @@ public class Presenter {
     /**
      * Displays the view message menu.
      */
+    /*
     public void viewMessageMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("View (S)ent messages");
@@ -174,6 +181,7 @@ public class Presenter {
     /**
      * Displays the event menu.
      */
+    /*
     public void eventMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("(V)iew all events");
@@ -186,6 +194,7 @@ public class Presenter {
     /**
      * Displays the view events menu.
      */
+    /*
     public void viewEventsMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("Sort events by (T)ime");
@@ -197,6 +206,7 @@ public class Presenter {
     /**
      * Displays the month options menu.
      */
+    /*
     public void viewMonthsMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("JANUARY");
@@ -225,6 +235,7 @@ public class Presenter {
         options.add("VIP Event");
         prompt(options);
     }
+    /*
     public void userTypeMenu(){
         ArrayList<String> options = new ArrayList<>();
         options.add("Attendee account");
@@ -239,6 +250,7 @@ public class Presenter {
      * @param menu_id determines which menu choices are needed.
      * @return list of valid input choices for a menu.
      */
+    /*
     public ArrayList<String> chooseMenuOptions(int menu_id){
         ArrayList<String> choices = new ArrayList<>();
         switch (menu_id){
