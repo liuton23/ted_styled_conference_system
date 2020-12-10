@@ -11,6 +11,11 @@ public class MessageListener implements PropertyChangeListener {
         this.changer = changer;
     }
 
+
+    /**
+     * Sends message about the details of event change
+     * @param evt the event of change
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("read status") || evt.getPropertyName().equals("archive status")) {
@@ -18,6 +23,9 @@ public class MessageListener implements PropertyChangeListener {
                     evt.getPropertyName() + " of this message for " + this.changer);
             System.out.println(
                     "This message has been marked as " + evt.getNewValue() + " for " + this.changer);
+        } else if (evt.getPropertyName().equals("delete status")){
+            System.out.println(
+                    "This message has been " + evt.getNewValue() + " for " + this.changer);
         } else {
             System.out.println("Message system observed a change in " +
                     evt.getPropertyName() + " of this message." );

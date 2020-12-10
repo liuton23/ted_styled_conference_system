@@ -1,5 +1,7 @@
 package Presenter;
 
+import Entities.Event;
+
 import java.util.ArrayList;
 
 public class SchedulePresenter{
@@ -69,5 +71,28 @@ public class SchedulePresenter{
                 break;
         }
     }
+
+    /**
+     * Displays an initial message then displays a list of Strings one at a time by speakers
+     * @param events list of events
+     */
+    public void displayAllEvents(ArrayList<Event> events, String way){
+        switch(way){
+            case "time":
+                System.out.println("Events sorted by time");
+                break;
+            case "name":
+                System.out.println("Events sorted by name");
+                break;
+            case "speaker":
+                System.out.println("Events sorted by speaker");
+                break;
+        }
+        for (Event e: events){
+            System.out.println(e);
+        }
+    }
+
+
 
 }

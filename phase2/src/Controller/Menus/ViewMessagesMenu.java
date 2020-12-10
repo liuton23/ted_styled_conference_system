@@ -10,6 +10,10 @@ public class ViewMessagesMenu extends Menu{
         options.add("View (R)eceived messages");
         options.add("View (U)nread messages");
         options.add("View messages (F)rom another user");
+        options.add("View arc(H)ived messages");
+        options.add("(M)ark as Unread");
+        options.add("Mark as (A)rchive");
+        options.add("(E)dit message");
         options.add("(B)ack");
         return options;
     }
@@ -22,6 +26,8 @@ public class ViewMessagesMenu extends Menu{
         choices.add("M");
         choices.add("A");
         choices.add("F");
+        choices.add("E");
+        choices.add("H");
         choices.add("B");
         return choices;
     }

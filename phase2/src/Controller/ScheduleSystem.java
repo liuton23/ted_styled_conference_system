@@ -150,7 +150,7 @@ public class ScheduleSystem extends Controller{
         }
         for (String speakerName: speakerList) {
             Speaker speaker = (Speaker) userManager.usernameToUserObject(speakerName).get();
-            userManager.addEventToSpeakerList((TalkAble) speaker, title);
+            userManager.addEventToSpeakerList(speaker, title);
         }
         roomManager.book(tempRoom, title, startDateTime, endDateTime);
         eventManager.createSpeakerEvent(title, speakerList, year, month, day, hour, minute, room, duration);
@@ -186,7 +186,7 @@ public class ScheduleSystem extends Controller{
         }
         for (String speakerName: speakerList) {
             Speaker speaker = (Speaker) userManager.usernameToUserObject(speakerName).get();
-            userManager.addEventToSpeakerList((TalkAble) speaker, title);
+            userManager.addEventToSpeakerList(speaker, title);
         }
         roomManager.book(tempRoom, title, startDateTime, endDateTime);
         eventManager.createVIPSpeakerEvent(title, speakerList, year, month, day, hour, minute, room, duration);
@@ -311,14 +311,9 @@ public class ScheduleSystem extends Controller{
                     presenter.displayMessages("requestRoom");
                     int roomId;
                     int roomCapacity;
-                    //roomId = getIntInput();
-                    Prompt intPrompt = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
-                    intPrompt.setText("Enter room ID");
-                    roomId = intPrompt.intAsk();
+                    roomId = getIntInput();
                     presenter.displayMessages("requestCapacity");
-                    Prompt capacityPrompt = promptBuilder.buildPrompt(presenter, PromptType.intAtLeastOnePrompt);
-                    //roomCapacity = getIntInputGreaterThanEqualTo(1);
-                    roomCapacity = capacityPrompt.intAsk();
+                    roomCapacity = getIntInputGreaterThanEqualTo(1);
                     schedulePresenter.printAddRoomMessage(addRoom(roomId,roomCapacity));
                     save();
                     break;
@@ -327,12 +322,9 @@ public class ScheduleSystem extends Controller{
                     presenter.displayMessages("changeSpeaker");
                     ArrayList<Event> events = new ArrayList<Event>(eventManager.getSpeakerEvents().values());
                     //events.sort(new bySpeakerEventComparator());
-                    presenter.displayAllEvents(events, "speaker");
+                    schedulePresenter.displayAllEvents(events, "speaker");
                     presenter.displayMessages("requestRoom");
-                    //index = getIntInput();
-                    Prompt indexPrompt = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
-                    indexPrompt.setText("Enter room index:");
-                    index = indexPrompt.intAsk();
+                    index = getIntInput();
                     presenter.displayMessages("requestNewSpeaker");
                     String newSpeaker = input.nextLine();
                     presenter.displayMessages("requestOldSpeaker");
@@ -357,38 +349,23 @@ public class ScheduleSystem extends Controller{
         presenter.displayMessages("S");
         String title = input.nextLine().trim();
         presenter.displayMessages("requestYear");
-        //int year = getIntInput();
-        PromptBuilder promptBuilder = new PromptBuilder();
-        Prompt intPrompt = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
-        intPrompt.setText("Please enter a year (e.g. 20XX):");
-        int year = intPrompt.intAsk();
+        int year = getIntInput();
         presenter.displayMessages("requestMonth"); //***********
-        //presenter.viewMonthsMenu();
         //String month = askMenuInput(13); //input.nextLine().toUpperCase();
-
+        PromptBuilder promptBuilder = new PromptBuilder();
         Prompt monthPrompt = promptBuilder.buildPrompt(presenter, PromptType.viewMonthMenu);
         String month = monthPrompt.ask();
         presenter.displayMessages("requestDay");
-        //int day = getIntInputInRange(1, 31);
-        Prompt dayPrompt = promptBuilder.buildPrompt(presenter, PromptType.intDayPrompt);
-        int day = dayPrompt.intAsk();
+        int day = getIntInputInRange(1, 31);
         presenter.displayMessages("requestHour");
-        //int hour = getIntInputInRange(0, 23);
-        Prompt hourPrompt = promptBuilder.buildPrompt(presenter, PromptType.intHourPrompt);
-        int hour = hourPrompt.intAsk();
+        int hour = getIntInputInRange(0, 23);
         presenter.displayMessages("requestMinute");
         // TODO: minute input keeps glitching on me...
-        //int min = getIntInputInRange(0, 59);
-        Prompt minPrompt = promptBuilder.buildPrompt(presenter, PromptType.intMinutePrompt);
-        int min = minPrompt.intAsk();
+        int min = getIntInputInRange(0, 59);
         presenter.displayMessages("requestDuration");
-        //int duration = getIntInput();
-        intPrompt.setText("Please enter length of event (hours):");
-        int duration = intPrompt.intAsk();
+        int duration = getIntInput();
         presenter.displayMessages("requestRoom");
-        //int roomID = getIntInput();
-        intPrompt.setText("Please enter room ID:");
-        int roomID = intPrompt.intAsk();
+        int roomID = getIntInput();
         // input the options etc in controller and presenter
         presenter.displayMessages("requestEventType");
         //String eventType = askMenuInput(17);
@@ -442,7 +419,6 @@ public class ScheduleSystem extends Controller{
      * @param end end of range
      * @return the inputted int
      */
-    /*
     private int getIntInputInRange(int start, int end) {
         boolean done = false;
         int in = 0;
@@ -457,14 +433,11 @@ public class ScheduleSystem extends Controller{
         return in;
     }
 
-     */
-
     /**
      * Makes sure user enters an int greater than or equal to start
      * @param start start of range
      * @return the inputted int
      */
-    /*
     private int getIntInputGreaterThanEqualTo(int start) {
         boolean done = false;
         int in = 0;
@@ -478,8 +451,6 @@ public class ScheduleSystem extends Controller{
         } while (!done);
         return in;
     }
-
-     */
 
     /**
      * @param eventName Name of the event to be cancelled.
@@ -505,7 +476,7 @@ public class ScheduleSystem extends Controller{
         roomManager.unbook(room, eventName);
         //removing the event name from all of the attendee's lists
         for (String attendeeName : eventManager.eventToAttendees(event)) {
-            User attendee = (User) userManager.usernameToUserObject(attendeeName).get();
+            User attendee = userManager.usernameToUserObject(attendeeName).get();
             userManager.dropOut((AttendAble) attendee, eventName);
         }
         //event removed successfully.

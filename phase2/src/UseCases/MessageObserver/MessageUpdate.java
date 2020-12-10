@@ -11,17 +11,19 @@ public class MessageUpdate {
     private Message message;
     private PropertyChangeSupport observable;
 
+    /**
+     * Initialize a message update object
+     * @param messageObj the message object
+     */
+    public MessageUpdate (Message messageObj) {
+        this.message = messageObj;
+        this.observable = new PropertyChangeSupport(this);
+    }
 
     /*
      * Add a new observer to observe the changes to this class.
      * @param observer
      */
-    public MessageUpdate (Message m) {
-        this.message = m;
-        this.observable = new PropertyChangeSupport(this);
-    }
-
-
     public void addObserver(PropertyChangeListener observer) {
         observable.addPropertyChangeListener(observer);
     }
@@ -44,6 +46,10 @@ public class MessageUpdate {
             observer.propertyChange(newEvent);
     }
 
+    /**
+     * Mark unread of a message for a recipient
+     * @param recipient the username of the recipient
+     */
     public void markUnread(String recipient) {
 
         String oldRead  = "Read";
@@ -53,6 +59,10 @@ public class MessageUpdate {
         notifyObservers (newEvent);
     }
 
+    /**
+     * Mark archive of a message for a user
+     * @param changer the username of changer
+     */
     public void markArchive(String changer) {
         String oldRead  = "Not archived";
         String newRead = "archived";
@@ -61,6 +71,12 @@ public class MessageUpdate {
         notifyObservers (newEvent);
     }
 
+    /**
+     * Edit message for a already sent message
+     * @param sender the username of the sender
+     * @param newText the updated text
+     */
+
     public void editMessage(String sender, String newText){
         String oldMessage = message.getText();
         message.setText(newText);
@@ -68,4 +84,17 @@ public class MessageUpdate {
                 oldMessage, newText);
         notifyObservers (newEvent);
     }
+
+    public void markDelete(String changer) {
+        String oldRead  = "Not deleted";
+        String newRead = "deleted";
+        if (message.getRecipients().contains(changer)){
+            message.removeRecipient(changer);
+        } else {
+            message.setDeletedForSender(false);
+        }
+        PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "delete status", oldRead, newRead);
+        notifyObservers (newEvent);
+    }
+
 }

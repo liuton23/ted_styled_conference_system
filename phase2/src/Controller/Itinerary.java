@@ -31,7 +31,7 @@ public class Itinerary {
             AttendAble userObj = obj.get();
 
             //Speaker sp = (Speaker) attendee;
-            //presenter.displaySchedule(attendeeManager.getSpeakingList(sp), "speakItinerary");
+            //presenter.displaySchedule(userManager.getSpeakingList(sp), "speakItinerary");
             //presenter.displaySchedule(attendeeManager.getItinerary(sp), "itinerary");
             presenter.displaySchedule(userManager.getItinerary(userObj), "itinerary");
             //else presenter.displaySchedule(attendeeManager.getItinerary(attendee), "itinerary");

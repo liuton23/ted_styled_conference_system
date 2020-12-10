@@ -21,6 +21,7 @@ public class Message implements Serializable {
     private HashMap<String, Boolean> readDict;
     private HashMap<String, Boolean> archivedDict;
     private Boolean edited;
+    private Boolean deletedForSender;
     private String messageNumber;
 
     /**
@@ -38,6 +39,7 @@ public class Message implements Serializable {
         this.archivedDict = new HashMap<String, Boolean>();
         archivedDict.put(sender,false);
         this.edited = false;
+        this.deletedForSender = false;
     }
 
 
@@ -50,6 +52,7 @@ public class Message implements Serializable {
         this.recipients.add(recipient);
         this.readDict.put(recipient, false);
         this.archivedDict.put(recipient,false);
+
     }
 
     /**
@@ -134,9 +137,21 @@ public class Message implements Serializable {
         return messageTime;
     }
 
+    public void removeRecipient(String recipient){
+        recipients.remove(recipient);
+    }
+
     @Override
     public String toString() {
         return messageNumber;
+    }
+
+    public Boolean getDeletedForSender(){
+        return deletedForSender;
+    }
+
+    public void setDeletedForSender(Boolean deleted){
+        this.deletedForSender = deleted;
     }
 
 

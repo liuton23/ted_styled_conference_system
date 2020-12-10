@@ -35,13 +35,22 @@ public class MessagePresenter {
                 System.out.println("There's no such message corresponding to this message number");
                 break;
             case "cantMark":
-                System.out.println("You can not mark a message you did not send or received");
+                System.out.println("You can not make this action on this message");
                 break;
             case "cantEdit":
                 System.out.println("You can not edit a message you did not send");
                 break;
             case "noArchive":
                 System.out.println("You have no archived messages");
+                break;
+            case "recalled":
+                System.out.println("You have recalled this message");
+                break;
+            case "cantUnread":
+                System.out.println("You can not unread a sent message from yourself");
+                break;
+            case "cantRecall":
+                System.out.println("You can not recall this message");
                 break;
         }
     }
@@ -155,7 +164,7 @@ public class MessagePresenter {
     }
 
     public void displayNewMessageNum(String num){
-        System.out.println("You have successfully create this message, message number is MSG" + num);
+        System.out.println("You have successfully create this message, message number is " + num);
     }
 
     public void displayNumOfNew(int num){

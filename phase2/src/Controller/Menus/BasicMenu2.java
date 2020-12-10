@@ -21,8 +21,6 @@ public class BasicMenu2 extends BasicMenu1{
         ArrayList<String> choices = super.getAllChoices();
         choices.add("S");
         choices.add("C");
-        choices.add("D");
-        //choices.add(("B"));
         return choices;
     }
 }

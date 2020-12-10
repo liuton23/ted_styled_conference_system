@@ -9,6 +9,7 @@ public class SendMessageOrganizerMenu extends Menu{
         options.add("Send to a (U)ser");
         options.add("Send to all (S)peakers");
         options.add("Send to all (A)ttendees");
+        options.add("(R)ecall message");
         options.add("(B)ack");
         return options;
     }
@@ -18,6 +19,7 @@ public class SendMessageOrganizerMenu extends Menu{
         choices.add("U");
         choices.add("S");
         choices.add("A");
+        choices.add("R");
         choices.add("B");
         return choices;
     }

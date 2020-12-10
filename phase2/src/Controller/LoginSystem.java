@@ -4,7 +4,6 @@ import Entities.UserFactory.UserType;
 import UseCases.UserManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -79,9 +78,9 @@ public class LoginSystem extends Controller {
     public String login() {
 
         Scanner obj1 = new Scanner(System.in);
-        presenter.printUsernameMessage();
+        presenter.printUsernameMessage(1);
         String username = obj1.nextLine();
-        presenter.printPasswordMessage();
+        presenter.printPasswordMessage(1);
         String password = obj1.nextLine();
         if (canLogin(username, password)) {
             presenter.printLoginSucceedMessage();
@@ -96,9 +95,9 @@ public class LoginSystem extends Controller {
      */
     public void registerUsers(UserManager userManager) {
         Scanner obj1 = new Scanner(System.in);
-        presenter.printUsernameMessage();
+        presenter.printUsernameMessage(1);
         String username = obj1.nextLine();
-        presenter.printPasswordMessage();
+        presenter.printPasswordMessage(1);
         String password = obj1.nextLine();
         presenter.printAreUAOrg();
         PromptBuilder promptBuilder = new PromptBuilder();
@@ -125,22 +124,10 @@ public class LoginSystem extends Controller {
      * Speaker registration. Cannot choose a username that is already taken.
      */
     public void createAccounts() throws IOException {
-        /*
         Scanner obj1 = new Scanner(System.in);
-        presenter.displayMessages("requestSpeaker");
+        presenter.printUsernameMessage(2);//"Enter your username:"
         String username = obj1.nextLine();
-        presenter.displayMessages("enterSpeakerPswd");
-        String password = obj1.nextLine();
-        if (registerSpeaker(username, password)){
-            presenter.printSpeakerCreatedMessage();
-        } else {
-            presenter.printRegisterFailMessage();
-        }
-         */
-        Scanner obj1 = new Scanner(System.in);
-        presenter.printUsernameMessage();//"Enter your username:"
-        String username = obj1.nextLine();
-        presenter.printPasswordMessage();//"Enter your password"
+        presenter.printPasswordMessage(2);//"Enter your password"
         String password = obj1.nextLine();
         //presenter.printSelectUserType();
         //String chosen = askMenuInput(16);
@@ -163,7 +150,7 @@ public class LoginSystem extends Controller {
                 break;
         }
         if (registerUser(username, password, type)) {
-            presenter.printRegisterSucceedMessage();
+            presenter.printAccountCreatedMessage();
         } else {
             presenter.printRegisterFailMessage();
         }

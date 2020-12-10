@@ -50,311 +50,6 @@ public class Presenter {
         System.out.print("Input: ");
     }
 
-    //MENU METHODS
-    /*
-    /**
-     * Displays the login menu.
-     */
-    public void loginMenu(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("(L)ogin");
-        options.add("(R)egister");
-        options.add("(P)assword Reset");
-        prompt(options);
-    }
-
-    /**
-     * Displays the main menu for attendees.
-     */
-    /*
-    public void basicMenu1(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("(M)essages");
-        options.add("(E)vents");
-        options.add("(I)tinerary");
-        options.add("(B)ack");
-        prompt(options);
-    }
-
-    /**
-     * Displays the main menu for organizers.
-     */
-    /*
-    public void basicMenu2(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("(M)essages");
-        options.add("(E)vents");
-        options.add("(I)tinerary");
-        options.add("(S)chedule events");
-        options.add("(C)reate user account");
-        options.add("(B)ack");
-        prompt(options);
-    }
-
-    /**
-     * Displays an organizer only menu.
-     */
-    /*
-    public void organizerMenu(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("(S)chedule Event");
-        options.add("(A)dd Room");
-        options.add("(C)hange Speaker");
-        options.add("(B)ack");
-        prompt(options);
-    }
-
-    /**
-     * Displays the main message menu.
-     */
-    /*
-    public void mainMessageMenu(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("(M)essage users");
-        options.add("(V)iew, mark and edit messages");
-        options.add("(B)ack");
-        prompt(options);
-    }
-
-    /**
-     * Displays the send message menu for attendee.
-     */
-    /*
-    public void sendMessageMenuAtt(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("Send to a (U)ser");
-        options.add("(B)ack");
-        prompt(options);
-    }
-
-    /**
-     * Displays the send message menu for organizer.
-     */
-    /*
-    public void sendOrgMessageOrg(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("Send to a (U)ser");
-        options.add("Send to all (S)peakers");
-        options.add("Send to all (A)ttendees");
-        options.add("(B)ack");
-        prompt(options);
-    }
-
-    public void wishToSendMoreEvent(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("(S)end to one more event");
-        options.add("(C)ontinue to message");
-        prompt(options);
-    }
-
-    /**
-     * Displays the send message menu for speaker.
-     */
-    public void sendMessageMenuSpeaker(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("Send to a (U)ser");
-        options.add("Send to all attendees in one or multiple (E)vents");
-        options.add("(B)ack");
-        prompt(options);
-    }
-
-    /**
-     * Displays the view message menu.
-     */
-    /*
-    public void viewMessageMenu(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("View (S)ent messages");
-        options.add("View (R)eceived messages");
-        options.add("View (U)nread messages");
-        options.add("View messages (F)rom another user");
-        options.add("View arc(H)ived messages");
-        options.add("(M)ark as Unread");
-        options.add("Mark as (A)rchive");
-        options.add("(E)dit message");
-        options.add("(B)ack");
-        prompt(options);
-    }
-
-
-
-    /**
-     * Displays the event menu.
-     */
-    /*
-    public void eventMenu(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("(V)iew all events");
-        options.add("(S)ign up for events");
-        options.add("(D)rop out of events");
-        options.add("(B)ack");
-        prompt(options);
-    }
-
-    /**
-     * Displays the view events menu.
-     */
-    /*
-    public void viewEventsMenu(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("Sort events by (T)ime");
-        options.add("Sort events by (N)ame");
-        options.add("Sort events by (S)peaker");
-        prompt(options);
-    }
-
-    /**
-     * Displays the month options menu.
-     */
-    /*
-    public void viewMonthsMenu(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("JANUARY");
-        options.add("FEBRUARY");
-        options.add("MARCH");
-        options.add("APRIL");
-        options.add("MAY");
-        options.add("JUNE");
-        options.add("JULY");
-        options.add("AUGUST");
-        options.add("SEPTEMBER");
-        options.add("OCTOBER");
-        options.add("NOVEMBER");
-        options.add("DECEMBER");
-        prompt(options);
-    }
-
-    /**
-     * Displays the event type options menu.
-     */
-    public void viewEventTypeMenu(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("Speaker Event");
-        options.add("VIP Speaker Event");
-        options.add("Event");
-        options.add("VIP Event");
-        prompt(options);
-    }
-    /*
-    public void userTypeMenu(){
-        ArrayList<String> options = new ArrayList<>();
-        options.add("Attendee account");
-        options.add("Organizer account");
-        options.add("Speaker account");
-        options.add("VIP account");
-        prompt(options);
-    }
-
-    /**
-     * Chooses which options are valid input options for a menu given <code>menu_id</code>.
-     * @param menu_id determines which menu choices are needed.
-     * @return list of valid input choices for a menu.
-     */
-    /*
-    public ArrayList<String> chooseMenuOptions(int menu_id){
-        ArrayList<String> choices = new ArrayList<>();
-        switch (menu_id){
-            case 1:
-                choices.add("L");
-                choices.add("R");
-                choices.add("P");
-                break;
-            case 3:
-                choices.add("C");
-                choices.add("S");
-            case 2:
-                choices.add("M");
-                choices.add("E");
-                choices.add("I");
-                choices.add(("B"));
-                break;
-            case 4:
-                choices.add("S");
-                choices.add("A");
-                choices.add("C");
-                choices.add(("B"));
-                break;
-            case 5:
-                choices.add("M");
-                choices.add("V");
-                choices.add(("B"));
-                break;
-            case 6:
-                choices.add("U");
-                choices.add("B");
-                break;
-            case 7:
-                choices.add("S");
-                choices.add("R");
-                choices.add("U");
-                choices.add("M");
-                choices.add("A");
-                choices.add("F");
-                choices.add("E");
-                choices.add("B");
-                choices.add("H");
-                break;
-            case 8:
-                choices.add("V");
-                choices.add("S");
-                choices.add("D");
-                choices.add(("B"));
-                break;
-            case 9:
-                choices.add("T");
-                choices.add("N");
-                choices.add("S");
-                break;
-            case 10:
-                choices.add("U");
-                choices.add("S");
-                choices.add("A");
-                choices.add("B");
-                break;
-            case 11:
-                choices.add("U");
-                choices.add("E");
-                choices.add("B");
-                break;
-            case 12:
-                choices.add("S");
-                choices.add("C");
-            case 13:
-                choices.add("JANUARY");
-                choices.add("FEBRUARY");
-                choices.add("MARCH");
-                choices.add("APRIL");
-                choices.add("MAY");
-                choices.add("JUNE");
-                choices.add("JULY");
-                choices.add("AUGUST");
-                choices.add("SEPTEMBER");
-                choices.add("OCTOBER");
-                choices.add("NOVEMBER");
-                choices.add("DECEMBER");
-            case 14: //yes options for are you organizer
-                choices.add("Y");
-                choices.add("T");
-                choices.add("YES");
-                choices.add("TRUE");
-            case 15: //no options for are you organizer
-                choices.add("N");
-                choices.add("F");
-                choices.add("NO");
-                choices.add("FALSE");
-            case 16: //user type options for organizers
-                choices.add("A");//Attendee
-                choices.add("O");//Organizer
-                choices.add("S");//Speaker
-                choices.add("V");//VIP
-            case 17: // event options
-                choices.add("SPEAKER EVENT");
-                choices.add("VIP SPEAKER EVENT");
-                choices.add("VIP EVENT");
-                choices.add("EVENT");
-        }
-        return choices;
-    }
 
     //DISPLAY METHODS
 
@@ -464,26 +159,7 @@ public class Presenter {
         }
     }
 
-    /**
-     * Displays an initial message then displays a list of Strings one at a time by speakers
-     * @param events list of events
-     */
-    public void displayAllEvents(ArrayList<Event> events, String way){
-        switch(way){
-            case "time":
-                System.out.println("Events sorted by time");
-                break;
-            case "name":
-                System.out.println("Events sorted by name");
-                break;
-            case "speaker":
-                System.out.println("Events sorted by speaker");
-                break;
-        }
-        for (Event e: events){
-            System.out.println(e);
-        }
-    }
+
 
 
     /**
@@ -497,24 +173,31 @@ public class Presenter {
     /**
      * Prompts user for username.
      */
-    public void printUsernameMessage(){
-        System.out.println("Enter your username:");
-    }
+    public void printUsernameMessage(int cases){
+        switch(cases){
+            case 1:
+                System.out.println("Enter your username:");
+                break;
+            case 2:
+                System.out.println("Enter an username:");
+                break;
+        }
 
-    /**
-     * Prompts user to input event number or zero if no more event
-     */
-    public void printInputEventNumOrZero(){
-        System.out.println("Please enter another event name " +
-                "if you wish, otherwise just enter (N)o");
     }
 
 
     /**
      * Prompts user for password.
      */
-    public void printPasswordMessage() {
-        System.out.println("Enter your password");
+    public void printPasswordMessage(int ind) {
+        switch (ind){
+            case 1:
+                System.out.println("Enter your password");
+                break;
+            case 2:
+                System.out.println("Enter a password");
+                break;
+        }
     }
 
     /**
@@ -537,13 +220,12 @@ public class Presenter {
     public void printRegisterSucceedMessage(){
         System.out.println("You have successfully registered. Please login to continue.");
     }
-
     /**
      * Displays that the organizer successfully added a speaker to the system.
      */
 
-    public void printSpeakerCreatedMessage(){
-        System.out.println("The speaker was successfully added to the system.");
+    public void printAccountCreatedMessage(){
+        System.out.println("This account was successfully added to the system.");
     }
 
     /**
@@ -553,23 +235,14 @@ public class Presenter {
         System.out.println("Are you an organizer?");
     }
 
-    /**
-     * Displays that "Are u an organizer".
-     */
-    public void printSelectUserType(){
-        System.out.println("Select (A)ttendee, (O)rganizer, (S)peaker, (V)IP");
-    }
 
     /**
      * Displays failed registration message.
      */
     public void printRegisterFailMessage(){
-        System.out.println("Your username or password is invalid.");
+        System.out.println("This username or password is invalid.");
         System.out.println("Please check that username or password is non-empty and username is not already taken.");
     }
-
-
-
 
 
 
@@ -578,6 +251,15 @@ public class Presenter {
      */
     public void printInvalidIntMessage() {
         System.out.println("Error: Please enter a valid integer");
+    }
+
+
+    /**
+     * Prints a message saying no save file was found
+     */
+    public void printNoSaveFile() {
+        System.out.println("NO save file found.");
+        System.out.println("Save file was not found or was corrupted.");
     }
 
     /**
@@ -595,14 +277,6 @@ public class Presenter {
      */
     public void printInvalidIntRangeMessage(int start) {
         System.out.println("Error: Please enter a valid integer greater than or equal to " + start);
-    }
-
-    /**
-     * Prints a message saying no save file was found
-     */
-    public void printNoSaveFile() {
-        System.out.println("NO save file found.");
-        System.out.println("Save file was not found or was corrupted.");
     }
 
 }
