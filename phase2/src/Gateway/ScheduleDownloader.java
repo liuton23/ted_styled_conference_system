@@ -8,7 +8,6 @@ import Presenter.ScheduleDownloaderPresenter;
 import UseCases.EventManager;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -42,9 +41,6 @@ public class ScheduleDownloader {
                 File file = File.createTempFile(presenter.getFileName(), ".pdf", dir);
                 PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(file));
                 doc.open();
-
-                //set font
-                Font font = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
 
                 //set title in pdf
                 Paragraph title = new Paragraph(presenter.getDocumentTitle());
