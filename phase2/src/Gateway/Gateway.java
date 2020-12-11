@@ -21,8 +21,6 @@ public class Gateway {
 
     private String filepath;
     private File file;
-    private Presenter presenter;
-    private UserManager userManager;
     Session session;
     String email;
 
@@ -77,6 +75,9 @@ public class Gateway {
         return serialized;
     }
 
+    /**
+     * Email setup.
+     */
     private void initEmail(){
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
@@ -95,9 +96,15 @@ public class Gateway {
         this.session = Session.getDefaultInstance(properties, auth);
     }
 
-    public void sendEmail(String username, String subject, String content) throws MessagingException {
-        String receiverEmail = userManager.usernameToUserObject(username).get().getEmail();
-
+    /**
+     * Sends emails from <code>email</code> to <code>receiverEmail</code> with subject <code>subject</code> and
+     * <code>content</code>.
+     * @param receiverEmail <code>String</code> email that it will be sent to.
+     * @param subject subject of the email.
+     * @param content content of the email.
+     * @throws MessagingException invalid email, or error in sending.
+     */
+    public void sendEmail(String receiverEmail, String subject, String content) throws MessagingException {
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(email));
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiverEmail));
@@ -105,56 +112,4 @@ public class Gateway {
         message.setContent(content, "text/html; charset=utf-8");
         Transport.send(message);
     }
-
-    public void addEmail(String username){
-        Scanner input = new Scanner(System.in);
-        boolean invInput;
-        do {
-            invInput = true;
-            presenter.displayMessages("enterEmail");
-            String email = input.nextLine();
-            if(email.toUpperCase().equals("BACK") || email.toUpperCase().equals("B")){
-                return;
-            }else if(email.isEmpty()){
-                userManager.setUserEmail(username, email);
-            }
-            if(!email.matches("[\\w.]+@\\w+(.com)|(.ca)|(.co.uk)}")){
-                presenter.invalidInput();
-            }else if(userManager.checkValidEmail(username, email) == 0){
-                presenter.displayMessages("yourEmail");
-                break;
-            }else if(userManager.checkValidEmail(username, email) == -1){
-                presenter.displayMessages("takenEmail");
-            }else{
-                userManager.setUserEmail(username, email);
-                invInput = false;
-            }
-        }while(invInput);
-        String subject = "CSC207 Tech Conference!";
-        String message = "Your email is now linked with CSC207 Tech Conference account" + username + "\n If you did " +
-                "not do this or would like to unsubscribe to emails, login to CSC 207 Tech Conference go to Messages " +
-                "-> Add email and enter nothing.";
-        try {
-            sendEmail(username, subject, message);
-        }catch (Exception e){
-            presenter.invalidInput();
-        }
-    }
-
-    public String passwordReset(String username){
-        Random random = new Random();
-        int code = random.nextInt(9000) + 1000;
-        String subject = "CSC207 Password Reset Request.";
-        String message = "The account associated with this email:" + username + "has requested a password change." +
-                "If you recognize this account then please enter the code below into the program, otherwise please"+
-                " ignore this message." + "\n\n\n<b>" + code + "</b>";
-        try {
-            sendEmail(username, subject, message);
-        } catch (MessagingException e) {
-            System.out.println("something is wrong");
-        }
-        return Integer.toString(code);
-    }
-
-    public void setUserManager(UserManager userManager){ this.userManager = userManager; }
 }

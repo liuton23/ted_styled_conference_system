@@ -22,6 +22,7 @@ public class Controller {
 
     private Gateway gateway = new Gateway("save.ser");
     private ScheduleDownloader scheduleDownloader = new ScheduleDownloader(new EventManager());
+    private EmailSystem emailSystem;
     private UserManager userManager = new UserManager();
     private EventManager eventManager = new EventManager();
     private MessageManager messageManager = new MessageManager();
@@ -94,13 +95,7 @@ public class Controller {
 
                 switch (chosen) {
                     case "U"://Change account email
-                        presenter.display("Please enter new account email.");
-                        Scanner scanner = new Scanner(System.in);
-                        String newEmail = scanner.nextLine();
-                        if (newEmail.toUpperCase().equals(presenter.getExit())){
-                            throw new IOException();
-                        }
-                        userManager.setUserEmail(username, newEmail);
+                        emailSystem.addEmail(username);
                         break;
                     case "M"://Messaging
                         MessageSystem messageSystem = new MessageSystem(messageManager,userManager,eventManager);
@@ -135,10 +130,13 @@ public class Controller {
         }
     }
 
+    /**
+     * Can reset the users password iff they enter a valid username and there is an email associated with that user.
+     */
     private void resetPassword(){
         Scanner input = new Scanner(System.in);
-        String username = "";
-        boolean isUser = true;
+        String username;
+        boolean isUser;
         do {
             isUser = true;
             presenter.printUsernameMessage(1);
@@ -155,7 +153,7 @@ public class Controller {
             System.out.println("No email with this account.");
             return;
         }
-        String code = gateway.passwordReset(username);
+        String code = emailSystem.passwordReset(username);
         String userCode;
         boolean correct;
         do{
@@ -234,6 +232,7 @@ public class Controller {
         }finally {
             // TODO: add new presenters?
             presenter = new Presenter();
+            emailSystem = new EmailSystem(gateway, userManager);
         }
     }
 

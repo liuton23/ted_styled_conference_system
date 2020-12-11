@@ -32,9 +32,21 @@ public class User implements Serializable,Account {
         return password;
     }
 
+    /**
+     * Method that sets the email.
+     * @param email the email of the user.
+     */
     public void setEmail(String email){ this.email = email; }
 
+    /**
+     * Method that gets the email of <code>User</code>.
+     * @return email of <code>User</code>.
+     */
     public String getEmail(){ return email;  }
 
+    /**
+     * Method that sets the password.
+     * @param password password of the user.
+     */
     public void setPassword(String password){ this.password = password; }
 }

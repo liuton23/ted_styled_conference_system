@@ -132,6 +132,24 @@ public class Presenter {
             case "enterSpeakerPswd":
                 System.out.println("Enter Speaker Password:");
                 break;
+            case "sendingEmail":
+                System.out.println("Sending email. This may take a moment.");
+                break;
+            case "sentEmail":
+                System.out.println("Email has been sent.");
+                break;
+            case "emailError":
+                System.out.println("There was an error sending the email");
+                break;
+            case "enterEmail":
+                System.out.println("Enter email or enter \"B\" to go back:");
+                break;
+            case "yourEmail":
+                System.out.println("You already have an email associated with this account.");
+                break;
+            case "takenEmail":
+                System.out.println("There is another account associated with this email.");
+                break;
         }
     }
 

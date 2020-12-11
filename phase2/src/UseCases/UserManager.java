@@ -284,6 +284,13 @@ public class UserManager implements Serializable {
         return list;
     }
 
+    /**
+     * Compares <code>email</code> with every <code>email</code> of <code>User</code> in this<code>UserManager</code>.
+     * @param username valid username in this <code>UserManager</code>.
+     * @param email <code>email</code> to be compared with.
+     * @return 0 if <code>User</code> with <code>username</code> already has an email. -1 if another <code>User</code>
+     * has the same <code>email</code>. Otherwise returns 1.
+     */
     public short checkValidEmail(String username, String email){
         for(User user: masterList){
             if(user.getUsername().equals(username) && !user.getEmail().isEmpty()){
@@ -296,15 +303,37 @@ public class UserManager implements Serializable {
         return 1;
     }
 
+    /**
+     * Sets the <code>email</code> of <code>User</code> with username <code>username</code>.
+     * @param username valid username in this <code>UserManager</code>.
+     * @param email email to set <code>User.email</code> to.
+     */
     public void setUserEmail(String username, String email){
         Optional<User> user = usernameToUserObject(username);
         user.ifPresent(value -> value.setEmail(email));
     }
 
+    /**
+     * Sets the <code>password</code> of <code>User</code> with username <code>username</code>.
+     * @param username valid username in this <code>UserManager</code>.
+     * @param password password to set <code>User.password</code> to.
+     */
     public void setAttendeePassword(String username, String password){
         Optional<User> user = usernameToUserObject(username);
+        user.ifPresent(value -> value.setPassword(password));
+    }
+
+    /**
+     * Gets the email of the <code>User</code> with username <code>username</code>.
+     * @param username valid username in this <code>UserManager</code>.
+     * @return email of a <code>User</code>.
+     */
+    public String getUserEmail(String username){
+        Optional<User> user = usernameToUserObject(username);
         if(user.isPresent()){
-            user.get().setPassword(password);
+            return user.get().getEmail();
+        }else{
+            return "";
         }
     }
     /*
