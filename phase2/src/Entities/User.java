@@ -5,11 +5,19 @@ import Entities.UserFactory.Account;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User implements Serializable,Account {
+/**
+ * Abstract class representing user accounts at the tech conference
+ */
+public abstract class User implements Serializable,Account {
     private String username;
     private String password;
     private String email;
 
+    /**
+     * Constructs an instance of a user account
+     * @param username account username.
+     * @param password account password.
+     */
     public User(String username, String password){
         this.username = username;
         this.password = password;

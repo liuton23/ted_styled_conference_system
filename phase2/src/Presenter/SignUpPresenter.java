@@ -2,8 +2,15 @@ package Presenter;
 
 import java.util.ArrayList;
 
+/**
+ * Display messages relevant for event signup/dropout and event viewing.
+ */
 public class SignUpPresenter {
 
+    /**
+     * Displays various messages depending on the input during event signup
+     * @param message Type of message that will be displayed during event signup
+     */
     public void printSignUpMessage(MessageType message){
         switch (message){
             case dropOut:
@@ -55,6 +62,11 @@ public class SignUpPresenter {
         }
     }
 
+    /**
+     * Displays list of events depending on how events are sorted.
+     * @param options list of sorted events.
+     * @param way specify how the events are sorted.
+     */
     public void displaySortedEvents(ArrayList<String> options, String way){
         switch(way) {
             case "time":

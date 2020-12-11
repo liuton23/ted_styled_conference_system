@@ -56,21 +56,6 @@ public class UserManager implements Serializable {
         }
         return newUser;
     }
-    /*
-    /**
-     * Method that creates an instance of Attendee and stores it in an instance of AttendeeManager
-     * @param username the new speaker account login username.
-     * @param password the new speaker account login username.
-     * @return the new speaker instance.
-     */
-    /*
-    public Speaker createSpeaker(String username, String password){
-        Speaker sp = new Speaker(username, password);
-        speakerList.add(sp);
-        return sp;
-    }
-
-     */
 
     /**
      * This method returns a boolean whether the given username belongs to a speaker in the system.
@@ -94,13 +79,6 @@ public class UserManager implements Serializable {
      * @return true iff an attendee/speaker account matches the username and password.
      */
     public boolean inSystem(String username, String password){
-        /*
-        ArrayList<User> combinedlist = new ArrayList<>();
-        combinedlist.addAll(getAllAttendees());
-        combinedlist.addAll(getAllSpeakers());
-        combinedlist.addAll(getAllOrganizers());
-
-         */
         for (User a: masterList){
             if (username.equals(a.getUsername()) && password.equals(a.getPassword())){
                 return true;
@@ -190,18 +168,18 @@ public class UserManager implements Serializable {
         return user instanceof OrganizeAble;
     }
 
-    public Boolean checkIsAttendee(Account user) {
-        return user instanceof AttendAble;
-    }
-
-    public Boolean checkIsSpeaker(Account user) {
-        return user instanceof AttendAble;
-    }
-
+    /**
+     * @param user user account object
+     * @return true of this attendee is organizer
+     */
     public Boolean hasVIPAccess(Account user){
         return user instanceof VIPAccess;
     }
 
+    /**
+     * @param user user account object
+     * @return username of he account
+     */
     public String getUsername(Account user) {
         return user.getUsername();
     }
@@ -350,21 +328,4 @@ public class UserManager implements Serializable {
             return "";
         }
     }
-    /*
-
-    public static void main(String[] args) {
-        AttendeeManager a = new AttendeeManager();
-        Attendee attendee = a.createAttendee("Bill Nye", "bill", "science");
-        a.add(attendee);
-        a.addAttendeeEvent(attendee, "CSC207");
-        System.out.println(a.inSystem("Bill", "Nye"));
-        System.out.println(a.inSystem("Bill", "James"));
-        System.out.println(a.inSystem("Steve", "Hawking"));
-        System.out.println(a.inSystem("bill", "science"));
-        System.out.println(a.inSystem("Bill", "science"));
-    }
-
-     */
-
-
 }
