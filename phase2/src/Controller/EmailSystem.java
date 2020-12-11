@@ -38,7 +38,7 @@ public class EmailSystem {
             invInput = true;
             presenter.displayMessages("enterEmail");
             String email = input.nextLine();
-            if(email.toUpperCase().equals("BACK") || email.toUpperCase().equals("B")){
+            if(email.equalsIgnoreCase("BACK") || email.equalsIgnoreCase("B")){
                 return;
             }else if(email.isEmpty()){
                 userManager.setUserEmail(username, email);

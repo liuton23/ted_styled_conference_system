@@ -85,16 +85,5 @@ public class MessageUpdate {
         notifyObservers (newEvent);
     }
 
-    public void markDelete(String changer) {
-        String oldRead  = "Not deleted";
-        String newRead = "deleted";
-        if (message.getRecipients().contains(changer)){
-            message.removeRecipient(changer);
-        } else {
-            message.setDeletedForSender(false);
-        }
-        PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "delete status", oldRead, newRead);
-        notifyObservers (newEvent);
-    }
 
 }
