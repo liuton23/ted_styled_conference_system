@@ -1,13 +1,11 @@
 package UseCases;
 
 import Entities.*;
+import Entities.EventComparators.byTimeEventComparator;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Manages and stores events in this tech conference system.
@@ -32,6 +30,17 @@ public class EventManager implements Serializable {
      */
     public HashMap<String, Event> getAllEvents() {
         return masterEventDict;
+    }
+
+    /**
+     * This method returns a list of all events sorted by time.
+     * @return a sorted list representing all of the events occurring at the tech conference.
+     */
+    public ArrayList<Event> getAllEventsSortedByTime() {
+        ArrayList<Event> events = new ArrayList<>(this.getAllEvents().values());
+        Comparator<Event> comparator = new byTimeEventComparator();
+        events.sort(comparator);
+        return events;
     }
 
     /**
@@ -285,10 +294,10 @@ public class EventManager implements Serializable {
 
     /**
      * Returns a list containing the linked hash maps of the event info for each event in a list of events
-     * @param events the list of events
      * @return the list containing the linked hash maps of of event info
      */
-    public ArrayList<LinkedHashMap<String, String>> getEventInfoLists(ArrayList<Event> events) {
+    public ArrayList<LinkedHashMap<String, String>> getEventInfoLists() {
+        ArrayList<Event> events = this.getAllEventsSortedByTime();
         ArrayList<LinkedHashMap<String, String>> eventInfos = new ArrayList<>();
         for (Event event : events) {
             eventInfos.add(event.toStringLinkedHashMap());
