@@ -315,13 +315,11 @@ public class ScheduleSystem extends Controller{
                     save();
                     break;
                 case "A":
-                    presenter.displayMessages("requestAddRoom");
                     presenter.displayMessages("requestRoom");
                     int roomId;
                     int roomCapacity;
                     //roomId = getIntInput();
                     Prompt intPrompt = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
-                    intPrompt.setText("Enter room ID");
                     roomId = intPrompt.intAsk();
                     presenter.displayMessages("requestCapacity");
                     Prompt capacityPrompt = promptBuilder.buildPrompt(presenter, PromptType.intAtLeastOnePrompt);
@@ -339,7 +337,6 @@ public class ScheduleSystem extends Controller{
                     presenter.displayMessages("requestRoom");
                     //index = getIntInput();
                     Prompt indexPrompt = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
-                    indexPrompt.setText("Enter room index:");
                     index = indexPrompt.intAsk();
                     presenter.displayMessages("requestNewSpeaker");
                     String newSpeaker = input.nextLine();
@@ -364,7 +361,6 @@ public class ScheduleSystem extends Controller{
         Scanner input = new Scanner(System.in);
         presenter.displayMessages("S");
         String title = input.nextLine().trim();
-        presenter.displayMessages("requestYear");
         //int year = getIntInput();
         PromptBuilder promptBuilder = new PromptBuilder();
         Prompt intPrompt = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
@@ -373,7 +369,6 @@ public class ScheduleSystem extends Controller{
         presenter.displayMessages("requestMonth"); //***********
         //presenter.viewMonthsMenu();
         //String month = askMenuInput(13); //input.nextLine().toUpperCase();
-
         Prompt monthPrompt = promptBuilder.buildPrompt(presenter, PromptType.viewMonthMenu);
         String month = monthPrompt.ask();
         presenter.displayMessages("requestDay");

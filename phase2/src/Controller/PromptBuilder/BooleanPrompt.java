@@ -18,7 +18,6 @@ public class BooleanPrompt extends Prompt {
         ArrayList<String> options = getMenuOptions();
         String chosen;
         do{
-            presenter.display(getText());
             chosen = input.next().toUpperCase();
             if (chosen.equals(presenter.getExit())){
                 throw new IOException();

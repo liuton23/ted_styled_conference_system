@@ -243,7 +243,7 @@ public class SignUpSystem extends Controller{
     }
 
 
-
+/**
     public static void main(String[] args) {
         UserManager atm = new UserManager();
         EventManager evm = new EventManager();
@@ -296,6 +296,7 @@ public class SignUpSystem extends Controller{
 
         }
     }
+ */
 
 
 }

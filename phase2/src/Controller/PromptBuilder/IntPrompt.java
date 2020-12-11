@@ -15,7 +15,6 @@ public class IntPrompt extends Prompt{
         boolean done = false;
         int x = 0;
         do {
-            presenter.display(getText());
             try {
                 x = Integer.parseInt(input.nextLine());
                 done = true;

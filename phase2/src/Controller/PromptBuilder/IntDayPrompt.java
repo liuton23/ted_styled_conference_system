@@ -15,7 +15,6 @@ public class IntDayPrompt extends IntPrompt{
         boolean done = false;
         int x = 0;
         do {
-            presenter.display(getText());
             try {
                 x = Integer.parseInt(input.nextLine());
                 if (!(1 <= x && x <= 31)) {
