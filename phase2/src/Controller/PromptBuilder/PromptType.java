@@ -1,5 +1,8 @@
 package Controller.PromptBuilder;
 
+/**
+ * list types of menu prompts.
+ */
 public enum PromptType {
     basicMenu1,
     basicMenu2,
