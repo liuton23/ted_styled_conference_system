@@ -2,6 +2,9 @@ package Controller.Menus;
 
 import java.util.ArrayList;
 
+/**
+ * Sending messages menu for organizers.
+ */
 public class SendMessageOrganizerMenu extends Menu{
 
     public ArrayList<String> getMenuOptions(){
@@ -14,6 +17,10 @@ public class SendMessageOrganizerMenu extends Menu{
         return options;
     }
 
+    /**
+     * Returns list of choices.
+     * @return list of choices.
+     */
     public ArrayList<String> getAllChoices(){
         ArrayList<String> choices = new ArrayList<>();
         choices.add("U");

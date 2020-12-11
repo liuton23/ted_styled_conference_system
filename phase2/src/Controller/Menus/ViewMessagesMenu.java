@@ -2,8 +2,14 @@ package Controller.Menus;
 
 import java.util.ArrayList;
 
+/**
+ * Viewing past messages menu.
+ */
 public class ViewMessagesMenu extends Menu{
-
+    /**
+     * Returns list of options.
+     * @return list of options.
+     */
     public ArrayList<String> getMenuOptions(){
         ArrayList<String> options = new ArrayList<>();
         options.add("View (S)ent messages");
@@ -18,6 +24,10 @@ public class ViewMessagesMenu extends Menu{
         return options;
     }
 
+    /**
+     * Returns list of choices.
+     * @return list of choices.
+     */
     public ArrayList<String> getAllChoices(){
         ArrayList<String> choices = new ArrayList<>();
         choices.add("S");
