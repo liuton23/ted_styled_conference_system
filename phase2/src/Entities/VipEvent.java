@@ -18,8 +18,9 @@ public class VipEvent extends Event implements VipOnly{
      * @param minute minute of event.
      * @param room room ID.
      * @param duration duration of event (hours).
+     * @param capacity the capacity of this event.
      */
-    public VipEvent(String title, int year, String month, int day, int hour, int minute, int room, int duration) {
-    super(("VIP" + title), year, month, day, hour, minute, room, duration);
+    public VipEvent(String title, int year, String month, int day, int hour, int minute, int room, int duration, int capacity) {
+    super(("VIP" + title), year, month, day, hour, minute, room, duration, capacity);
     }
 }

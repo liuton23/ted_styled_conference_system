@@ -18,6 +18,7 @@ public class SpeakerEvent extends Event implements Serializable {
     private ArrayList<LocalDateTime> eventTime;
     private int room;
     private ArrayList<String> attendeeList;
+    private int capacity;
 
     /**
      * Constructs an instance of event.
@@ -29,10 +30,11 @@ public class SpeakerEvent extends Event implements Serializable {
      * @param hour the starting hour of the event.
      * @param minute the starting minute of the event.
      * @param room the room id of the room where the event is taking place.
+     * @param capacity the capacity of the event.
      */
 
-    public SpeakerEvent(String title, ArrayList<String> speaker, int year, String month, int day, int hour, int minute, int room, int duration){
-        super(title, year, month, day, hour, minute, room, duration);
+    public SpeakerEvent(String title, ArrayList<String> speaker, int year, String month, int day, int hour, int minute, int room, int duration, int capacity){
+        super(title, year, month, day, hour, minute, room, duration, capacity);
         this.speaker = speaker;
     }
 

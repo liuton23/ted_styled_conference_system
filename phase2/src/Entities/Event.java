@@ -17,9 +17,10 @@ public class Event implements Serializable{
     private ArrayList<LocalDateTime> eventTime;
     private int room;
     private ArrayList<String> attendeeList;
+    private int capacity;
 
     // duration has to be an int representing a number of hours
-    public Event(String title, int year, String month, int day, int hour, int minute, int room, int duration){
+    public Event(String title, int year, String month, int day, int hour, int minute, int room, int duration, int capacity){
         LocalTime startTime = LocalTime.of(hour, minute);
         LocalTime endTime = startTime.plusHours(duration);
         this.title = title;
@@ -28,6 +29,7 @@ public class Event implements Serializable{
         this.eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute, 0));
         this.room = room;
         this.attendeeList = new ArrayList<String>();
+        this.capacity = capacity;
     }
     // getters
     /**
@@ -61,6 +63,13 @@ public class Event implements Serializable{
      */
     public ArrayList<String> getAttendeeList(){ return attendeeList;}
 
+    /**
+     * A method that returns the capacity of this event. Capacity should be less than equal to the room capacity.
+     * @return an integer representing the capacity of this event.
+     */
+    public int getCapacity(){ return capacity;}
+
+
     //setters
     /**
      * This method sets the time of an event, for any events whose desired length is 1 hour.
@@ -86,6 +95,14 @@ public class Event implements Serializable{
      */
     public void setRoom(int newRoom){
         this.room = newRoom;
+    }
+
+    /**
+     * A method that changes the capacity of this event.
+     * @param newCapacity the new event capacity.
+     */
+    public void setCapacity(int newCapacity){
+        this.capacity = newCapacity;
     }
 
     /**

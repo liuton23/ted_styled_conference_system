@@ -62,10 +62,11 @@ public class EventManager implements Serializable {
      * @param hour the hour the event starts.
      * @param minute the minute the event starts.
      * @param room the room id of the desired room where the event takes place.
+     * @param capacity the capacity of the event.
      */
     public void createSpeakerEvent(String title, ArrayList<String> speaker, int year, String month, int day, int hour,
-                              int minute, int room, int duration){
-        SpeakerEvent newEvent = new SpeakerEvent(title, speaker, year, month, day, hour, minute, room, duration);
+                              int minute, int room, int duration, int capacity){
+        SpeakerEvent newEvent = new SpeakerEvent(title, speaker, year, month, day, hour, minute, room, duration, capacity);
         masterEventDict.put(title, newEvent);
         speakerEvents.put(title, newEvent);
     }
@@ -81,24 +82,25 @@ public class EventManager implements Serializable {
      * @param hour the hour the event starts.
      * @param minute the minute the event starts.
      * @param room the room id of the desired room where the event takes place.
+     * @param capacity the capacity of the event.
      */
     public void createSpeakerlessEvent(String title, int year, String month, int day, int hour,
-                                   int minute, int room, int duration){
-        Event newEvent = new Event(title, year, month, day, hour, minute, room, duration);
+                                   int minute, int room, int duration, int capacity){
+        Event newEvent = new Event(title, year, month, day, hour, minute, room, duration, capacity);
         masterEventDict.put(title, newEvent);
         speakerlessEvents.put(title, newEvent);
     }
 
     public void createVIPSpeakerEvent(String title, ArrayList<String> speaker, int year, String month, int day, int hour,
-                                      int minute, int room, int duration){
-        VipSpeakerEvent newEvent = new VipSpeakerEvent(title, speaker, year, month, day, hour, minute, room, duration);
+                                      int minute, int room, int duration, int capacity){
+        VipSpeakerEvent newEvent = new VipSpeakerEvent(title, speaker, year, month, day, hour, minute, room, duration, capacity);
         masterEventDict.put(title, newEvent);
         speakerEvents.put(title, newEvent);
     }
 
     public void createVIPEvent(String title, int year, String month, int day, int hour,
-                               int minute, int room, int duration){
-        VipEvent newEvent = new VipEvent(title, year, month, day, hour, minute, room, duration);
+                               int minute, int room, int duration, int capacity){
+        VipEvent newEvent = new VipEvent(title, year, month, day, hour, minute, room, duration, capacity);
         masterEventDict.put(title, newEvent);
         speakerlessEvents.put(title, newEvent);
     }
@@ -294,10 +296,5 @@ public class EventManager implements Serializable {
         speakerList1.add("Caesar Milan");
         speakerList1.add("Fido");
         speakerList2.add("Karen Gillan");
-
-        eventManager.createSpeakerEvent("Pet Conference", speakerList1, 2020, "NOVEMBER",
-                16, 12, 0, 100, 5);
-        eventManager.createSpeakerEvent("Fan Expo", speakerList2, 2015, "AUGUST",
-                20, 2, 0, 500, 2);
     }
 }
