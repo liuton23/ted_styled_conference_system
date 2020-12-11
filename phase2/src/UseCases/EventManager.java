@@ -294,7 +294,7 @@ public class EventManager implements Serializable {
 
     /**
      * Returns a list containing the linked hash maps of the event info for each event in a list of events
-     * @return the list containing the linked hash maps of of event info
+     * @return the list containing the linked hash maps of event info in order by time
      */
     public ArrayList<LinkedHashMap<String, String>> getEventInfoLists() {
         ArrayList<Event> events = this.getAllEventsSortedByTime();
