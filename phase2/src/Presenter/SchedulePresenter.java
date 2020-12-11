@@ -4,6 +4,9 @@ import Entities.Event;
 
 import java.util.ArrayList;
 
+/**
+ * Displays messages relevant for scheduling events.
+ */
 public class SchedulePresenter{
     /**
      * Displays message reflecting whether an event was successfully created and if not what the issue is.

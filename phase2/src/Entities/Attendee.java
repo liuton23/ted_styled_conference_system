@@ -11,6 +11,11 @@ import java.util.ArrayList;
 public class Attendee extends User implements Serializable, AttendAble {
     private ArrayList<String> itinerary;
 
+    /**
+     * Constructs an instance of attendee account.
+     * @param username account username.
+     * @param password account password.
+     */
     public Attendee(String username, String password) {
         super(username, password);
         this.itinerary = new ArrayList<String>();
@@ -40,23 +45,4 @@ public class Attendee extends User implements Serializable, AttendAble {
         itinerary.sort(String::compareToIgnoreCase);
         return itinerary;
     }
-
-
-    /*
-    public static void main(String[] args) {
-        Attendee a = new Attendee("Bill Nye", "billy", "science");
-        Speaker s = new Speaker("Steve", "Steve1", "Hawking");
-        a.addEvent("9:00");
-        a.addEvent("8:00");
-        System.out.println(a.getItinerary());
-        a.removeEvent("9:00");
-        System.out.println(a.getItinerary());
-        s.addEvent("9:00");
-        s.addEvent("8:00");
-        System.out.println(s.getItinerary());
-        s.removeEvent("9:00");
-        System.out.println(s.getItinerary());
-    }
-
-     */
 }
