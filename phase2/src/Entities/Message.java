@@ -1,8 +1,4 @@
 package Entities;
-
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,7 +17,6 @@ public class Message implements Serializable {
     private HashMap<String, Boolean> readDict;
     private HashMap<String, Boolean> archivedDict;
     private Boolean edited;
-    private Boolean deletedForSender;
     private String messageNumber;
 
     /**
@@ -39,7 +34,6 @@ public class Message implements Serializable {
         this.archivedDict = new HashMap<String, Boolean>();
         archivedDict.put(sender,false);
         this.edited = false;
-        this.deletedForSender = false;
     }
 
 
@@ -92,30 +86,61 @@ public class Message implements Serializable {
         return text;
     }
 
+    /**
+     * set read status base on a recipient
+     * @param recipient username of the recipient
+     * @param read indicates read or not
+     */
     public void setRead(String recipient, Boolean read){
         this.readDict.put(recipient,read);
     }
 
+    /**
+     * set archived status
+     * @param changer username of the changer
+     * @param archived whether its archived
+     */
     public void setArchived(String changer, Boolean archived) {
         this.archivedDict.put(changer,archived);
     }
 
+    /**
+     * get read status given a recipient
+     * @param recipient username of the recipient
+     * @return true if read fot this user
+     */
     public Boolean getRead(String recipient){
         return this.readDict.get(recipient);
     }
 
+    /**
+     * get archived status given a user
+     * @param changer username
+     * @return true if archived for this user
+     */
     public Boolean getArchived(String changer) {
         return this.archivedDict.get(changer);
     }
 
+    /**
+     * set message to a unique 8-digit number
+     * @param messageNumber string of the number
+     */
     public void setMessageNumber(String messageNumber) {
         this.messageNumber = messageNumber;
     }
 
+    /**
+     * get this message number
+     * @return message number
+     */
     public String getMessageNumber(){
         return this.messageNumber;
     }
 
+    /**
+     * reset status of read and archived for all recipient and sender after edited
+     */
     public void reset(){
         for (String recipient: recipients){
             this.readDict.put(recipient,false);
@@ -124,6 +149,10 @@ public class Message implements Serializable {
         this.edited = true;
     }
 
+    /**
+     * get if this message is edited
+     * @return true if edited
+     */
     public Boolean getEdited(){
         return this.edited;
     }
@@ -137,22 +166,14 @@ public class Message implements Serializable {
         return messageTime;
     }
 
+    /**
+     * remove a recipient from recipient list
+     * @param recipient username of recipient to be removed
+     */
     public void removeRecipient(String recipient){
         recipients.remove(recipient);
     }
 
-    @Override
-    public String toString() {
-        return messageNumber;
-    }
-
-    public Boolean getDeletedForSender(){
-        return deletedForSender;
-    }
-
-    public void setDeletedForSender(Boolean deleted){
-        this.deletedForSender = deleted;
-    }
 
 
 }

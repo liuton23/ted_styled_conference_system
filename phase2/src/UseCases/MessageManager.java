@@ -47,6 +47,10 @@ public class MessageManager implements Serializable {
         return currMessage.getMessageNumber();
     }
 
+    /**
+     * delete a message from system
+     * @param messageObj message object
+     */
     public void deleteMessage(Message messageObj) {
         messages.remove(messageObj);
         messageNumStorage.remove(messageObj.getMessageNumber());
@@ -95,7 +99,7 @@ public class MessageManager implements Serializable {
     public ArrayList<String> getSendBy(String sender){
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : messages){
-            if (m.getSender().equals(sender) && !m.getDeletedForSender()){
+            if (m.getSender().equals(sender)){
                 allMessages.add(m.getMessageNumber() + ": To " + recipientsBuilder(m.getRecipients()) + " {" + m.getText() +
                         "} @ " + m.getMessageTime().toString());
             }

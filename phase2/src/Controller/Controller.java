@@ -22,9 +22,9 @@ public class Controller {
 
     private Gateway gateway = new Gateway("save.ser");
     private ScheduleDownloader scheduleDownloader = new ScheduleDownloader(new EventManager());
-    private EmailSystem emailSystem;
     private UserManager userManager = new UserManager();
     private EventManager eventManager = new EventManager();
+    private EmailSystem emailSystem;
     private MessageManager messageManager = new MessageManager();
     private RoomManager roomManager = new RoomManager();
 
@@ -129,7 +129,6 @@ public class Controller {
             }
         }
     }
-
     /**
      * Can reset the users password iff they enter a valid username and there is an email associated with that user.
      */

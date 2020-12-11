@@ -2,6 +2,9 @@ package Presenter;
 
 import java.util.ArrayList;
 
+/**
+ * This class displays statement for message system only
+ */
 public class MessagePresenter {
 
     /**
@@ -158,15 +161,27 @@ public class MessagePresenter {
         }
     }
 
+    /**
+     * displays "your original message is ..."
+     * @param text text of message
+     */
     public void displayOriginalMessage(String text){
         System.out.println("Your Original Message is: {" + text + "}.");
         System.out.println("Please enter your new message:");
     }
 
+    /**
+     * display you have create a message with a message number
+     * @param num message number
+     */
     public void displayNewMessageNum(String num){
         System.out.println("You have successfully create this message, message number is " + num);
     }
 
+    /**
+     * display new messages statement
+     * @param num number of new messages
+     */
     public void displayNumOfNew(int num){
         if (num == 1) {
             System.out.println("You have a new message");
