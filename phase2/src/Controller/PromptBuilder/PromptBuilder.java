@@ -18,7 +18,6 @@ public class PromptBuilder {
             case booleanPrompt:
                 BooleanPrompt booleanPrompt = new BooleanPrompt(presenter);
                 booleanPrompt.setMenu(new BooleanMenu());
-                booleanPrompt.setText("Yes or No?");
                 return booleanPrompt;
             case eventsMenu:
                 StringPrompt eventsPrompt = new StringPrompt(presenter);
@@ -31,17 +30,11 @@ public class PromptBuilder {
             case intPrompt://require manual setting of display message
                 return new IntPrompt(presenter);
             case intDayPrompt:
-                IntPrompt dayPrompt = new IntDayPrompt(presenter);
-                dayPrompt.setText("Enter day of month (1-31):");
-                return dayPrompt;
+                return new IntDayPrompt(presenter);
             case intHourPrompt:
-                IntHourPrompt hrPrompt = new IntHourPrompt(presenter);
-                hrPrompt.setText("Enter hour of day (0-23):");
-                return hrPrompt;
+                return new IntHourPrompt(presenter);
             case intMinutePrompt:
-                IntMinutePrompt minPrompt = new IntMinutePrompt(presenter);
-                minPrompt.setText("Enter minute of hour (0-59):");
-                return minPrompt;
+                return new IntMinutePrompt(presenter);
             case intAtLeastOnePrompt://require manual setting of display message
                 return new IntAtLeastOnePrompt(presenter);
             case loginPrompt:

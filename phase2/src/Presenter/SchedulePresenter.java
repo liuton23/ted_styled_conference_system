@@ -32,6 +32,9 @@ public class SchedulePresenter{
             case 5:
                 System.out.println("This room is not in the system.");
                 break;
+            case 100:
+                System.out.println("Event capacity cannot exceed the capacity of the room.");
+                break;
         }
     }
     /**

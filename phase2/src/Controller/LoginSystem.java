@@ -100,6 +100,7 @@ public class LoginSystem extends Controller {
         presenter.printPasswordMessage(1);
         String password = obj1.nextLine();
         presenter.displayMessages("areUOrg");
+        presenter.displayMessages("YorN");
         PromptBuilder promptBuilder = new PromptBuilder();
         Prompt booleanPrompt = promptBuilder.buildPrompt(presenter, PromptType.booleanPrompt);
         try {

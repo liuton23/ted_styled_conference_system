@@ -92,15 +92,18 @@ public class Presenter {
                 break;
             case "requestDay":
                 System.out.println("Enter starting day of event:");
+                System.out.println("Enter a day of your chosen month from 0 up to 31");
                 break;
             case "requestHour":
                 System.out.println("Enter starting hour of the event:");
+                System.out.println("Enter a integer between 0 - 23");
                 break;
             case "requestMinute":
                 System.out.println("Enter starting minute of the event:");
+                System.out.println("Enter a integer between 0 - 59");
                 break;
             case "requestDuration":
-                System.out.println("Enter lenght of event (hours):");
+                System.out.println("Enter length of event (hours):");
                 break;
             case "requestRoom":
                 System.out.println("Enter room id of event room:");
@@ -113,6 +116,9 @@ public class Presenter {
                 break;
             case "changeSpeaker":
                 System.out.println("Change Speaker");
+                break;
+            case "requestEventCapacity":
+                System.out.println("Enter event attendee capacity:");
                 break;
             case "sortBySpeaker":
                 System.out.println("Events sorted by speaker:");
@@ -163,6 +169,9 @@ public class Presenter {
             case "invalidIntInput":
                 System.out.println("Error: Please enter a valid integer");
                 break;
+            case "YorN":
+                System.out.println("(Y)es or (N)o");
+                break;
         }
     }
 
@@ -197,7 +206,7 @@ public class Presenter {
     public void cancelEventMessage(int value){
         switch (value){
             case 0:
-                System.out.println("event name does not correspond to an event.");
+                System.out.println("Event name does not correspond to an event.");
             case 1:
                 System.out.println("Event successfully removed.");
         }

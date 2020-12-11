@@ -10,7 +10,6 @@ import java.util.List;
 public abstract class Prompt {
     protected Presenter presenter;
     private Menu menu;
-    private String text;
 
     public Prompt(Presenter presenter){
         this.presenter = presenter;
@@ -28,13 +27,6 @@ public abstract class Prompt {
         return menu.getAllChoices();
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getText(){
-        return text;
-    }
 
     public boolean invalidInput(List<String> choices, String chosen) {
         for(String choice: choices){

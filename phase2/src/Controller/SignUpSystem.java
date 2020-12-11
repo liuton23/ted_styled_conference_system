@@ -139,7 +139,11 @@ public class SignUpSystem extends Controller{
             return true;
         } else if (!(userManager.hasVIPAccess(attendee)) && event instanceof VipOnly) {
             return false;
-        } else {
+        }
+        else if(eventManager.eventToAttendees(event).size() >= eventManager.getEventCapacity(event)){
+            return false;
+        }
+        else {
             return true;
         }
     }
@@ -243,7 +247,7 @@ public class SignUpSystem extends Controller{
     }
 
 
-
+/**
     public static void main(String[] args) {
         UserManager atm = new UserManager();
         EventManager evm = new EventManager();
@@ -253,8 +257,8 @@ public class SignUpSystem extends Controller{
         rm.addRoom(1, 10);
         ArrayList<String> speakerlist = new ArrayList<>();
         speakerlist.add("jill");
-        evm.createSpeakerEvent("Pet conference",speakerlist, 2020, "DECEMBER", 12, 12, 0, 1, 1);
-        evm.createSpeakerEvent("ABC",speakerlist, 2020, "DECEMBER", 13, 14, 0, 1, 1);
+        evm.createSpeakerEvent("Pet conference",speakerlist, 2020, "DECEMBER", 12, 12, 0, 1, 1, 5);
+        evm.createSpeakerEvent("ABC",speakerlist, 2020, "DECEMBER", 13, 14, 0, 1, 1, 10);
 
         SignUpSystem sus = new SignUpSystem(atm,evm, rm);
         sus.setComparator(new byTimeEventComparator());
@@ -296,6 +300,7 @@ public class SignUpSystem extends Controller{
 
         }
     }
+ */
 
 
 }

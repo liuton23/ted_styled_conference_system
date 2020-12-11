@@ -15,7 +15,6 @@ public class IntMinutePrompt extends IntPrompt{
         boolean done = false;
         int x = 0;
         do {
-            presenter.display(getText());
             try {
                 x = Integer.parseInt(input.nextLine());
                 if (!(0 <= x && x <= 59)) {
