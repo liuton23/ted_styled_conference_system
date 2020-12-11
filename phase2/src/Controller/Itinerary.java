@@ -1,5 +1,6 @@
 package Controller;
 
+import Entities.User;
 import Entities.UserFactory.AttendAble;
 import Entities.UserFactory.TalkAble;
 import Presenter.Presenter;
@@ -8,10 +9,18 @@ import UseCases.UserManager;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * Outlines the planned events of user at the conference.
+ */
 public class Itinerary {
     private UserManager userManager;
     private Presenter presenter;
 
+    /**
+     * Constructs an instance of Itinerary.
+     * @param userManager the UserManager used by the conference.
+     * @param presenter the main Presenter used by the conference.
+     */
     public Itinerary(UserManager userManager, Presenter presenter){
         this.userManager = userManager;
         this.presenter = presenter;
@@ -28,14 +37,14 @@ public class Itinerary {
         } else {
             Optional<AttendAble> obj = userManager.usernameToAttendeeObject(user);
 
-            AttendAble userObj = obj.get();
+            if (obj.isPresent()){
+                AttendAble userObj = obj.get();
+                presenter.displaySchedule(userManager.getItinerary(userObj), "itinerary");
+            }
 
-            //Speaker sp = (Speaker) attendee;
-            //presenter.displaySchedule(userManager.getSpeakingList(sp), "speakItinerary");
-            //presenter.displaySchedule(attendeeManager.getItinerary(sp), "itinerary");
-            presenter.displaySchedule(userManager.getItinerary(userObj), "itinerary");
-            //else presenter.displaySchedule(attendeeManager.getItinerary(attendee), "itinerary");
-            if (userManager.checkIsSpeaker(userObj)) {
+            Optional<TalkAble> obj1 = userManager.usernameToSpeakerObject(user);
+            if (obj1.isPresent()) {
+                TalkAble userObj = obj1.get();
                 presenter.displaySchedule(userManager.getSpeakingList((TalkAble) userObj), "speakItinerary");
             }
         }

@@ -95,6 +95,7 @@ public class Controller {
 
                 switch (chosen) {
                     case "U"://Change account email
+                        presenter.display("You current email is: " + userManager.getUserEmail(username));
                         emailSystem.addEmail(username);
                         break;
                     case "M"://Messaging
@@ -113,7 +114,14 @@ public class Controller {
                         ScheduleSystem scheduleSystem  = new ScheduleSystem(eventManager,userManager, roomManager);
                         scheduleSystem.scheduleActivity();
                         break;
-                    case "C"://Create accounts
+                    case "C"://Cancelling events
+                        ScheduleSystem scheduleSystem1  = new ScheduleSystem(eventManager,userManager, roomManager);
+                        presenter.display("Enter name of event that should be cancelled:");
+                        Scanner input = new Scanner(System.in);
+                        String name = input.nextLine();
+                        presenter.cancelEventMessage(scheduleSystem1.cancelEvent(name));
+                        break;
+                    case "A"://Create accounts
                         loginSystem.createAccounts();
                         break;
                     case "D"://Download PDF of conference schedule
@@ -132,7 +140,7 @@ public class Controller {
     /**
      * Can reset the users password iff they enter a valid username and there is an email associated with that user.
      */
-    private void resetPassword(){
+    private void resetPassword() throws IOException{
         Scanner input = new Scanner(System.in);
         String username;
         boolean isUser;
@@ -140,6 +148,12 @@ public class Controller {
             isUser = true;
             presenter.printUsernameMessage(1);
             username = input.nextLine();
+            if (username.toUpperCase().equals(presenter.getExit())){
+                throw new IOException();
+            }
+            if (username.toUpperCase().equals("BACK") || username.toUpperCase().equals("B")){
+                return;
+            }
             if(!userManager.usernameToUserObject(username).isPresent()){
                 isUser = false;
                 presenter.invalidInput();

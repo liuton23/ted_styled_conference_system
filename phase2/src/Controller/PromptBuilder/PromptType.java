@@ -5,6 +5,7 @@ public enum PromptType {
     basicMenu2,
     booleanPrompt,
     eventsMenu,
+    eventsOrgMenu,
     intPrompt,
     intDayPrompt,
     intHourPrompt,

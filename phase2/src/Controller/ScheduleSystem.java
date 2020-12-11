@@ -396,6 +396,10 @@ public class ScheduleSystem extends Controller{
         }
     }
 
+    /**
+     * Helper method to create events with speakers.
+     * @return names of speakers
+     */
     private ArrayList<String> scheduleSpeakerEventHelper(){
         Scanner input = new Scanner(System.in);
         presenter.displayMessages("requestSpeaker");

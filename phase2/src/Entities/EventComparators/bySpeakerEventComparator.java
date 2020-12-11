@@ -25,6 +25,9 @@ public class bySpeakerEventComparator implements Comparator<Event> {
         if (e1 instanceof SpeakerEvent && e2 instanceof SpeakerEvent){
             ArrayList<String> s1 = ((SpeakerEvent) e1).getSpeaker();
             ArrayList<String> s2 = ((SpeakerEvent) e2).getSpeaker();
+            if (s1.equals(s2)){
+                return e1.getTitle().compareTo(e2.getTitle());
+            }
             return s1.get(0).compareTo(s2.get(0));
         } else {
             return e1.getTitle().compareTo(e2.getTitle());

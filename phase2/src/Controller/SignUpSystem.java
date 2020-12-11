@@ -3,6 +3,7 @@ package Controller;
 import Controller.PromptBuilder.Prompt;
 import Controller.PromptBuilder.PromptBuilder;
 import Controller.PromptBuilder.PromptType;
+import Entities.EventComparators.bySpeakerEventComparator;
 import Entities.EventComparators.byTitleEventComparator;
 import Entities.SpeakerEvent;
 import Entities.UserFactory.AttendAble;
@@ -10,6 +11,7 @@ import Entities.Event;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.Room;
 import Entities.User;
+import Entities.UserFactory.UserType;
 import Entities.VipOnly;
 import Presenter.*;
 import UseCases.UserManager;
@@ -177,7 +179,12 @@ public class SignUpSystem extends Controller{
         while (activity) {
             //String chosen = askMenuInput(8);
             PromptBuilder promptBuilder = new PromptBuilder();
-            Prompt eventPrompt = promptBuilder.buildPrompt(presenter, PromptType.eventsMenu);
+            Prompt eventPrompt;
+            if (userManager.usernameToOrganizer(username).isPresent()){
+                eventPrompt = promptBuilder.buildPrompt(presenter, PromptType.eventsOrgMenu);
+            } else {
+                eventPrompt = promptBuilder.buildPrompt(presenter, PromptType.eventsMenu);
+            }
             String chosen = eventPrompt.ask();
             int index;
 
@@ -229,36 +236,66 @@ public class SignUpSystem extends Controller{
                 signUpPresenter.displaySortedEvents(viewAllEvents(), "name");
                 break;
             case "S":
-                //sus.setComparator(new bySpeakerEventComparator());
+                setComparator(new bySpeakerEventComparator());
                 signUpPresenter.displaySortedEvents(viewAllEvents(), "speaker");
                 break;
         }
     }
 
 
-/*
+
     public static void main(String[] args) {
-        AttendeeManager atm = new AttendeeManager();
+        UserManager atm = new UserManager();
         EventManager evm = new EventManager();
-        atm.createAttendee("Bill89", "science", false);
-        evm.createEvent("Pets", "Mr. Simons", 2020, "NOVEMBER", 17, 5, 0, 3, 2);
-        evm.createEvent("Cats", "Mr. Paul", 2020, "NOVEMBER", 17, 6, 0, 3, 2);
-        System.out.println(atm.getAllAttendees());
-        System.out.println(evm.getEvents());
-        SignUpSystem sus = new SignUpSystem();
-        System.out.println(sus.viewAllEvents(evm));
+        RoomManager rm = new RoomManager();
+
+        atm.createAttendee("jill", "123", UserType.SPEAKER);
+        rm.addRoom(1, 10);
+        ArrayList<String> speakerlist = new ArrayList<>();
+        speakerlist.add("jill");
+        evm.createSpeakerEvent("Pet conference",speakerlist, 2020, "DECEMBER", 12, 12, 0, 1, 1);
+        evm.createSpeakerEvent("ABC",speakerlist, 2020, "DECEMBER", 13, 14, 0, 1, 1);
+
+        SignUpSystem sus = new SignUpSystem(atm,evm, rm);
+        sus.setComparator(new byTimeEventComparator());
+        ArrayList<String> list = sus.viewAllEvents();
+        System.out.println(list);
 
         sus.setComparator(new byTitleEventComparator());
-        System.out.println(sus.viewAllEvents(evm));
+        list = sus.viewAllEvents();
+        System.out.println(list);
 
         sus.setComparator(new bySpeakerEventComparator());
-        System.out.println(sus.viewAllEvents(evm));
+        list = sus.viewAllEvents();
+        System.out.println(list);
 
-        System.out.println(sus.signUpEvent(atm,evm, "Bill8", 1));
-        System.out.println(sus.signUpEvent(atm,evm, "Bill89", 1));
-        System.out.println(sus.dropOutEvent(atm,evm, "Bill89", 1));
+        try {
+            sus.setComparator(new byTimeEventComparator());
+            sus.viewAllEvent();
+
+        } catch (IOException e){
+            System.out.println("OPPS");
+
+        }
+
+        try {
+            sus.setComparator(new bySpeakerEventComparator());
+            sus.viewAllEvent();
+
+        } catch (IOException e){
+            System.out.println("OPPS");
+
+        }
+
+        try {
+            sus.setComparator(new byTitleEventComparator());
+            sus.viewAllEvent();
+
+        } catch (IOException e){
+            System.out.println("OPPS");
+
+        }
     }
 
- */
 
 }

@@ -11,7 +11,8 @@ public class BasicMenu2 extends BasicMenu1{
         options.add("(E)vents");
         options.add("(I)tinerary");
         options.add("(S)chedule events");
-        options.add("(C)reate user account");
+        options.add("(C)ancel events");
+        options.add("create user (A)ccount");
         options.add("(D)ownload Schedule as PDF");
         options.add("(B)ack");
         return options;
@@ -21,6 +22,7 @@ public class BasicMenu2 extends BasicMenu1{
         ArrayList<String> choices = super.getAllChoices();
         choices.add("S");
         choices.add("C");
+        choices.add("A");
         return choices;
     }
 }

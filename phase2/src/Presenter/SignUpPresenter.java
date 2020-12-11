@@ -67,5 +67,8 @@ public class SignUpPresenter {
                 System.out.println("Sort events by speaker");
                 break;
         }
+        for (String event: options){
+            System.out.println(event);
+        }
     }
 }

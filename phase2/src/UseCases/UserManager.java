@@ -269,6 +269,20 @@ public class UserManager implements Serializable {
     }
 
     /**
+     * Method that takes an user username and returns a stored Attendee instance iff one exists.
+     * @param username username of an attendee.
+     * @return instance of Attendee iff one exists.
+     */
+    public Optional<TalkAble> usernameToSpeakerObject(String username){
+        for (TalkAble user: speakerList){
+            if (username.equals(user.getUsername())){
+                return Optional.of(user);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
      * Method that returns a list of attendees that attend an event.
      * @param event instance of Event that some attendees will attend.
      * @return list of attendees who will attend the event.

@@ -99,6 +99,9 @@ public class Presenter {
             case "requestMinute":
                 System.out.println("Enter starting minute of the event:");
                 break;
+            case "requestDuration":
+                System.out.println("Enter lenght of event (hours):");
+                break;
             case "requestRoom":
                 System.out.println("Enter room id of event room:");
                 break;
@@ -177,7 +180,14 @@ public class Presenter {
         }
     }
 
-
+    public void cancelEventMessage(int value){
+        switch (value){
+            case 0:
+                System.out.println("event name does not correspond to an event.");
+            case 1:
+                System.out.println("Event successfully removed.");
+        }
+    }
 
 
     /**

@@ -24,6 +24,10 @@ public class PromptBuilder {
                 StringPrompt eventsPrompt = new StringPrompt(presenter);
                 eventsPrompt.setMenu(new EventsMenu());
                 return eventsPrompt;
+            case eventsOrgMenu:
+                StringPrompt eventsOrgPrompt = new StringPrompt(presenter);
+                eventsOrgPrompt.setMenu(new EventsOrgMenu());
+                return eventsOrgPrompt;
             case intPrompt://require manual setting of display message
                 return new IntPrompt(presenter);
             case intDayPrompt:
