@@ -96,6 +96,23 @@ public class SchedulePresenter{
         }
     }
 
+    /**
+     * Prints a message that user should enter a valid integer between start and end
+     * @param start start of valid range
+     * @param end end of valid range
+     */
+    public void printInvalidIntRangeMessage(int start, int end) {
+        System.out.println("Error: Please enter a valid integer between " + start + " and " + end);
+    }
+
+    /**
+     * Prints a message that user should enter a valid integer greater or equal to start
+     * @param start start of valid range
+     */
+    public void printInvalidIntRangeMessage(int start) {
+        System.out.println("Error: Please enter a valid integer greater than or equal to " + start);
+    }
+
 
 
 }

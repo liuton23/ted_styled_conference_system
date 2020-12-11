@@ -99,7 +99,7 @@ public class LoginSystem extends Controller {
         String username = obj1.nextLine();
         presenter.printPasswordMessage(1);
         String password = obj1.nextLine();
-        presenter.printAreUAOrg();
+        presenter.displayMessages("areUOrg");
         PromptBuilder promptBuilder = new PromptBuilder();
         Prompt booleanPrompt = promptBuilder.buildPrompt(presenter, PromptType.booleanPrompt);
         try {
