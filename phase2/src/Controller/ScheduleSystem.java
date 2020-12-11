@@ -165,7 +165,27 @@ public class ScheduleSystem extends Controller{
         return 3;
     }
 
-    // TODO: add helper to deal with the localtime repetitive code
+    /**
+     * Helper method to create LocalDateTime objects from given values.
+     * @param year the year of the first LocalDateTime.
+     * @param month the month of the first LocalDateTime.
+     * @param day the day of the first LocalDateTime.
+     * @param hour the hour of the first LocalDateTime.
+     * @param minute the minute of the first LocalDateTime.
+     * @param duration the time in hours that the second LocalDateTime should be after the first.
+     * @return an ArrayList of the two LocalDateTimes (start time and end time)
+     */
+    private ArrayList<LocalDateTime> dateTimeHelperMethod(int year, String month, int day, int hour, int minute, int duration){
+        LocalTime startTime = LocalTime.of(hour, minute);
+        LocalTime endTime = startTime.plusHours(duration);
+        LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
+        LocalDateTime endDateTime = LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute);
+        ArrayList<LocalDateTime> returnArray = new ArrayList<>();
+        returnArray.add(startDateTime);
+        returnArray.add(endDateTime);
+        return returnArray;
+    }
+
     /**
      * This method schedules a VIPSpeakerEvent if all necessary conditions are satisfied and returns an integer representing
      * a successful event creation or a specific error message.
@@ -183,15 +203,14 @@ public class ScheduleSystem extends Controller{
      */
     public int scheduleVIPSpeakerEvent(String title, ArrayList<String> speakerList, int year, String month, int day, int hour, int minute,
                                        int room, int duration, int capacity){
-        LocalTime startTime = LocalTime.of(hour, minute);
-        LocalTime endTime = startTime.plusHours(duration);
-        LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
-        LocalDateTime endDateTime = LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute);
-        Room tempRoom = roomManager.idToRoom(room);
+        ArrayList<LocalDateTime> timeArray = dateTimeHelperMethod(year, month, day, hour, minute, duration);
+        LocalDateTime startDateTime = timeArray.get(0);
+        LocalDateTime endDateTime = timeArray.get(1);
         int eventCheckValue = scheduleSpeakerEventCheck(title, speakerList, year, month, day, hour, minute, room, duration, capacity);
         if (eventCheckValue != 3) {
             return eventCheckValue;
         }
+        Room tempRoom = roomManager.idToRoom(room);
         for (String speakerName: speakerList) {
             Speaker speaker = (Speaker) userManager.usernameToUserObject(speakerName).get();
             userManager.addEventToSpeakerList(speaker, title);
@@ -203,15 +222,14 @@ public class ScheduleSystem extends Controller{
     }
     public int scheduleVIPEvent(String title, int year, String month, int day, int hour, int minute,
                                 int room, int duration, int capacity) {
-        LocalTime startTime = LocalTime.of(hour, minute);
-        LocalTime endTime = startTime.plusHours(duration);
-        LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
-        LocalDateTime endDateTime = LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute);
-        Room tempRoom = roomManager.idToRoom(room);
+        ArrayList<LocalDateTime> timeArray = dateTimeHelperMethod(year, month, day, hour, minute, duration);
+        LocalDateTime startDateTime = timeArray.get(0);
+        LocalDateTime endDateTime = timeArray.get(1);
         int eventCheckValue = scheduleSpeakerlessEventCheck(title, year, month, day, hour, minute, room, duration, capacity);
         if (eventCheckValue != 3) {
             return eventCheckValue;
         }
+        Room tempRoom = roomManager.idToRoom(room);
         roomManager.book(tempRoom, title, startDateTime, endDateTime);
         eventManager.createVIPEvent(title, year, month, day, hour, minute, room, duration, capacity);
         //"Event successfully created."
@@ -220,15 +238,14 @@ public class ScheduleSystem extends Controller{
 
     public int scheduleSpeakerlessEvent(String title, int year, String month, int day, int hour, int minute,
                                 int room, int duration, int capacity) {
-        LocalTime startTime = LocalTime.of(hour, minute);
-        LocalTime endTime = startTime.plusHours(duration);
-        LocalDateTime startDateTime = LocalDateTime.of(year, Month.valueOf(month), day, hour, minute);
-        LocalDateTime endDateTime = LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute);
-        Room tempRoom = roomManager.idToRoom(room);
+        ArrayList<LocalDateTime> timeArray = dateTimeHelperMethod(year, month, day, hour, minute, duration);
+        LocalDateTime startDateTime = timeArray.get(0);
+        LocalDateTime endDateTime = timeArray.get(1);
         int eventCheckValue = scheduleSpeakerlessEventCheck(title, year, month, day, hour, minute, room, duration, capacity);
         if (eventCheckValue != 3) {
             return eventCheckValue;
         }
+        Room tempRoom = roomManager.idToRoom(room);
         roomManager.book(tempRoom, title, startDateTime, endDateTime);
         eventManager.createSpeakerlessEvent(title, year, month, day, hour, minute, room, duration, capacity);
         //"Event successfully created."

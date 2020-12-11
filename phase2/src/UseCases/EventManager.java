@@ -275,6 +275,14 @@ public class EventManager implements Serializable {
         }
     }
 
+    public int getEventCapacity(Event event){
+        return event.getCapacity();
+    }
+
+    public void setEventCapacity(Event event, int capacity){
+        event.setCapacity(capacity);
+    }
+
     /**
      * Returns a list containing the linked hash maps of the event info for each event in a list of events
      * @param events the list of events
