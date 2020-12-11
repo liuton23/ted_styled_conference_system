@@ -153,6 +153,16 @@ public class Presenter {
             case "takenEmail":
                 System.out.println("There is another account associated with this email.");
                 break;
+            case "areUOrg":
+                System.out.println("Are you an organizer?");
+                break;
+            case "invalidInput":
+                System.out.println("The input you entered is invalid.");
+                System.out.println("Please try again.");
+                break;
+            case "invalidIntInput":
+                System.out.println("Error: Please enter a valid integer");
+                break;
         }
     }
 
@@ -180,6 +190,10 @@ public class Presenter {
         }
     }
 
+    /**
+     * display cancel event message
+     * @param value cases
+     */
     public void cancelEventMessage(int value){
         switch (value){
             case 0:
@@ -189,14 +203,6 @@ public class Presenter {
         }
     }
 
-
-    /**
-     * Displays a message when input is invalid.
-     */
-    public void invalidInput(){
-        System.out.println("The input you entered is invalid.");
-        System.out.println("Please try again.");
-    }
 
     /**
      * Prompts user for username.
@@ -256,13 +262,6 @@ public class Presenter {
         System.out.println("This account was successfully added to the system.");
     }
 
-    /**
-     * Displays that "Are u an organizer".
-     */
-    public void printAreUAOrg(){
-        System.out.println("Are you an organizer?");
-    }
-
 
     /**
      * Displays failed registration message.
@@ -270,15 +269,6 @@ public class Presenter {
     public void printRegisterFailMessage(){
         System.out.println("This username or password is invalid.");
         System.out.println("Please check that username or password is non-empty and username is not already taken.");
-    }
-
-
-
-    /**
-     * Prints a message that user should enter a valid integer
-     */
-    public void printInvalidIntMessage() {
-        System.out.println("Error: Please enter a valid integer");
     }
 
 

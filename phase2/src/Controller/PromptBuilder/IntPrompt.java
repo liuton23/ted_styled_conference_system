@@ -20,7 +20,7 @@ public class IntPrompt extends Prompt{
                 x = Integer.parseInt(input.nextLine());
                 done = true;
             } catch (NumberFormatException e) {
-                presenter.printInvalidIntMessage();
+                presenter.displayMessages("invalidIntInput");
             }
         } while (!done);
         return x;

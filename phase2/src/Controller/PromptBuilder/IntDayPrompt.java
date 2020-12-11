@@ -24,7 +24,7 @@ public class IntDayPrompt extends IntPrompt{
                     done = true;
                 }
             } catch (NumberFormatException e) {
-                presenter.printInvalidIntMessage();
+                presenter.displayMessages("invalidIntInput");
             }
         } while (!done);
         return x;

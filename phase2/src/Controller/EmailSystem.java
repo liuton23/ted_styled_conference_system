@@ -44,7 +44,7 @@ public class EmailSystem {
                 userManager.setUserEmail(username, email);
             }
             if(!email.matches("[\\w.]+@\\w+(.com)|(.ca)|(.co.uk)}")){
-                presenter.invalidInput();
+                presenter.displayMessages("invalidInput");
             }else if(userManager.checkValidEmail(username, email) == 0){
                 presenter.displayMessages("yourEmail");
                 return;

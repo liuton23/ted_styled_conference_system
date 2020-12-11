@@ -151,12 +151,12 @@ public class Controller {
             if (username.toUpperCase().equals(presenter.getExit())){
                 throw new IOException();
             }
-            if (username.toUpperCase().equals("BACK") || username.toUpperCase().equals("B")){
+            if (username.equalsIgnoreCase("BACK") || username.equalsIgnoreCase("B")){
                 return;
             }
             if(!userManager.usernameToUserObject(username).isPresent()){
                 isUser = false;
-                presenter.invalidInput();
+                presenter.displayMessages("invalidInput");
             }
         }while(!isUser);
 
@@ -174,13 +174,13 @@ public class Controller {
             presenter.displayMessages("requestCode");
             System.out.println("Enter the code that has been sent to your email.");
             userCode = input.nextLine();
-            if(userCode.toUpperCase().equals("EXIT")){
+            if(userCode.equalsIgnoreCase("EXIT")){
                 exit();
-            }else if(userCode.toUpperCase().equals("B")){
+            }else if(userCode.equalsIgnoreCase("B")){
                 return;
             }else if(!code.equals(userCode)){
                 correct = false;
-                presenter.invalidInput();
+                presenter.displayMessages("invalidInput");
             }
         }while(!correct);
         String password;
@@ -202,12 +202,11 @@ public class Controller {
                 in = Integer.parseInt(input.nextLine());
                 done = true;
             } catch (NumberFormatException e) {
-                presenter.printInvalidIntMessage();
+                presenter.displayMessages("invalidIntInput");
             }
         } while (!done);
         return in;
     }
-
 
 
 
