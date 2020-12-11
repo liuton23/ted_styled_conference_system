@@ -48,7 +48,7 @@ public abstract class Prompt {
 
              */
         }
-        presenter.invalidInput();
+        presenter.displayMessages("invalidInput");
         return true;
     }
 

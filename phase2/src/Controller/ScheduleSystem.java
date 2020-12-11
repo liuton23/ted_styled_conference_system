@@ -454,7 +454,7 @@ public class ScheduleSystem extends Controller{
             if (start <= in && in <= end) {
                 done = true;
             } else {
-                schedulePresenter.printInvalidIntRangeMessage(start, end);
+                presenter.printInvalidIntRangeMessage(start, end);
             }
         } while (!done);
         return in;
@@ -473,7 +473,7 @@ public class ScheduleSystem extends Controller{
             if (start <= in) {
                 done = true;
             } else {
-                schedulePresenter.printInvalidIntRangeMessage(start);
+                presenter.printInvalidIntRangeMessage(start);
             }
         } while (!done);
         return in;
