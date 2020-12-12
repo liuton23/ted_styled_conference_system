@@ -80,8 +80,8 @@ public class ScheduleSystem extends Controller{
             //"This event name has already been taken."
             return 2;
         }
-        // TODO: add this check elsewhere
-        else if(capacity > tempRoom.getCapacity()){
+        // TODO: add this check elsewhere, and message to presenter etc.
+        else if(capacity > roomManager.getCapacity(tempRoom)){
             //signifies that that's not allowed for this room
             return 100;
             }
@@ -298,7 +298,7 @@ public class ScheduleSystem extends Controller{
                     // changing speaker
                     if (eventManager.freeSpeakerCheck(eventObject.getEventTime(), newSpeaker)) {
                         eventManager.changeSpeaker(eventObject, newSpeaker, oldSpeaker);
-                        userManager.changeSpeaker(eventObject.getTitle(), newSpeaker, oldSpeaker);
+                        userManager.changeSpeaker(eventManager.getTitle(eventObject), newSpeaker, oldSpeaker);
                         //"Speaker changed successfully."
                         return 0;
                     }

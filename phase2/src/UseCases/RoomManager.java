@@ -53,6 +53,15 @@ public class RoomManager implements Serializable {
     }
 
     /**
+     * Method returns the capacity of the provided room.
+     * @param room the room whose capacity is being returned.
+     * @return the capacity of the room.
+     */
+    public int getCapacity(Room room){
+        return room.getCapacity();
+    }
+
+    /**
      * Takes in an id value and returns whether or not the room is in the system
      * @param id the id of the room to check
      * @return true if the room is in the system, false if not
