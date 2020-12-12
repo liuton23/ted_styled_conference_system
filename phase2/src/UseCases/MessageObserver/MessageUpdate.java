@@ -7,6 +7,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * a class updates message status
+ */
 public class MessageUpdate {
     private Message message;
     private PropertyChangeSupport observable;

@@ -305,13 +305,4 @@ public class EventManager implements Serializable {
         return eventInfos;
     }
 
-    //testing
-    public static void main(String[] args) {
-        EventManager eventManager = new EventManager();
-        ArrayList<String> speakerList1 = new ArrayList<>();
-        ArrayList<String> speakerList2 = new ArrayList<>();
-        speakerList1.add("Caesar Milan");
-        speakerList1.add("Fido");
-        speakerList2.add("Karen Gillan");
-    }
 }

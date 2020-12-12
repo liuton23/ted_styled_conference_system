@@ -32,7 +32,7 @@ public class MessagePresenter {
                 System.out.println("There are no received messages for you");
                 break;
             case "inputMessageNum":
-                System.out.println("Please input a length 8 message number (MSGxxxxx):");
+                System.out.println("Please input a message number (e.g. MSG12345):");
                 break;
             case "noSuchMessageNum":
                 System.out.println("There's no such message corresponding to this message number");

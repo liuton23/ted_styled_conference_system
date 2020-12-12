@@ -3,6 +3,9 @@ package UseCases.MessageObserver;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * a listener class keep tracks of the changes
+ */
 public class MessageListener implements PropertyChangeListener {
 
     private String changer;

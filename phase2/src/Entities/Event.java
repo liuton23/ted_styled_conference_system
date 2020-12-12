@@ -149,9 +149,4 @@ public class Event implements Serializable{
         return info;
     }
 
-    //testing
-    public static void main(String[] args) {
-        ArrayList<String> speakerList = new ArrayList<String>();
-        speakerList.add("Caesar Milan");
-    }
 }

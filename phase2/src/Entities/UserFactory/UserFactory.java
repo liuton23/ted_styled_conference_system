@@ -2,10 +2,23 @@ package Entities.UserFactory;
 
 import Entities.*;
 
-public class UserFactory {
+/**
+ * a user factory class
+ */
 
+public class UserFactory {
+    /**
+     * empty user factory constructor
+     */
     public UserFactory(){}
 
+    /**
+     * creates a account depends on types
+     * @param username username
+     * @param password password
+     * @param type types
+     * @return a user object
+     */
     public User createAccount(String username, String password, UserType type){
         switch (type) {
             case ATTENDEE:
