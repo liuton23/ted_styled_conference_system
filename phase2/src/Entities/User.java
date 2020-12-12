@@ -3,7 +3,6 @@ package Entities;
 import Entities.UserFactory.Account;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Abstract class representing user accounts at the tech conference

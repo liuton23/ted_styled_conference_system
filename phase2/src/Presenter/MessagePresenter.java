@@ -32,7 +32,7 @@ public class MessagePresenter {
                 System.out.println("There are no received messages for you");
                 break;
             case "inputMessageNum":
-                System.out.println("Please input an 8-digit message number");
+                System.out.println("Please input a message number (e.g. MSG12345):");
                 break;
             case "noSuchMessageNum":
                 System.out.println("There's no such message corresponding to this message number");
@@ -174,8 +174,8 @@ public class MessagePresenter {
      * display you have create a message with a message number
      * @param num message number
      */
-    public void displayNewMessageNum(String num){
-        System.out.println("You have successfully create this message, message number is " + num);
+    public void displayNewMessageNum(int num){
+        System.out.println("You have successfully create this message, message number is MSG" + num);
     }
 
     /**

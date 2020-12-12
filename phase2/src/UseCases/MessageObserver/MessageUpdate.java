@@ -7,6 +7,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * a class updates message status
+ */
 public class MessageUpdate {
     private Message message;
     private PropertyChangeSupport observable;
@@ -73,13 +76,13 @@ public class MessageUpdate {
 
     /**
      * Edit message for a already sent message
-     * @param sender the username of the sender
      * @param newText the updated text
      */
 
-    public void editMessage(String sender, String newText){
+    public void editMessage(String newText){
         String oldMessage = message.getText();
         message.setText(newText);
+        message.reset();
         PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "message content",
                 oldMessage, newText);
         notifyObservers (newEvent);

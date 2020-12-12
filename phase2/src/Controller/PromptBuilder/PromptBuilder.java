@@ -4,7 +4,12 @@ import Controller.Menus.*;
 import Presenter.Presenter;
 
 public class PromptBuilder {
-
+    /**
+     *Builds a prompt for various activities depending on input.
+     * @param presenter Presenter that will display messages.
+     * @param type specifies what type of prompt to produce.
+     * @return prompts for user input.
+     */
     public Prompt buildPrompt(Presenter presenter, PromptType type){
         switch (type){
             case basicMenu1:
@@ -27,7 +32,7 @@ public class PromptBuilder {
                 StringPrompt eventsOrgPrompt = new StringPrompt(presenter);
                 eventsOrgPrompt.setMenu(new EventsOrgMenu());
                 return eventsOrgPrompt;
-            case intPrompt://require manual setting of display message
+            case intPrompt:
                 return new IntPrompt(presenter);
             case intDayPrompt:
                 return new IntDayPrompt(presenter);
@@ -35,7 +40,7 @@ public class PromptBuilder {
                 return new IntHourPrompt(presenter);
             case intMinutePrompt:
                 return new IntMinutePrompt(presenter);
-            case intAtLeastOnePrompt://require manual setting of display message
+            case intAtLeastOnePrompt:
                 return new IntAtLeastOnePrompt(presenter);
             case loginPrompt:
                 StringPrompt loginPrompt = new StringPrompt(presenter);

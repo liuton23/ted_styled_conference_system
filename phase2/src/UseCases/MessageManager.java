@@ -1,8 +1,6 @@
 package UseCases;
 
 import Entities.Message;
-import Entities.User;
-import Entities.UserFactory.UserType;
 import UseCases.MessageObserver.MarkType;
 import UseCases.MessageObserver.MessageListener;
 import UseCases.MessageObserver.MessageUpdate;
@@ -37,15 +35,16 @@ public class MessageManager implements Serializable {
      * @param text content of the message
      * @return an message object
      */
-    public String createMessage(ArrayList<String> recipients, String sender, String text) {
+    public int createMessage(ArrayList<String> recipients, String sender, String text) {
         Message currMessage = new Message(sender, text);
         for (String a : recipients) {
             currMessage.setRecipients(a);
         }
-        messageNumGenerator(currMessage);
+        int num = messageNumGenerator(currMessage);
         messages.add(currMessage);
-        return currMessage.getMessageNumber();
+        return num;
     }
+
 
     /**
      * delete a message from system
@@ -57,21 +56,6 @@ public class MessageManager implements Serializable {
     }
 
     /**
-     * reply a message given sender and content of the message.
-     * @param m message text
-     * @param sender sender's username
-     * @param text content of the message
-     * @return a replied message object
-     */
-    public Message reply(Message m, String sender, String text){
-        Message message = new Message (sender, text);
-        message.setRecipients(m.getSender());
-        messageNumGenerator(message);
-        messages.add(message);
-        return message;
-    } //This is not used for phase 1, but may be useful in phase 2
-
-    /**
      * Gets a list of archived messages for a user
      * @param username username of this user
      * @return a list of archived messages
@@ -80,7 +64,11 @@ public class MessageManager implements Serializable {
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : messages){
             if (getSenderAndRecipients(m).contains(username)){
-                if (m.getArchived(username)) {
+                if (m.getArchived(username) && m.getEdited()) {
+                    allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " To " +
+                            recipientsBuilder(m.getRecipients()) + " {" + m.getText() +
+                            "} @ " + m.getMessageTime().toString() + " (edited)");
+                } else if (m.getArchived(username)){
                     allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " To " +
                             recipientsBuilder(m.getRecipients()) + " {" + m.getText() +
                             "} @ " + m.getMessageTime().toString());
@@ -99,7 +87,10 @@ public class MessageManager implements Serializable {
     public ArrayList<String> getSendBy(String sender){
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : messages){
-            if (m.getSender().equals(sender)){
+            if (m.getSender().equals(sender) && m.getEdited()){
+                allMessages.add(m.getMessageNumber() + ": To " + recipientsBuilder(m.getRecipients()) + " {" + m.getText() +
+                        "} @ " + m.getMessageTime().toString() + " (edited)");
+            } else if (m.getSender().equals(sender)){
                 allMessages.add(m.getMessageNumber() + ": To " + recipientsBuilder(m.getRecipients()) + " {" + m.getText() +
                         "} @ " + m.getMessageTime().toString());
             }
@@ -198,6 +189,8 @@ public class MessageManager implements Serializable {
                 if (m.getEdited()) {
                     allMessages.add(m.getMessageNumber() + ": {" + m.getText() + "} @ " + m.getMessageTime().toString()
                             + " (edited)");
+                } else {
+                    allMessages.add(m.getMessageNumber() + ": {" + m.getText() + "} @ " + m.getMessageTime().toString());
                 }
                 m.setRead(recipient,true);
             }
@@ -239,9 +232,7 @@ public class MessageManager implements Serializable {
         PropertyChangeListener messageListener = new MessageListener(m.getSender());
         MessageUpdate messageUpdate = new MessageUpdate(m);
         messageUpdate.addObserver(messageListener);
-        m.setText(newText);
-        m.reset();
-        messageUpdate.editMessage(m.getSender(),newText);
+        messageUpdate.editMessage(newText);
         messageUpdate.removeObserver(messageListener);
     }
 
@@ -291,7 +282,7 @@ public class MessageManager implements Serializable {
      * Generate a unique message number (id)
      * @param message message object
      */
-    public void messageNumGenerator(Message message){
+    public int messageNumGenerator(Message message){
         String x = "";
         int num = 10000 + (int)(Math.random() * (90000));
         x = "MSG" + num;
@@ -301,6 +292,7 @@ public class MessageManager implements Serializable {
             messageNumStorage.add(x);
             message.setMessageNumber(x);
         }
+        return num;
     }
 
     /**
@@ -317,37 +309,4 @@ public class MessageManager implements Serializable {
         return Optional.empty();
     }
 
-
-    public static void main(String[] args){
-        UserManager a = new UserManager();
-        User josh = a.createAttendee("iamjosh", "4532dgtf", UserType.ATTENDEE);
-        User rita = a.createAttendee("ritaishannie", "123456", UserType.ATTENDEE);
-        User bob = a.createAttendee("Bob", "98321", UserType.ATTENDEE);
-        MessageManager mas = new MessageManager();
-        ArrayList<String> rs = new ArrayList<String>();
-        rs.add("iamjosh");
-        Message m = mas.numToMessageObject(mas.createMessage(rs,"ritaishannie","hello jesus")).get();
-        Message newm = mas.reply(m, "iamjosh","hello, rita");
-        Message c = mas.reply(newm, "ritaishannie", "I'll go to eaton tomorrow");
-        mas.reply(c, "iamjosh", "I'm watching start up.");
-        User org = a.createAttendee("lisa231", "iloveme", UserType.ORGANIZER);
-        User sam = a.createAttendee("sam","76gtej", UserType.ATTENDEE);
-        User go = a.createAttendee("gosh", "kihojsbc", UserType.ATTENDEE);
-        ArrayList<String> att = new ArrayList<String>();
-        att.add("iamjosh");
-        att.add("ritaishannie");
-        att.add("Bob");
-        att.add("sam");
-        Message meeting = mas.numToMessageObject(mas.createMessage
-                (att,"lisa231","meeting starts in 10mins!!")).get();
-        mas.reply(meeting,"ritaishannie","Got it!");
-        System.out.println(mas.getReceivedBy("ritaishannie"));
-        m.setRead("iamjosh", true);
-        mas.markAs(m, "iamjosh",MarkType.UNREAD);
-        mas.markAs(meeting, "ritaishannie",MarkType.ARCHIVED);
-        mas.editMessage(m,"I am here");
-        System.out.println(mas.getReceivedBy("iamjosh"));
-        System.out.println(mas.getSendBy("lisa231"));
-        System.out.println(mas.getAllMessagesFrom("ritaishannie","iamjosh"));
-    }
 }

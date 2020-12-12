@@ -2,16 +2,12 @@ package Gateway;
 
 import java.io.FileOutputStream;
 import java.io.File;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.ArrayList;
-import Entities.Event;
-import Entities.EventComparators.byTimeEventComparator;
 import Presenter.ScheduleDownloaderPresenter;
 import UseCases.EventManager;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -22,7 +18,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 public class ScheduleDownloader {
     private EventManager eventManager;
     private ScheduleDownloaderPresenter presenter = new ScheduleDownloaderPresenter();
-    private Comparator<Event> comparator = new byTimeEventComparator();
 
     /**
      * Creates an instance of ScheduleDownloader
@@ -47,9 +42,6 @@ public class ScheduleDownloader {
                 PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(file));
                 doc.open();
 
-                //set font
-                Font font = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
-
                 //set title in pdf
                 Paragraph title = new Paragraph(presenter.getDocumentTitle());
                 doc.add(title);
@@ -58,9 +50,8 @@ public class ScheduleDownloader {
                 //set table
                 Paragraph schedule = new Paragraph();
 
-                ArrayList<Event> events = new ArrayList<>(eventManager.getAllEvents().values());
-                events.sort(comparator); //get events in sorted order by time
-                ArrayList<LinkedHashMap<String, String>> eventInfos = eventManager.getEventInfoLists(events); //get lists of event information
+                //get events infos in sorted order by time
+                ArrayList<LinkedHashMap<String, String>> eventInfos = eventManager.getEventInfoLists();
                 ArrayList<String> keys = getKeys(eventInfos);
                 int max = keys.size();
                 LinkedHashMap<String, String> headers = presenter.getHeaders(); //put headers in presenter

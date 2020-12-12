@@ -5,11 +5,18 @@ import Presenter.Presenter;
 import java.util.Scanner;
 
 public class IntDayPrompt extends IntPrompt{
-
+    /**
+     * Method that sets the presenter for the prompt.
+     * @param presenter for displaying prompt messages.
+     */
     public IntDayPrompt(Presenter presenter){
         super(presenter);
     }
 
+    /**
+     * Return integer value from prompt options.
+     * @return int value.
+     */
     public int intAsk(){
         Scanner input = new Scanner(System.in);
         boolean done = false;

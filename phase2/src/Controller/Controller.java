@@ -13,7 +13,6 @@ import UseCases.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
-import java.util.List;
 
 /**
  * Manages user input.
@@ -36,6 +35,7 @@ public class Controller {
     public void run() {
         init();
         presenter.welcomeMessage();
+        init();
         boolean running = true;
         PromptBuilder promptBuilder = new PromptBuilder();
         try {
@@ -48,7 +48,7 @@ public class Controller {
 
                 switch (chosen) {
                     case "R":
-                        loginSystem.registerUsers(userManager);
+                        loginSystem.registerUsers();
                         break;
                     case "L":
                         username = loginSystem.login();
@@ -85,13 +85,13 @@ public class Controller {
             try {
                 String chosen;
                 PromptBuilder promptBuilder = new PromptBuilder();
+                Prompt prompt;
                 if (isOrg){
-                    Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.basicMenu2);
-                    chosen = prompt.ask();
+                    prompt = promptBuilder.buildPrompt(presenter, PromptType.basicMenu2);
                 }else{
-                    Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.basicMenu1);
-                    chosen = prompt.ask();
+                    prompt = promptBuilder.buildPrompt(presenter, PromptType.basicMenu1);
                 }
+                chosen = prompt.ask();
 
                 switch (chosen) {
                     case "U"://Change account email
@@ -188,27 +188,6 @@ public class Controller {
         password = input.nextLine();
         userManager.setAttendeePassword(username, password);
     }
-
-    /**
-     * Makes sure user enters an int as input
-     * @return the int the user entered
-     */
-    public int getIntInput() {
-        Scanner input = new Scanner(System.in);
-        boolean done = false;
-        int in = 0;
-        do {
-            try {
-                in = Integer.parseInt(input.nextLine());
-                done = true;
-            } catch (NumberFormatException e) {
-                presenter.displayMessages("invalidIntInput");
-            }
-        } while (!done);
-        return in;
-    }
-
-
 
     /**
      * Exits the program after saving.

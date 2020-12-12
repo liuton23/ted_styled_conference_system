@@ -11,7 +11,6 @@ import Entities.Event;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.Room;
 import Entities.User;
-import Entities.UserFactory.UserType;
 import Entities.VipOnly;
 import Presenter.*;
 import UseCases.UserManager;
@@ -134,6 +133,12 @@ public class SignUpSystem extends Controller{
 
     }
 
+    /**
+     * Checks if <code>attendee</code> can attend <code>event</code>.
+     * @param event the event to be checked.
+     * @param attendee the attendee to be checked.
+     * @return true if the user can attend. Otherwise returns false.
+     */
     private boolean checkCanAttend(Event event, User attendee){
         if (userManager.hasVIPAccess(attendee) && event instanceof VipOnly){
             return true;
@@ -245,62 +250,6 @@ public class SignUpSystem extends Controller{
                 break;
         }
     }
-
-
-/**
-    public static void main(String[] args) {
-        UserManager atm = new UserManager();
-        EventManager evm = new EventManager();
-        RoomManager rm = new RoomManager();
-
-        atm.createAttendee("jill", "123", UserType.SPEAKER);
-        rm.addRoom(1, 10);
-        ArrayList<String> speakerlist = new ArrayList<>();
-        speakerlist.add("jill");
-        evm.createSpeakerEvent("Pet conference",speakerlist, 2020, "DECEMBER", 12, 12, 0, 1, 1, 5);
-        evm.createSpeakerEvent("ABC",speakerlist, 2020, "DECEMBER", 13, 14, 0, 1, 1, 10);
-
-        SignUpSystem sus = new SignUpSystem(atm,evm, rm);
-        sus.setComparator(new byTimeEventComparator());
-        ArrayList<String> list = sus.viewAllEvents();
-        System.out.println(list);
-
-        sus.setComparator(new byTitleEventComparator());
-        list = sus.viewAllEvents();
-        System.out.println(list);
-
-        sus.setComparator(new bySpeakerEventComparator());
-        list = sus.viewAllEvents();
-        System.out.println(list);
-
-        try {
-            sus.setComparator(new byTimeEventComparator());
-            sus.viewAllEvent();
-
-        } catch (IOException e){
-            System.out.println("OPPS");
-
-        }
-
-        try {
-            sus.setComparator(new bySpeakerEventComparator());
-            sus.viewAllEvent();
-
-        } catch (IOException e){
-            System.out.println("OPPS");
-
-        }
-
-        try {
-            sus.setComparator(new byTitleEventComparator());
-            sus.viewAllEvent();
-
-        } catch (IOException e){
-            System.out.println("OPPS");
-
-        }
-    }
- */
 
 
 }

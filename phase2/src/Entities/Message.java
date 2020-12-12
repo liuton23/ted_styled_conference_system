@@ -166,14 +166,4 @@ public class Message implements Serializable {
         return messageTime;
     }
 
-    /**
-     * remove a recipient from recipient list
-     * @param recipient username of recipient to be removed
-     */
-    public void removeRecipient(String recipient){
-        recipients.remove(recipient);
-    }
-
-
-
 }

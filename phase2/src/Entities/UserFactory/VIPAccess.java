@@ -1,9 +1,8 @@
 package Entities.UserFactory;
 
-import java.util.ArrayList;
-
+/**
+ * Gives VIP attendees special access.
+ */
 public interface VIPAccess extends Account{
-    //void addVIPEvent(String vipEvent);
-    //void removeVIPEvent(String vipEvent);
-    //ArrayList<String> getVIPEvents();
+
 }

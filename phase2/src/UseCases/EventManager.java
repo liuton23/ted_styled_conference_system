@@ -1,13 +1,11 @@
 package UseCases;
 
 import Entities.*;
+import Entities.EventComparators.byTimeEventComparator;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Manages and stores events in this tech conference system.
@@ -32,6 +30,17 @@ public class EventManager implements Serializable {
      */
     public HashMap<String, Event> getAllEvents() {
         return masterEventDict;
+    }
+
+    /**
+     * This method returns a list of all events sorted by time.
+     * @return a sorted list representing all of the events occurring at the tech conference.
+     */
+    public ArrayList<Event> getAllEventsSortedByTime() {
+        ArrayList<Event> events = new ArrayList<>(this.getAllEvents().values());
+        Comparator<Event> comparator = new byTimeEventComparator();
+        events.sort(comparator);
+        return events;
     }
 
     /**
@@ -91,6 +100,20 @@ public class EventManager implements Serializable {
         speakerlessEvents.put(title, newEvent);
     }
 
+    /**
+     * This method creates a VIP-only event and adds it to EventManager's hashmap of events (masterEventList) with the
+     * event name as the key and the SpeakerEvent object as the value. It adds the event name as a key to EventManager's
+     * hashmap of speaker events (speakerEvents) and the event object as the value as well.
+     * @param title the desired event name.
+     * @param speaker the desired speaker username.
+     * @param year the year the event starts.
+     * @param month the month the event starts.
+     * @param day the day the event starts.
+     * @param hour the hour the event starts.
+     * @param minute the minute the event starts.
+     * @param room the room id of the desired room where the event takes place.
+     * @param capacity the capacity of the event.
+     */
     public void createVIPSpeakerEvent(String title, ArrayList<String> speaker, int year, String month, int day, int hour,
                                       int minute, int room, int duration, int capacity){
         VipSpeakerEvent newEvent = new VipSpeakerEvent(title, speaker, year, month, day, hour, minute, room, duration, capacity);
@@ -98,6 +121,20 @@ public class EventManager implements Serializable {
         speakerEvents.put(title, newEvent);
     }
 
+    /**
+     * This method creates a speaker-less VIP-only event and adds it to EventManager's hashmap of events.
+     * (masterEventList) with the event name as the key and the event object as the value. It adds the event name as a
+     * key to EventManager's hashmap of speaker-less events (speakerlessEvents) and the event object as the value as
+     * well.
+     * @param title the desired event name.
+     * @param year the year the event starts.
+     * @param month the month the event starts.
+     * @param day the day the event starts.
+     * @param hour the hour the event starts.
+     * @param minute the minute the event starts.
+     * @param room the room id of the desired room where the event takes place.
+     * @param capacity the capacity of the event.
+     */
     public void createVIPEvent(String title, int year, String month, int day, int hour,
                                int minute, int room, int duration, int capacity){
         VipEvent newEvent = new VipEvent(title, year, month, day, hour, minute, room, duration, capacity);
@@ -275,20 +312,31 @@ public class EventManager implements Serializable {
         }
     }
 
+    /**
+     * Returns the maximum number of people for an <code>Event</code>.
+     * @param event event for which to get the capacity of.
+     * @return the maximum capacity for the event.
+     */
     public int getEventCapacity(Event event){
         return event.getCapacity();
     }
 
+    /**
+     * Sets the maximum number of attendees for an event.
+     * @param event event for which to set the capacity of.
+     * @param capacity the new maximum capacity for the event. Must be less than capacity of room the event is being
+     *                 held in.
+     */
     public void setEventCapacity(Event event, int capacity){
         event.setCapacity(capacity);
     }
 
     /**
      * Returns a list containing the linked hash maps of the event info for each event in a list of events
-     * @param events the list of events
-     * @return the list containing the linked hash maps of of event info
+     * @return the list containing the linked hash maps of event info in order by time
      */
-    public ArrayList<LinkedHashMap<String, String>> getEventInfoLists(ArrayList<Event> events) {
+    public ArrayList<LinkedHashMap<String, String>> getEventInfoLists() {
+        ArrayList<Event> events = this.getAllEventsSortedByTime();
         ArrayList<LinkedHashMap<String, String>> eventInfos = new ArrayList<>();
         for (Event event : events) {
             eventInfos.add(event.toStringLinkedHashMap());
@@ -296,13 +344,4 @@ public class EventManager implements Serializable {
         return eventInfos;
     }
 
-    //testing
-    public static void main(String[] args) {
-        EventManager eventManager = new EventManager();
-        ArrayList<String> speakerList1 = new ArrayList<>();
-        ArrayList<String> speakerList2 = new ArrayList<>();
-        speakerList1.add("Caesar Milan");
-        speakerList1.add("Fido");
-        speakerList2.add("Karen Gillan");
-    }
 }

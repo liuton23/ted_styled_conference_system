@@ -10,7 +10,6 @@ import java.util.ArrayList;
  */
 public class VIP extends Speaker implements Serializable, AttendAble, TalkAble, VIPAccess{
     private ArrayList<String> itinerary;
-    private ArrayList<String> VIPEvents;
 
     /**
      * Constructs a VIP attendee.
@@ -20,7 +19,6 @@ public class VIP extends Speaker implements Serializable, AttendAble, TalkAble, 
     public VIP(String username, String password){
         super(username, password);
         this.itinerary = new ArrayList<>();
-        this.VIPEvents = new ArrayList<>();
     }
 
     /**

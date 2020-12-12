@@ -52,25 +52,6 @@ public class LoginSystem extends Controller {
     }
 
     /**
-     * Register a new speaker if there is no existing account with the same username.
-     *
-     * @param username speaker account username.
-     * @param password speaker account password
-     * @return true iff the account was successfully registered.
-     */
-
-    public boolean registerSpeaker(String username, String password) {
-        if (userManager.usernameToUserObject(username).isPresent()) {
-            return false;
-        } else if (username.trim().isEmpty() || password.trim().isEmpty()) {
-            return false;
-        } else {
-            userManager.createAttendee(username, password, UserType.SPEAKER);
-            return true;
-        }
-    }
-
-    /**
      * Attendee login.
      *
      * @return username of <code>Attendee</code> if it exists. Otherwise returns an empty string.
@@ -93,7 +74,7 @@ public class LoginSystem extends Controller {
     /**
      * Attendee registration. Cannot choose a username that is already taken.
      */
-    public void registerUsers(UserManager userManager) {
+    public void registerUsers() {
         Scanner obj1 = new Scanner(System.in);
         presenter.printUsernameMessage(1);
         String username = obj1.nextLine();

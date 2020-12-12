@@ -6,8 +6,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Prompts that return a string value.
+ */
 public class StringPrompt extends Prompt{
-
+    /**
+     * Method that sets the presenter for the prompt.
+     * @param presenter for displaying prompt messages.
+     */
     public StringPrompt(Presenter presenter){
         super(presenter);
     }
