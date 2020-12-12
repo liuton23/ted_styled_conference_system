@@ -1,7 +1,6 @@
 package Controller.Menus;
 
 import java.util.ArrayList;
-
 /**
  * Main menu for non-organizers.
  */

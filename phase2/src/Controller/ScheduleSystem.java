@@ -351,7 +351,7 @@ public class ScheduleSystem extends Controller{
                     ArrayList<Event> events = new ArrayList<Event>(eventManager.getSpeakerEvents().values());
                     //events.sort(new bySpeakerEventComparator());
                     schedulePresenter.displayAllEvents(events, "speaker");
-                    presenter.displayMessages("requestRoom");
+                    presenter.displayMessages("requestCancelEvent");
                     //index = getIntInput();
                     Prompt indexPrompt = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
                     index = indexPrompt.intAsk();
@@ -460,44 +460,7 @@ public class ScheduleSystem extends Controller{
         return speakers;
     }
 
-    /**
-     * Makes sure user enters an int between start and end (inclusive)
-     * @param start start of range
-     * @param end end of range
-     * @return the inputted int
-     */
-    private int getIntInputInRange(int start, int end) {
-        boolean done = false;
-        int in;
-        do {
-            in = getIntInput();
-            if (start <= in && in <= end) {
-                done = true;
-            } else {
-                presenter.printInvalidIntRangeMessage(start, end);
-            }
-        } while (!done);
-        return in;
-    }
 
-    /**
-     * Makes sure user enters an int greater than or equal to start
-     * @param start start of range
-     * @return the inputted int
-     */
-    private int getIntInputGreaterThanEqualTo(int start) {
-        boolean done = false;
-        int in;
-        do {
-            in = getIntInput();
-            if (start <= in) {
-                done = true;
-            } else {
-                presenter.printInvalidIntRangeMessage(start);
-            }
-        } while (!done);
-        return in;
-    }
 
     /**
      * @param eventName Name of the event to be cancelled.
@@ -508,8 +471,7 @@ public class ScheduleSystem extends Controller{
         if (!eventManager.nameToEvent(eventName).isPresent()) {
             // event name does not correspond to an event.
             return 0;
-        }
-        else if(eventManager.getSpeakerEvents().containsKey(eventName)) {
+        } else if(eventManager.getSpeakerEvents().containsKey(eventName)) {
             SpeakerEvent speakerEvent = eventManager.getSpeakerEvents().get(eventName);
             ArrayList<String> speakerUsernameList = eventManager.getSpeakers(speakerEvent);
             for (String speakerName : speakerUsernameList) {

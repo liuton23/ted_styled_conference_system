@@ -92,15 +92,15 @@ public class Presenter {
                 break;
             case "requestDay":
                 System.out.println("Enter starting day of event:");
-                System.out.println("Enter a day of your chosen month from 0 up to 31");
+                System.out.println("Enter a day of your chosen month from 1 up to 31");
                 break;
             case "requestHour":
                 System.out.println("Enter starting hour of the event:");
-                System.out.println("Enter a integer between 0 - 23");
+                System.out.println("Enter an integer between 0 - 23");
                 break;
             case "requestMinute":
                 System.out.println("Enter starting minute of the event:");
-                System.out.println("Enter a integer between 0 - 59");
+                System.out.println("Enter an integer between 0 - 59");
                 break;
             case "requestDuration":
                 System.out.println("Enter length of event (hours):");
@@ -172,6 +172,9 @@ public class Presenter {
             case "YorN":
                 System.out.println("(Y)es or (N)o");
                 break;
+            case "requestCancelEvent":
+                System.out.println("Enter an event ID you would like to cancel:");
+                break;
         }
     }
 
@@ -207,8 +210,10 @@ public class Presenter {
         switch (value){
             case 0:
                 System.out.println("Event name does not correspond to an event.");
+                break;
             case 1:
                 System.out.println("Event successfully removed.");
+                break;
         }
     }
 
