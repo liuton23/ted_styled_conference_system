@@ -190,4 +190,17 @@ public class MessagePresenter {
         }
     }
 
+    public void displayMarkAs(int type, String username){
+        if (type == 1) {
+            System.out.println("Message system observed a change in read status of this message for " + username);
+            System.out.println("This message has been marked as UNREAD for " + username);
+        } else if (type == 2) {
+            System.out.println("Message system observed a change in archive status of this message for " + username);
+            System.out.println("This message has been marked as ARCHIVED for " + username);
+        } else if (type == 3){
+            System.out.println("Message system observed a change in the content of this message.");
+            System.out.println("This message content has been EDITED by " + username);
+        } System.out.println();
+    }
+
 }

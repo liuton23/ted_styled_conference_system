@@ -13,7 +13,7 @@ public class MainMessageMenu extends Menu{
     public ArrayList<String> getMenuOptions(){
         ArrayList<String> options = new ArrayList<>();
         options.add("(M)essage users");
-        options.add("(V)iew messages");
+        options.add("(V)iew, edit and mark messages");
         options.add("(B)ack");
         return options;
     }
