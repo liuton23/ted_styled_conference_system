@@ -314,6 +314,91 @@ public class ScheduleSystem extends Controller{
     }
 
     /**
+     * Method that adds a speaker to a speaker event or a VIP speaker event.
+     * @param eventName the event the speaker is to be added to.
+     * @param speakerName the username of the speaker to be added.
+     * @return an integer message representing successful completion or an error.
+     */
+    public int addSpeaker(String eventName, String speakerName){
+        if (!eventManager.nameToEvent(eventName).isPresent()) {
+            // event name does not correspond to any event.
+            return 4;
+        }
+        else if (!userManager.registeredSpeaker(speakerName)){
+            // not a registered speaker
+            return 5;
+        }
+        else if(!eventManager.getSpeakerEvents().containsKey(eventName)){
+            //Event name doesn't correspond to an event with speakers.
+            return 7;
+        }
+        else {
+            SpeakerEvent eventObject = (SpeakerEvent) eventManager.nameToEvent(eventName).get();
+            if (userManager.usernameToUserObject(speakerName).isPresent()) {
+            // if object is speaker
+                if (userManager.usernameToUserObject(speakerName).get() instanceof TalkAble) {
+                // changing speaker
+                    if (eventManager.freeSpeakerCheck(eventObject.getEventTime(), speakerName)) {
+                        eventManager.addSpeaker(eventObject, speakerName);
+                        userManager.addEventToSpeakerList(userManager.usernameToSpeakerObject(speakerName).get(), eventObject.getTitle());
+                        //"Speaker added successfully."
+                        //TODO: add to presenter
+                        return 400;
+                    }
+                    // speaker is not free
+                    return 1;
+                }
+            // user is not a speaker
+            return 2;
+            }
+        //"One of the users does not exist."
+        return 3;
+        }
+    }
+    /**
+     * Method that removes a speaker from a speaker event or a VIP speaker event.
+     * @param eventName the event the speaker is to be added to.
+     * @param speakerName the username of the speaker to be removed.
+     * @return an integer message representing successful completion or an error.
+     */
+    public int removeSpeaker(String eventName, String speakerName){
+        if (!eventManager.nameToEvent(eventName).isPresent()) {
+            // event name does not correspond to any event.
+            return 4;
+        }
+        else if (!userManager.registeredSpeaker(speakerName)){
+            // not a registered speaker
+            return 5;
+        }
+        else if(!eventManager.getSpeakerEvents().containsKey(eventName)){
+            //Event name doesn't correspond to an event with speakers.
+            return 7;
+        }
+        else {
+            SpeakerEvent eventObject = (SpeakerEvent) eventManager.nameToEvent(eventName).get();
+            if (userManager.usernameToUserObject(speakerName).isPresent()) {
+                // if object is speaker
+                if (userManager.usernameToUserObject(speakerName).get() instanceof TalkAble) {
+                    // changing speaker
+                    if (eventManager.getSpeakers(eventObject).size() != 1) {
+                        eventManager.removeSpeaker(eventObject, speakerName);
+                        userManager.removeEventFromSpeakerList(userManager.usernameToSpeakerObject(speakerName).get(), eventObject.getTitle());
+                        //"Speaker removed successfully."
+                        return 300;
+                    }
+                    // Cannot remove speaker a speaker event must have at least one speaker.
+                    // TODO: add this message to presenter
+                    return 500;
+                }
+                // user is not a speaker
+                return 2;
+            }
+            //"One of the users does not exist."
+            return 3;
+        }
+    }
+
+    /**
      * Organizer only menu to schedule events, add rooms and change speakers.
      */
     public void scheduleActivity() throws IOException {
