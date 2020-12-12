@@ -1,9 +1,5 @@
 package Entities;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-
 /**
  * An instance of this class represents a speakerless event only for VIP attendees.
  */

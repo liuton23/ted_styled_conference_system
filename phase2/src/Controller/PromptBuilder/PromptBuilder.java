@@ -8,7 +8,7 @@ public class PromptBuilder {
      *Builds a prompt for various activities depending on input.
      * @param presenter Presenter that will display messages.
      * @param type specifies what type of prompt to produce.
-     * @return
+     * @return prompts for user input.
      */
     public Prompt buildPrompt(Presenter presenter, PromptType type){
         switch (type){

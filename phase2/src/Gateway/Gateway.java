@@ -1,8 +1,5 @@
 package Gateway;
 
-import Presenter.Presenter;
-import UseCases.UserManager;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +8,6 @@ import java.util.List;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.*;
 import java.util.*;
 
 /**

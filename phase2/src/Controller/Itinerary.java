@@ -1,12 +1,10 @@
 package Controller;
 
-import Entities.User;
 import Entities.UserFactory.AttendAble;
 import Entities.UserFactory.TalkAble;
 import Presenter.Presenter;
 import UseCases.UserManager;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -45,7 +43,7 @@ public class Itinerary {
             Optional<TalkAble> obj1 = userManager.usernameToSpeakerObject(user);
             if (obj1.isPresent()) {
                 TalkAble userObj = obj1.get();
-                presenter.displaySchedule(userManager.getSpeakingList((TalkAble) userObj), "speakItinerary");
+                presenter.displaySchedule(userManager.getSpeakingList(userObj), "speakItinerary");
             }
         }
     }

@@ -1,7 +1,6 @@
 package UseCases;
 
 import Entities.*;
-import Entities.Event;
 import Entities.UserFactory.*;
 
 import java.io.Serializable;
@@ -85,10 +84,6 @@ public class UserManager implements Serializable {
             }
         }
         return false;
-    }
-
-    public ArrayList<OrganizeAble> getAllOrganizers(){
-        return organizerList;
     }
 
     /**
@@ -258,22 +253,6 @@ public class UserManager implements Serializable {
             }
         }
         return Optional.empty();
-    }
-
-    /**
-     * Method that returns a list of attendees that attend an event.
-     * @param event instance of Event that some attendees will attend.
-     * @return list of attendees who will attend the event.
-     */
-    public ArrayList<AttendAble> eventToAttendees(Event event){
-        ArrayList<AttendAble> list = new ArrayList<>();
-        String title = event.getTitle();
-        for (AttendAble a: attendeeList){
-            if (a.getItinerary().contains(title)){
-                list.add(a);
-            }
-        }
-        return list;
     }
 
     /**

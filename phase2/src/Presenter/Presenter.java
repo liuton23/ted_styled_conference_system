@@ -1,7 +1,5 @@
 package Presenter;
 
-import Entities.Event;
-
 import java.util.ArrayList;
 
 /**
