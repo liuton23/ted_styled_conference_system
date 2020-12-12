@@ -134,6 +134,12 @@ public class SignUpSystem extends Controller{
 
     }
 
+    /**
+     * Checks if <code>attendee</code> can attend <code>event</code>.
+     * @param event the event to be checked.
+     * @param attendee the attendee to be checked.
+     * @return true if the user can attend. Otherwise returns false.
+     */
     private boolean checkCanAttend(Event event, User attendee){
         if (userManager.hasVIPAccess(attendee) && event instanceof VipOnly){
             return true;

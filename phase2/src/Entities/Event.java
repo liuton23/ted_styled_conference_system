@@ -20,6 +20,19 @@ public class Event implements Serializable{
     private int capacity;
 
     // duration has to be an int representing a number of hours
+
+    /**
+     * Creates an event.
+     * @param title name of the event.
+     * @param year start year of the event.
+     * @param month start month of the event.
+     * @param day start day of the event.
+     * @param hour start hour of the event.
+     * @param minute start minute of the event.
+     * @param room room of the event.
+     * @param duration how long the event will last for.
+     * @param capacity how many people can attend the event. Must be less than capacity of room.
+     */
     public Event(String title, int year, String month, int day, int hour, int minute, int room, int duration, int capacity){
         LocalTime startTime = LocalTime.of(hour, minute);
         LocalTime endTime = startTime.plusHours(duration);
@@ -28,7 +41,7 @@ public class Event implements Serializable{
         this.eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, hour, minute, 0));
         this.eventTime.add(LocalDateTime.of(year, Month.valueOf(month), day, endTime.getHour(), minute, 0));
         this.room = room;
-        this.attendeeList = new ArrayList<String>();
+        this.attendeeList = new ArrayList<>();
         this.capacity = capacity;
     }
     // getters

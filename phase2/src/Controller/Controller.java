@@ -36,6 +36,7 @@ public class Controller {
     public void run() {
         init();
         presenter.welcomeMessage();
+        init();
         boolean running = true;
         PromptBuilder promptBuilder = new PromptBuilder();
         try {
@@ -85,13 +86,13 @@ public class Controller {
             try {
                 String chosen;
                 PromptBuilder promptBuilder = new PromptBuilder();
+                Prompt prompt;
                 if (isOrg){
-                    Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.basicMenu2);
-                    chosen = prompt.ask();
+                    prompt = promptBuilder.buildPrompt(presenter, PromptType.basicMenu2);
                 }else{
-                    Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.basicMenu1);
-                    chosen = prompt.ask();
+                    prompt = promptBuilder.buildPrompt(presenter, PromptType.basicMenu1);
                 }
+                chosen = prompt.ask();
 
                 switch (chosen) {
                     case "U"://Change account email
