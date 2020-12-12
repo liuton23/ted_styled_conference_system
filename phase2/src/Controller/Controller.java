@@ -13,7 +13,6 @@ import UseCases.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
-import java.util.List;
 
 /**
  * Manages user input.
@@ -49,7 +48,7 @@ public class Controller {
 
                 switch (chosen) {
                     case "R":
-                        loginSystem.registerUsers(userManager);
+                        loginSystem.registerUsers();
                         break;
                     case "L":
                         username = loginSystem.login();
@@ -189,27 +188,6 @@ public class Controller {
         password = input.nextLine();
         userManager.setAttendeePassword(username, password);
     }
-
-    /**
-     * Makes sure user enters an int as input
-     * @return the int the user entered
-     */
-    public int getIntInput() {
-        Scanner input = new Scanner(System.in);
-        boolean done = false;
-        int in = 0;
-        do {
-            try {
-                in = Integer.parseInt(input.nextLine());
-                done = true;
-            } catch (NumberFormatException e) {
-                presenter.displayMessages("invalidIntInput");
-            }
-        } while (!done);
-        return in;
-    }
-
-
 
     /**
      * Exits the program after saving.

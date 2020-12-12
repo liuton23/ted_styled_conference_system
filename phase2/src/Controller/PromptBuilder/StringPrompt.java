@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class StringPrompt extends Prompt{
     /**
      * Method that sets the presenter for the prompt.
-     * @param presenter
+     * @param presenter for displaying prompt messages.
      */
     public StringPrompt(Presenter presenter){
         super(presenter);

@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class BooleanPrompt extends Prompt {
     /**
      * Method that sets the presenter for the prompt.
-     * @param presenter
+     * @param presenter for displaying prompt messages.
      */
     public BooleanPrompt(Presenter presenter){
         super(presenter);
@@ -17,8 +17,8 @@ public class BooleanPrompt extends Prompt {
 
     /**
      * Return boolean value from prompt options.
-     * @return boolean value
-     * @throws IOException
+     * @return boolean value.
+     * @throws IOException to exit program.
      */
     public boolean booleanAsk() throws IOException {
         Scanner input = new Scanner(System.in);

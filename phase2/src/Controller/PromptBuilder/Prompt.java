@@ -13,15 +13,15 @@ public abstract class Prompt {
 
     /**
      * Method that sets the presenter for the prompt.
-     * @param presenter
+     * @param presenter for displaying prompt messages.
      */
     public Prompt(Presenter presenter){
         this.presenter = presenter;
     }
 
     /**
-     * Method that sets the menue for the prompt.
-     * @param menu
+     * Method that sets the menu for the prompt.
+     * @param menu contains options and choices.
      */
     public void setMenu(Menu menu) {
         this.menu = menu;
@@ -61,22 +61,21 @@ public abstract class Prompt {
 
     /**
      * Return boolean value from prompt options.
-     * @return boolean value
-     * @throws IOException
+     * @return boolean value.
+     * @throws IOException to exit program.
      */
     public boolean booleanAsk() throws IOException {return false;}
 
     /**
      * Return integer value from prompt options.
-     * @return int value
-     * @throws IOException
+     * @return int value.
      */
-    public int intAsk() throws IOException {return 0;}
+    public int intAsk() {return 0;}
 
     /**
      * Return String value from prompt options.
      * @return String value
-     * @throws IOException
+     * @throws IOException to exit program.
      */
     public String ask() throws IOException {return "";}
 }

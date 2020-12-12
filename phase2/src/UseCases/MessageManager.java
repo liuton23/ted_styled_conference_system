@@ -1,8 +1,6 @@
 package UseCases;
 
 import Entities.Message;
-import Entities.User;
-import Entities.UserFactory.UserType;
 import UseCases.MessageObserver.MarkType;
 import UseCases.MessageObserver.MessageListener;
 import UseCases.MessageObserver.MessageUpdate;

@@ -11,7 +11,6 @@ import Entities.Event;
 import Entities.EventComparators.byTimeEventComparator;
 import Entities.Room;
 import Entities.User;
-import Entities.UserFactory.UserType;
 import Entities.VipOnly;
 import Presenter.*;
 import UseCases.UserManager;

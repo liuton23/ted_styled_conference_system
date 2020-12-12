@@ -2,13 +2,12 @@ package Controller.PromptBuilder;
 
 import Presenter.Presenter;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class IntMinutePrompt extends IntPrompt{
     /**
      * Method that sets the presenter for the prompt.
-     * @param presenter
+     * @param presenter for displaying prompt messages.
      */
     public IntMinutePrompt(Presenter presenter){
         super(presenter);
@@ -16,8 +15,7 @@ public class IntMinutePrompt extends IntPrompt{
 
     /**
      * Return integer value from prompt options.
-     * @return int value
-     * @throws IOException
+     * @return int value.
      */
     public int intAsk() {
         Scanner input = new Scanner(System.in);
