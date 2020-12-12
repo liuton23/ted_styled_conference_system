@@ -158,7 +158,7 @@ public class MessageSystem extends Controller {
                         return 1;
                         // event with no speaker == event you do not speak at
                     }
-                    if (((SpeakerEvent) eventF).getSpeaker().contains(sender)) {
+                    if (eventManager.getSpeakers((SpeakerEvent) eventF).contains(sender)) {
                         if (eventManager.eventToAttendees(eventF).size() != 0) {
                             list.addAll(eventManager.eventToAttendees(eventF));
                         } else noAtt.add(i);
@@ -223,15 +223,12 @@ public class MessageSystem extends Controller {
         while (messagingOther) {
             String chosen;
             if (user instanceof TalkAble) {
-                //chosen = askMenuInput(11);
                 Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.sendMessageSpeakerMenu);
                 chosen = prompt.ask();
             } else if (user instanceof OrganizeAble) {
-                //chosen = askMenuInput(10);
                 Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.sendMessageOrganizerMenu);
                 chosen = prompt.ask();
             } else {
-                //chosen = askMenuInput(6);
                 Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.sendMessageAttendeeMenu);
                 chosen = prompt.ask();
             }
@@ -274,7 +271,6 @@ public class MessageSystem extends Controller {
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("printInputEventName");
         events.add(obj.nextLine().trim());
-        //String chosen = askMenuInput(12);
         PromptBuilder promptBuilder = new PromptBuilder();
         Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.wishToSendMoreEventMenu);
         String chosen = prompt.ask();
@@ -287,7 +283,7 @@ public class MessageSystem extends Controller {
                 messagePresenter.generalPrintHelperForMS("printInputMessagePlz");
                 String message = obj.nextLine().trim();
                 int i = messageEventAttendees(events,username,message);
-                if (i > 7){
+                if (i > 6){ // if it's a five-digit int, message is created we need to display the number
                     messagePresenter.displayNewMessageNum(i);
                 } else {
                     messagePresenter.printMessageEventsAttendees(i);
@@ -305,7 +301,6 @@ public class MessageSystem extends Controller {
     private void viewMessages(String username) throws IOException {
         boolean viewingMessage = true;
         while (viewingMessage) {
-            //String chosen = askMenuInput(7);
             PromptBuilder promptBuilder = new PromptBuilder();
             Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.viewMessageMenu);
             String chosen = prompt.ask();
@@ -400,7 +395,7 @@ public class MessageSystem extends Controller {
         messagePresenter.generalPrintHelperForMS("printInputMessagePlz");
         String message = obj.nextLine();
         int i = messageAllAttendees(username, message);
-        if (i > 3){
+        if (i > 3){ // if it's a five-digit int, message is created we need to display the number
             messagePresenter.displayNewMessageNum(i);
         } else {
             messagePresenter.printMessageAllAttendees(i);

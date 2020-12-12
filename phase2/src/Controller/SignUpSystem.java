@@ -144,13 +144,7 @@ public class SignUpSystem extends Controller{
             return true;
         } else if (!(userManager.hasVIPAccess(attendee)) && event instanceof VipOnly) {
             return false;
-        }
-        else if(eventManager.eventToAttendees(event).size() >= eventManager.getEventCapacity(event)){
-            return false;
-        }
-        else {
-            return true;
-        }
+        } else return eventManager.eventToAttendees(event).size() < eventManager.getEventCapacity(event);
     }
 
     /**
