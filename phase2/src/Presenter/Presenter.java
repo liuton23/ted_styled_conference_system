@@ -38,9 +38,22 @@ public class Presenter {
      */
     public void prompt(ArrayList<String> options){
         int width = (options.size() / 4) + 1;
+        int[] colLengths = new int[width];
+        int[] lengths = new int[options.size()];
+        for(int i = 0; i < options.size(); i++) {
+            int length = (int) Math.ceil((options.get(i).length() + 1)/4.0);
+            lengths[i] = length;
+            if(colLengths[i % width] < length){
+                colLengths[i%width] = length;
+            }
+        }
         System.out.println("Please select an option:");
         for(int i = 0; i < options.size(); i++) {
-            System.out.print(options.get(i) + "\t \t \t");
+            StringBuilder tabspace = new StringBuilder();
+            for(int j = 0; j < 2 + colLengths[i%width] - lengths[i]; j++){
+                tabspace.append("\t");
+            }
+            System.out.print(options.get(i) + tabspace);
             if( (i + 1) % width == 0){
                 System.out.println();
             }
