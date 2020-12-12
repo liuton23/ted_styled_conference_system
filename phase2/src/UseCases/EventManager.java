@@ -184,6 +184,15 @@ public class EventManager implements Serializable {
     }
 
     /**
+     * Returns the name of the provided event object
+     * @param event the event whose name is being returned.
+     * @return the name of the event.
+     */
+    public String getTitle(Event event){
+        return event.getTitle();
+    }
+
+    /**
      * Method that returns an Optional<Event> object from its name.
      * @param eventName the name of the event to be returned
      * @return the respective Optional<Event> object.
