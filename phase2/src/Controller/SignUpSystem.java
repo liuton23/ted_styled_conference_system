@@ -67,12 +67,12 @@ public class SignUpSystem extends Controller{
         int index = 1;
         for (Event event: eventDictClone){
             String x = "";
-            if(eventManager.getSpeakerEvents().containsKey(event.getTitle())) {
+            if(eventManager.getSpeakerEvents().containsKey(eventManager.getTitle(event))) {
                 SpeakerEvent speakerEvent = (SpeakerEvent) event;
-                x += index + ") " + event.getTitle() + " @ " + event.getEventTime() + " with " + eventManager.getSpeakers(speakerEvent).get(0) + " and more, ";
+                x += index + ") " + eventManager.getTitle(event) + " @ " + event.getEventTime() + " with " + eventManager.getSpeakers(speakerEvent).get(0) + " and more, ";
             }
             else{
-                x += index + ") " + event.getTitle() + " @ " + event.getEventTime() +", ";
+                x += index + ") " + eventManager.getTitle(event) + " @ " + event.getEventTime() +", ";
             }
             stringEventList.add(x);
             index += 1;
@@ -122,7 +122,7 @@ public class SignUpSystem extends Controller{
             if(event.getAttendeeList().size() < room.getCapacity()) {
                 if (checkCanAttend(event, attendee)) {
                     eventManager.signUp(event, attendee.getUsername());
-                    userManager.signUp((AttendAble) attendee, event.getTitle());
+                    userManager.signUp((AttendAble) attendee, eventManager.getTitle(event));
                     return 2;
                 } else {
                     return 6;
@@ -144,13 +144,7 @@ public class SignUpSystem extends Controller{
             return true;
         } else if (!(userManager.hasVIPAccess(attendee)) && event instanceof VipOnly) {
             return false;
-        }
-        else if(eventManager.eventToAttendees(event).size() >= eventManager.getEventCapacity(event)){
-            return false;
-        }
-        else {
-            return true;
-        }
+        } else return eventManager.eventToAttendees(event).size() < eventManager.getEventCapacity(event);
     }
 
     /**
@@ -175,7 +169,7 @@ public class SignUpSystem extends Controller{
         }
         User attendee = obj.get();
         eventManager.dropOut(event, attendee.getUsername());
-        userManager.dropOut((AttendAble) attendee, event.getTitle());
+        userManager.dropOut((AttendAble) attendee, eventManager.getTitle(event));
         return MessageType.successfulDropOut;
     }
 
