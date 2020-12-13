@@ -63,6 +63,82 @@ public class SchedulePresenter{
                 break;
         }
     }
+
+    /**
+     * Displays message reflecting whether a speaker was successfully added to an event.
+     * @param addSpeakerOutput output of the ScheduleSystem.addSpeaker() method.
+     */
+    public void printAddSpeakerMessage(int addSpeakerOutput){
+        switch (addSpeakerOutput) {
+            case 400:
+                System.out.println("Speaker added successfully.");
+                break;
+            case 1:
+                System.out.println("Speaker is already booked at this time.");
+                break;
+            case 2:
+                System.out.println("This person is not a speaker.");
+                break;
+            case 3:
+                System.out.println("This user does not exist.");
+                break;
+            case 4:
+                System.out.println("This event name does not correspond to an event in the system.");
+                break;
+            case 5:
+                System.out.println("The username provided does not match a speaker in the system.");
+                break;
+            case 7:
+                System.out.println("This event is not a speaker event. Please create a speaker Event to add a speaker.");
+                break;
+        }
+    }
+
+    /**
+     * Displays message reflecting whether a speaker was successfully removed from an event.
+     * @param removeSpeakerOutput output of the ScheduleSystem.removeSpeaker() method.
+     */
+    public void printRemoveSpeakerMessage(int removeSpeakerOutput){
+        switch (removeSpeakerOutput) {
+            case 300:
+                System.out.println("Speaker removed successfully.");
+                break;
+            case 500:
+                System.out.println("Cannot remove this speaker-- speaker Events must always have at least one speaker. You many change the speaker or create a new event.");
+                break;
+            case 2:
+                System.out.println("This person is not a speaker.");
+                break;
+            case 3:
+                System.out.println("This user does not exist.");
+                break;
+            case 4:
+                System.out.println("This event name does not correspond to an event in the system.");
+                break;
+            case 5:
+                System.out.println("The username provided does not match a speaker in the system.");
+                break;
+            case 7:
+                System.out.println("This event is not a speaker event and has no speakers to remove.");
+                break;
+        }
+    }
+
+    /**
+     * Displays message reflecting whether an event was successfully canceled.
+     * @param cancelEventOutput output of the ScheduleSystem.cancelEvent() method.
+     */
+    public void printCancelEventMessage(int cancelEventOutput){
+        switch (cancelEventOutput) {
+            case 0:
+                System.out.println("The event name provided does not correspond to an event.");
+                break;
+            case 1:
+                System.out.println("Event successfully canceled.");
+
+        }
+    }
+
     /**
      * Displays message reflecting whether a room was successfully added or a message indicating error.
      * @param addRoomMessage output from the ScheduleSystem.addRoom() method

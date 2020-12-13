@@ -86,6 +86,12 @@ public class Presenter {
             case "requestSpeaker":
                 System.out.println("Enter speaker username:");
                 break;
+            case "addSpeaker":
+                System.out.println("Add Speaker");
+                break;
+            case "removeSpeaker":
+                System.out.println("Remove Speaker");
+                break;
             case "requestNewSpeaker":
                 System.out.println("Enter username of the new speaker:");
                 break;
@@ -130,6 +136,9 @@ public class Presenter {
                 break;
             case "requestEventCapacity":
                 System.out.println("Enter event attendee capacity:");
+                break;
+            case "requestEventName":
+                System.out.println("Enter name of event:");
                 break;
             case "sortBySpeaker":
                 System.out.println("Events sorted by speaker:");

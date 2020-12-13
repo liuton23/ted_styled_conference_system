@@ -220,6 +220,21 @@ public class ScheduleSystem extends Controller{
         //"Event successfully created."
         return 3;
     }
+
+    /**
+     * Schedules a speaker-less VIP event with the provided information if all conditions are met and signals this, or
+     * provides and integer representation of an error message.
+     * @param title the name of this event.
+     * @param year the year the event begins.
+     * @param month the month the event begins.
+     * @param day the day the event begins.
+     * @param hour the hour the event begins.
+     * @param minute the minute hte event begins.
+     * @param room the id of the room where the event will take place.
+     * @param duration the duration of the event in hours.
+     * @param capacity the capacity of the event.
+     * @return an integer representation of an error message or successful event creation.
+     */
     public int scheduleVIPEvent(String title, int year, String month, int day, int hour, int minute,
                                 int room, int duration, int capacity) {
         ArrayList<LocalDateTime> timeArray = dateTimeHelperMethod(year, month, day, hour, minute, duration);
@@ -236,6 +251,20 @@ public class ScheduleSystem extends Controller{
         return 3;
     }
 
+    /**
+     * Schedules a speaker-less event with the provided information if all conditions are met and signals this, or
+     * provides and integer representation of an error message.
+     * @param title the name of this event.
+     * @param year the year the event begins.
+     * @param month the month the event begins.
+     * @param day the day the event begins.
+     * @param hour the hour the event begins.
+     * @param minute the minute hte event begins.
+     * @param room the id of the room where the event will take place.
+     * @param duration the duration of the event in hours.
+     * @param capacity the capacity of the event.
+     * @return an integer representation of an error message or successful event creation.
+     */
     public int scheduleSpeakerlessEvent(String title, int year, String month, int day, int hour, int minute,
                                 int room, int duration, int capacity) {
         ArrayList<LocalDateTime> timeArray = dateTimeHelperMethod(year, month, day, hour, minute, duration);
@@ -314,7 +343,7 @@ public class ScheduleSystem extends Controller{
     }
 
     /**
-     * Method that adds a speaker to a speaker event or a VIP speaker event.
+     * Method that adds a speaker to a SpeakerEvent or a VIPSpeakerEvent.
      * @param eventName the event the speaker is to be added to.
      * @param speakerName the username of the speaker to be added.
      * @return an integer message representing successful completion or an error.
@@ -399,7 +428,7 @@ public class ScheduleSystem extends Controller{
     }
 
     /**
-     * Organizer only menu to schedule events, add rooms and change speakers.
+     * Organizer only menu to schedule events, add rooms, change speakers, and add or remove speakers.
      */
     public void scheduleActivity() throws IOException {
         boolean scheduling = true;
@@ -416,6 +445,7 @@ public class ScheduleSystem extends Controller{
                     scheduleEvent();
                     save();
                     break;
+                // Adding room
                 case "A":
                     presenter.displayMessages("requestRoom");
                     int roomId;
@@ -428,12 +458,14 @@ public class ScheduleSystem extends Controller{
                     schedulePresenter.printAddRoomMessage(addRoom(roomId,roomCapacity));
                     save();
                     break;
+                // changing speaker
                 case "C":
                     int index;
                     presenter.displayMessages("changeSpeaker");
                     ArrayList<Event> events = new ArrayList<Event>(eventManager.getSpeakerEvents().values());
                     schedulePresenter.displayAllEvents(events, "speaker");
-                    presenter.displayMessages("requestCancelEvent");
+                    //presenter.displayMessages("requestCancelEvent");
+                    //TODO why is this here? ^^
                     Prompt indexPrompt = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
                     index = indexPrompt.intAsk();
                     presenter.displayMessages("requestNewSpeaker");
@@ -443,6 +475,37 @@ public class ScheduleSystem extends Controller{
                     String eventName = events.get(index - 1).getTitle();
                     int message = changeSpeaker(eventName,newSpeaker, oldSpeaker);
                     schedulePresenter.printChangeSpeakerMessage(message);
+                    save();
+                    break;
+                // adding speaker
+                case "D":
+                    presenter.displayMessages("addSpeaker");
+                    presenter.displayMessages("requestEventName");
+                    String selectedEventName = input.nextLine();
+                    presenter.displayMessages("requestSpeaker");
+                    String addSpeaker = input.nextLine();
+                    int intMessage = addSpeaker(selectedEventName, addSpeaker);
+                    schedulePresenter.printAddSpeakerMessage(intMessage);
+                    save();
+                    break;
+                // removing speaker
+                case "E":
+                    presenter.displayMessages("removeSpeaker");
+                    presenter.displayMessages("requestEventName");
+                    String removeSpeakerEventName = input.nextLine();
+                    presenter.displayMessages("requestSpeaker");
+                    String removeSpeaker = input.nextLine();
+                    int integerMessage = removeSpeaker(removeSpeakerEventName, removeSpeaker);
+                    schedulePresenter.printRemoveSpeakerMessage(integerMessage);
+                    save();
+                    break;
+                // removing (cancelling) event
+                case "R":
+                    presenter.displayMessages("cancelEvent");
+                    presenter.displayMessages("requestEventName");
+                    String cancelEvent = input.nextLine();
+                    int cancelEventMessage = cancelEvent(cancelEvent);
+                    schedulePresenter.printCancelEventMessage(cancelEventMessage);
                     save();
                     break;
                 case "B":

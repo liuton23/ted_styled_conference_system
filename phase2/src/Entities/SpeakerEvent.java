@@ -19,7 +19,7 @@ public class SpeakerEvent extends Event implements Serializable {
     private int capacity;
 
     /**
-     * Constructs an instance of event.
+     * Constructs an instance of SpeakerEvent.
      * @param title the name of the event. Event names are unique.
      * @param speaker the username of the speaker speaking at the event.
      * @param year the year the event is starting in.

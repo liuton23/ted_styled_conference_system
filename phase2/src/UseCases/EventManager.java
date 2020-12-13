@@ -50,6 +50,7 @@ public class EventManager implements Serializable {
     public HashMap<String, SpeakerEvent> getSpeakerEvents() {
         return speakerEvents;
     }
+
     /**
      * This method returns an ArrayList of speaker-less events.
      * @return a HashMap<String, Event>  representing the events occurring at the tech conference.
@@ -310,7 +311,6 @@ public class EventManager implements Serializable {
      * This method removes the specified event from the list of events at the Tech Conference.
      * @param event the event to be removed.
      * */
-    //for phase 2
     public void cancelEvent(Event event){
         masterEventDict.remove(event.getTitle());
         if (event instanceof SpeakerEvent){
