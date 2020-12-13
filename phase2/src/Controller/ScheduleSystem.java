@@ -478,7 +478,7 @@ public class ScheduleSystem extends Controller{
                     save();
                     break;
                 // adding speaker
-                case "D":
+                case "Ad":
                     presenter.displayMessages("addSpeaker");
                     presenter.displayMessages("requestEventName");
                     String selectedEventName = input.nextLine();
@@ -489,7 +489,7 @@ public class ScheduleSystem extends Controller{
                     save();
                     break;
                 // removing speaker
-                case "E":
+                case "Re":
                     presenter.displayMessages("removeSpeaker");
                     presenter.displayMessages("requestEventName");
                     String removeSpeakerEventName = input.nextLine();

@@ -16,6 +16,9 @@ public class OrganizerMenu extends Menu{
         options.add("(A)dd Room");
         options.add("(C)hange Speaker");
         options.add("(B)ack");
+        options.add("(R)emove Event");
+        options.add("(Ad)d Speaker");
+        options.add("(Re)move Speaker");
         return options;
     }
 
@@ -29,6 +32,9 @@ public class OrganizerMenu extends Menu{
         choices.add("A");
         choices.add("C");
         choices.add("B");
+        choices.add("R");
+        choices.add("Ad");
+        choices.add("Re");
         return choices;
     }
 }
