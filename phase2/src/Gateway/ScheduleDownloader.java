@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.ArrayList;
+
 import Presenter.ScheduleDownloaderPresenter;
 import UseCases.EventManager;
 import com.itextpdf.text.Chunk;
@@ -21,6 +22,7 @@ public class ScheduleDownloader {
 
     /**
      * Creates an instance of ScheduleDownloader
+     *
      * @param eventManager the EventManager for the conference to download the schedule of
      */
     public ScheduleDownloader(EventManager eventManager) {
@@ -95,6 +97,7 @@ public class ScheduleDownloader {
 
     /**
      * Gets the keys from the linked hash maps in a list
+     *
      * @param listOfLists the list of linked hash maps
      * @return a list of the keys
      */

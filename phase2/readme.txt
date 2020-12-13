@@ -77,6 +77,7 @@ Enter “m” or “M” if you want to mark a message unread
 Enter “e” or “E” if you want to edit a message’s content you already sent
 Enter “h” or “H” if you want to view messages you have archived
 Enter “u” or “U” if you want to view unread messages
+Enter "o" or "O" if you want to unarchive a message
 Enter “b” or “B” if you want to return to the main Message page
 
 

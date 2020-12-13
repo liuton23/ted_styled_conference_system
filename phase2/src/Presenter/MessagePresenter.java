@@ -9,10 +9,11 @@ public class MessagePresenter {
 
     /**
      * General helper method for printing messages depends on input
+     *
      * @param input order
      */
-    public void generalPrintHelperForMS(String input){
-        switch(input){
+    public void generalPrintHelperForMS(String input) {
+        switch (input) {
             case "printPleaseInputUsername":
                 System.out.println("Please input an username");
                 break;
@@ -55,23 +56,31 @@ public class MessagePresenter {
             case "cantRecall":
                 System.out.println("You can not recall this message");
                 break;
+            case "cantUnArchive":
+                System.out.println("You can not remove a not archived message");
+                break;
+            case "hereAreArchived":
+                System.out.println("Here are the messages you have archived");
+                break;
         }
     }
 
     /**
      * print "There are no messages sent to you from " + user
+     *
      * @param user username
      */
-    public void thereAreNoMessForUFrom(String user){
+    public void thereAreNoMessForUFrom(String user) {
         System.out.println("There are no messages sent to you from " + user);
     }
 
     /**
      * Displays message reflecting the situation after messaging an attendee.
+     *
      * @param messageAttendee output from the MessageSystem.messageAttendee() method
      */
 
-    public void printMessageAttendee(int messageAttendee){
+    public void printMessageAttendee(int messageAttendee) {
         switch (messageAttendee) {
             case 1:
                 System.out.println("Incorrect username. Please try again.");
@@ -87,9 +96,10 @@ public class MessagePresenter {
 
     /**
      * Displays message reflecting the situation after messaging all speakers.
-     * @param messageAllSpeakers  output from MessageSystem.messageAllSpeakers()
+     *
+     * @param messageAllSpeakers output from MessageSystem.messageAllSpeakers()
      */
-    public void printMessageAllSpeakers(int messageAllSpeakers){
+    public void printMessageAllSpeakers(int messageAllSpeakers) {
         switch (messageAllSpeakers) {
             case 1:
                 System.out.println("Incorrect username. Please try again.");
@@ -105,9 +115,10 @@ public class MessagePresenter {
 
     /**
      * Displays message reflecting the situation after messaging all attendees.
-     * @param messageAllAttendees  output from MessageSystem.messageAllAttendees()
+     *
+     * @param messageAllAttendees output from MessageSystem.messageAllAttendees()
      */
-    public void printMessageAllAttendees(int messageAllAttendees){
+    public void printMessageAllAttendees(int messageAllAttendees) {
         switch (messageAllAttendees) {
             case 1:
                 System.out.println("Incorrect username. Please try again.");
@@ -125,10 +136,11 @@ public class MessagePresenter {
 
     /**
      * Displays message reflecting the situation after messaging all attendees from multiple events.
+     *
      * @param messageMultipleEventsAttendees output from overloading MessageSystem.messageEventAttendees()
      */
-    public void printMessageEventsAttendees(int messageMultipleEventsAttendees){
-        switch(messageMultipleEventsAttendees){
+    public void printMessageEventsAttendees(int messageMultipleEventsAttendees) {
+        switch (messageMultipleEventsAttendees) {
             case 1:
                 System.out.println("Event(s) you entered contain event you do not speak at.");
                 break;
@@ -152,37 +164,41 @@ public class MessagePresenter {
 
     /**
      * Method which displays user's messages from a list
+     *
      * @param messages a list of messages to be displayed
      */
 
     public void displayListOfMessage(ArrayList<String> messages) {
-        for (String m: messages) {
+        for (String m : messages) {
             System.out.println(m);
         }
     }
 
     /**
      * displays "your original message is ..."
+     *
      * @param text text of message
      */
-    public void displayOriginalMessage(String text){
+    public void displayOriginalMessage(String text) {
         System.out.println("Your Original Message is: {" + text + "}.");
         System.out.println("Please enter your new message:");
     }
 
     /**
      * display you have create a message with a message number
+     *
      * @param num message number
      */
-    public void displayNewMessageNum(int num){
+    public void displayNewMessageNum(int num) {
         System.out.println("You have successfully create this message, message number is MSG" + num);
     }
 
     /**
      * display new messages statement
+     *
      * @param num number of new messages
      */
-    public void displayNumOfNew(int num){
+    public void displayNumOfNew(int num) {
         if (num == 1) {
             System.out.println("You have a new message");
         } else {
@@ -190,17 +206,27 @@ public class MessagePresenter {
         }
     }
 
-    public void displayMarkAs(int type, String username){
+    /**
+     * Display marked as message based on type
+     *
+     * @param type     different type
+     * @param username username of user
+     */
+    public void displayMarkAs(int type, String username) {
         if (type == 1) {
             System.out.println("Message system observed a change in read status of this message for " + username);
             System.out.println("This message has been marked as UNREAD for " + username);
         } else if (type == 2) {
             System.out.println("Message system observed a change in archive status of this message for " + username);
             System.out.println("This message has been marked as ARCHIVED for " + username);
-        } else if (type == 3){
+        } else if (type == 3) {
             System.out.println("Message system observed a change in the content of this message.");
             System.out.println("This message content has been EDITED by " + username);
-        } System.out.println();
+        } else if (type == 4) {
+            System.out.println("Message system observed a change in archive status of this message for " + username);
+            System.out.println("This message has been removed from " + username + "'s archived messages list");
+        }
+        System.out.println();
     }
 
 }

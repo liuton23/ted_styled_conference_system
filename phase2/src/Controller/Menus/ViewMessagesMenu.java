@@ -19,6 +19,7 @@ public class ViewMessagesMenu extends Menu{
         options.add("View arc(H)ived messages");
         options.add("(M)ark as Unread");
         options.add("Mark as (A)rchive");
+        options.add("Rem(O)ve an archive message");
         options.add("(E)dit message");
         options.add("(B)ack");
         return options;
@@ -39,6 +40,7 @@ public class ViewMessagesMenu extends Menu{
         choices.add("E");
         choices.add("H");
         choices.add("B");
+        choices.add("O");
         return choices;
     }
 }
