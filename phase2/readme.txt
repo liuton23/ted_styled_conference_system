@@ -7,8 +7,10 @@ Do this by hovering on the red words and selecting add to classpath.
 Alternatively, you can delete the Tests folder as it is not required for the program to function.
 
 The phase 2 module depends on "com.itextpdf.maven:itextdoc.2.0.0" and "javamail-1.4.7".
-"itextdoc.2.0.0" can be downloaded using Maven in IntelliJ.
-"javamail-1.4.7" was downloaded online.
+The dependencies can be added by going to File -> Project Structure -> Libraries -> '+'.
+"itextdoc.2.0.0" can be downloaded using Maven in IntelliJ by entering "com.itextpdf.maven:itextdoc.2.0.0".
+"javamail-1.4.7" was downloaded online. We've also included the .jar file in the phase2 folder along with
+this readme.txt file.
 
 When the user runs the program, the console will say:
 “Welcome to the 207th Tech Conference! You can enter 'EXIT' to exit anytime. Note that terminating the program without

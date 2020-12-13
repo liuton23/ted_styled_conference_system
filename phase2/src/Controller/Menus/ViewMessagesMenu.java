@@ -12,10 +12,10 @@ public class ViewMessagesMenu extends Menu{
      */
     public ArrayList<String> getMenuOptions(){
         ArrayList<String> options = new ArrayList<>();
-        options.add("View (S)ent messages");
-        options.add("View (R)eceived messages");
+        options.add("View all (S)ent messages");
+        options.add("View all (R)eceived messages");
         options.add("View (U)nread messages");
-        options.add("View messages (F)rom another user");
+        options.add("View all messages (F)rom another user");
         options.add("View arc(H)ived messages");
         options.add("(M)ark as Unread");
         options.add("Mark as (A)rchive");

@@ -8,10 +8,13 @@ import Entities.Event;
 import Entities.UserFactory.*;
 import Presenter.*;
 import UseCases.MessageObserver.MarkType;
+import UseCases.MessageObserver.MessageListener;
+import UseCases.MessageObserver.MessageUpdate;
 import UseCases.UserManager;
 import UseCases.EventManager;
 import UseCases.MessageManager;
 
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.*;
 
@@ -24,6 +27,7 @@ public class MessageSystem extends Controller {
     UserManager userManager;
     EventManager eventManager;
     private MessagePresenter messagePresenter = new MessagePresenter();
+    private MessageListener messageListener = new MessageListener();
 
     /**
      * Create an instance of MessageSystem
@@ -444,12 +448,37 @@ public class MessageSystem extends Controller {
             } else if (!messageManager.getSenderAndRecipients(obj2).get(0).equals(username) && type == MarkType.RECALL){
                 messagePresenter.generalPrintHelperForMS("cantRecall");
             } else {
-                messageManager.markAs(obj2,username,type);
                 if (type == MarkType.RECALL){
+                    messageManager.deleteMessage(obj2);
                     messagePresenter.generalPrintHelperForMS("recalled");
+                } else {
+                    observeMarkAs(obj2,username,type);
                 }
             }
         }
+    }
+
+    /**
+     * private helper method for let messageUpdate update message and notify changes
+     * @param m message object
+     * @param changer username of the changer
+     * @param type a type of which message can be marked as
+     */
+    private void observeMarkAs(Message m, String changer, MarkType type){
+        // precondition: the changer must be in the recipient list of this message.
+        // Start observing
+        MessageUpdate messageUpdate = new MessageUpdate(m);
+        messageUpdate.addObserver(messageListener);
+        switch (type){
+            case UNREAD:
+                messageUpdate.markUnread(changer);
+                break;
+            case ARCHIVED:
+                messageUpdate.markArchive(changer);
+                break;
+        }
+        messagePresenter.displayMarkAs(messageListener.getMarkBin(),changer);
+        messageUpdate.removeObserver(messageListener);
     }
 
     /**
@@ -468,7 +497,13 @@ public class MessageSystem extends Controller {
             if (messageManager.getSenderAndRecipients(obj2).get(0).equals(username)) {
                 messagePresenter.displayOriginalMessage(messageManager.getContent(obj2));
                 String newText = obj.nextLine();
-                messageManager.editMessage(obj2, newText);
+                // start observing the changes
+                MessageUpdate messageUpdate = new MessageUpdate(obj2);
+                messageUpdate.addObserver(messageListener);
+                messageUpdate.editMessage(newText);
+                messagePresenter.displayMarkAs(messageListener.getMarkBin(),username);
+                messageUpdate.removeObserver(messageListener);
+                // end observing
             } else {
                 messagePresenter.generalPrintHelperForMS("cantEdit");
             }

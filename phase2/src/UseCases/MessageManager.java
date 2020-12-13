@@ -17,15 +17,14 @@ import java.util.Optional;
 public class MessageManager implements Serializable {
     private ArrayList<Message> messages;
     private ArrayList<String> messageNumStorage;
-
     // All the string representation of Attendee is its username
 
     /**
      * initiate a new message manager with a new empty message list.
      */
     public MessageManager(){
-        messages = new ArrayList<Message>();
-        messageNumStorage = new ArrayList<String>();
+        messages = new ArrayList<>();
+        messageNumStorage = new ArrayList<>();
     }
 
     /**
@@ -198,43 +197,8 @@ public class MessageManager implements Serializable {
         return allMessages;
     }
 
-    /**
-     * Mark a message as a type depends on input
-     * @param m message object
-     * @param changer username of the changer
-     * @param type a type of which message can be marked as
-     */
-    public void markAs(Message m, String changer, MarkType type){
-        // precondition: the changer must be in the recipient list of this message.
-        PropertyChangeListener messageListener = new MessageListener(changer);
-        MessageUpdate messageUpdate = new MessageUpdate(m);
-        messageUpdate.addObserver(messageListener);
-        switch (type){
-            case UNREAD:
-                messageUpdate.markUnread(changer);
-                break;
-            case ARCHIVED:
-                messageUpdate.markArchive(changer);
-                break;
-            case RECALL:
-                deleteMessage(m);
-                break;
-        }
-        messageUpdate.removeObserver(messageListener);
-    }
 
-    /**
-     * Edit a sent message
-     * @param m message object
-     * @param newText updated text
-     */
-    public void editMessage(Message m, String newText){
-        PropertyChangeListener messageListener = new MessageListener(m.getSender());
-        MessageUpdate messageUpdate = new MessageUpdate(m);
-        messageUpdate.addObserver(messageListener);
-        messageUpdate.editMessage(newText);
-        messageUpdate.removeObserver(messageListener);
-    }
+
 
     /**
      * Gets the sender and recipients of a message
