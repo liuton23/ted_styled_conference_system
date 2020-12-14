@@ -21,7 +21,7 @@ public class SpeakerEvent extends Event implements Serializable {
     /**
      * Constructs an instance of SpeakerEvent.
      * @param title the name of the event. Event names are unique.
-     * @param speaker the username of the speaker speaking at the event.
+     * @param speaker an ArrayList of usernames corresponding to speakers of the event.
      * @param year the year the event is starting in.
      * @param month the month the event is starting in.
      * @param day the first (and possibly only) day of the event.

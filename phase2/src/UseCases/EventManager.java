@@ -159,14 +159,31 @@ public class EventManager implements Serializable {
                 if(speaker.equals(speakerName)) {
                     LocalDateTime existingEventStart = eventInstance.getEventTime().get(0);
                     LocalDateTime existingEventEnd = eventInstance.getEventTime().get(1);
-                    if (newEventStart.isBefore(existingEventEnd) || newEventStart.isEqual(existingEventEnd) &&
-                            existingEventStart.isBefore(newEventEnd) || existingEventStart.isEqual(newEventEnd)) {
+                    if (checkSpeakerConflict(newEventStart, newEventEnd, eventTime)) {
                         return false;
+                        }
                     }
                 }
             }
-        }
         return true;
+    }
+
+    public boolean checkSpeakerConflict(LocalDateTime start, LocalDateTime end, ArrayList<LocalDateTime> eventTime) {
+        LocalDateTime bookingStart = eventTime.get(0); //start time of booking
+        LocalDateTime bookingEnd = eventTime.get(1);  //end time of booking
+        if (start.isAfter(bookingStart) && start.isBefore(bookingEnd)) {
+            return true;
+        } else if (end.isAfter(bookingStart) && end.isBefore(bookingEnd)) {
+            return true;
+        } else if (start.equals(bookingEnd)) {
+            return true;
+        } else if (end.equals(bookingEnd)) {
+            return true;
+        } else if (start.isBefore(bookingStart) && end.isAfter(bookingEnd)){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
