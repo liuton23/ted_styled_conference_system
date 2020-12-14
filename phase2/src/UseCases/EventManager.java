@@ -159,7 +159,10 @@ public class EventManager implements Serializable {
                 if(speaker.equals(speakerName)) {
                     LocalDateTime existingEventStart = eventInstance.getEventTime().get(0);
                     LocalDateTime existingEventEnd = eventInstance.getEventTime().get(1);
-                    if (checkSpeakerConflict(newEventStart, newEventEnd, eventTime)) {
+                    ArrayList<LocalDateTime> eventInstanceTime = new ArrayList<>();
+                    eventInstanceTime.add(existingEventStart);
+                    eventInstanceTime.add(existingEventEnd);
+                    if (checkSpeakerConflict(newEventStart, newEventEnd, eventInstanceTime)) {
                         return false;
                         }
                     }
