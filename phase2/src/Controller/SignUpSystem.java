@@ -69,7 +69,13 @@ public class SignUpSystem extends Controller{
             String x = "";
             if(eventManager.getSpeakerEvents().containsKey(eventManager.getTitle(event))) {
                 SpeakerEvent speakerEvent = (SpeakerEvent) event;
-                x += index + ") " + eventManager.getTitle(event) + " @ " + event.getEventTime() + " with " + eventManager.getSpeakers(speakerEvent).get(0) + " and more, ";
+                if (speakerEvent.getSpeaker().size() == 1) {
+                    x += index + ") " + eventManager.getTitle(event) + " @ " + event.getEventTime() + " with " + eventManager.getSpeakers(speakerEvent).get(0);
+                }
+                else {
+                    x += index + ") " + eventManager.getTitle(event) + " @ " + event.getEventTime() + " with " + eventManager.getSpeakers(speakerEvent).get(0) + " and more, ";
+                }
+
             }
             else{
                 x += index + ") " + eventManager.getTitle(event) + " @ " + event.getEventTime() +", ";
