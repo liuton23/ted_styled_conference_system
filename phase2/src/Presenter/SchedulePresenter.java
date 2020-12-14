@@ -139,6 +139,23 @@ public class SchedulePresenter{
         }
     }
 
+    public void printChangeCapacityMessage(int changeCapacityMessage) {
+        switch (changeCapacityMessage) {
+            case 4:
+                System.out.println("The event name provided does not correspond to an event.");
+                break;
+            case 1000:
+                System.out.println("Event Capacity must be less than equal to room capacity.");
+                break;
+            case 1001:
+                System.out.println("Already have an attendee amount that is greater than this capacity.");
+                break;
+            case 1002:
+                System.out.println("Successfully changed capacity.");
+                break;
+        }
+    }
+
     /**
      * Displays message reflecting whether a room was successfully added or a message indicating error.
      * @param addRoomMessage output from the ScheduleSystem.addRoom() method

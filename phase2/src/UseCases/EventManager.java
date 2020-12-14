@@ -288,12 +288,9 @@ public class EventManager implements Serializable {
      * @return a boolean where true signals a successful change and false signals the new speaker is unavailable.
      */
     public boolean removeSpeaker(SpeakerEvent event, String speaker){
-        // checking that the corresponding speaker is free at this event time
-        if(freeSpeakerCheck(event.getEventTime(), speaker)){
-            if (event.getSpeaker().size() >= 2) {
-                event.removeSpeaker(speaker);
-                return true;
-            }
+        if (event.getSpeaker().size() >= 2) {
+            event.removeSpeaker(speaker);
+            return true;
         }
         return false;
     }

@@ -80,7 +80,6 @@ public class ScheduleSystem extends Controller{
             //"This event name has already been taken."
             return 2;
         }
-        // TODO: add this check elsewhere, and message to presenter etc.
         else if(capacity > roomManager.getCapacity(tempRoom)){
             //signifies that that's not allowed for this room
             return 100;
@@ -371,7 +370,6 @@ public class ScheduleSystem extends Controller{
                         eventManager.addSpeaker(eventObject, speakerName);
                         userManager.addEventToSpeakerList(userManager.usernameToSpeakerObject(speakerName).get(), eventObject.getTitle());
                         //"Speaker added successfully."
-                        //TODO: add to presenter
                         return 400;
                     }
                     // speaker is not free
@@ -384,6 +382,33 @@ public class ScheduleSystem extends Controller{
         return 3;
         }
     }
+
+    /**
+     * Method to change event capacity, an integer value is returned representing successful completion or an error message.
+     * @param eventName the name of the event.
+     * @param newCapacity the desired new capacity.
+     * @return an integer representation of an error message or successful completion.
+     */
+    public int changeEventCapacity(String eventName, int newCapacity) {
+        if (!eventManager.nameToEvent(eventName).isPresent()) {
+            // event name does not correspond to any event.
+            return 4;
+        }
+        Event eventObject = eventManager.nameToEvent(eventName).get();
+        int roomID = eventManager.getEventRoom(eventObject);
+        Room room = roomManager.idToRoom(roomID);
+        if (newCapacity > roomManager.getCapacity(room)) {
+            // capacity must be less than equal to room capacity
+            return 1000;
+        }
+        else if (eventManager.eventToAttendees(eventObject).size() > newCapacity) {
+            // already over that capacity
+            return 1001;
+        }
+        eventManager.setEventCapacity(eventObject, newCapacity);
+        return 1002;
+        }
+
     /**
      * Method that removes a speaker from a speaker event or a VIP speaker event.
      * @param eventName the event the speaker is to be added to.
@@ -416,7 +441,6 @@ public class ScheduleSystem extends Controller{
                         return 300;
                     }
                     // Cannot remove speaker a speaker event must have at least one speaker.
-                    // TODO: add this message to presenter
                     return 500;
                 }
                 // user is not a speaker
@@ -464,8 +488,6 @@ public class ScheduleSystem extends Controller{
                     presenter.displayMessages("changeSpeaker");
                     ArrayList<Event> events = new ArrayList<Event>(eventManager.getSpeakerEvents().values());
                     schedulePresenter.displayAllEvents(events, "speaker");
-                    //presenter.displayMessages("requestCancelEvent");
-                    //TODO why is this here? ^^
                     Prompt indexPrompt = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
                     index = indexPrompt.intAsk();
                     presenter.displayMessages("requestNewSpeaker");
@@ -499,13 +521,16 @@ public class ScheduleSystem extends Controller{
                     schedulePresenter.printRemoveSpeakerMessage(integerMessage);
                     save();
                     break;
-                // removing (cancelling) event
-                case "R":
-                    presenter.displayMessages("cancelEvent");
+                // changing capacity
+                case "CH":
+                    Prompt integerPrompt = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
+                    presenter.displayMessages("changeCapacity");
+                    presenter.displayMessages("requestEventCapacity");
+                    int eventCapacity = integerPrompt.intAsk();
                     presenter.displayMessages("requestEventName");
-                    String cancelEvent = input.nextLine();
-                    int cancelEventMessage = cancelEvent(cancelEvent);
-                    schedulePresenter.printCancelEventMessage(cancelEventMessage);
+                    String eventNameForCapacity = input.nextLine();
+                    int capacityMessage = changeEventCapacity(eventNameForCapacity, eventCapacity);
+                    schedulePresenter.printChangeCapacityMessage(capacityMessage);
                     save();
                     break;
                 case "B":
