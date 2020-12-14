@@ -97,4 +97,5 @@ Enter “c” or “C” to change speakers at an event. Follow the prompts.
 Enter "Ad" or "ad" to add a speaker to an event.
 Enter "R" or "r" to remove an event.
 Enter "Re" or "re" to remove a speaker from an event.
+Enter "CH" or "ch" to change the event capacity of an event.
 Enter “b” or “B” to return to the account activities.
