@@ -4,6 +4,9 @@ import Presenter.Presenter;
 
 import java.util.Scanner;
 
+/**
+ * Prompt for getting an int greater or equal to 1
+ */
 public class IntAtLeastOnePrompt extends IntPrompt{
     /**
      * Method that sets the presenter for the prompt.

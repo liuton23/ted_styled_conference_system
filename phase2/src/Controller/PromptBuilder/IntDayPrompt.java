@@ -4,6 +4,9 @@ import Presenter.Presenter;
 
 import java.util.Scanner;
 
+/**
+ * Prompt for asking for a day int
+ */
 public class IntDayPrompt extends IntPrompt{
     /**
      * Method that sets the presenter for the prompt.

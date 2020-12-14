@@ -3,6 +3,9 @@ package Controller.PromptBuilder;
 import Controller.Menus.*;
 import Presenter.Presenter;
 
+/**
+ * Builds required prompts
+ */
 public class PromptBuilder {
     /**
      *Builds a prompt for various activities depending on input.

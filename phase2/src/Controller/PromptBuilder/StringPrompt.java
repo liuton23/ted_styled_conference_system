@@ -18,6 +18,11 @@ public class StringPrompt extends Prompt{
         super(presenter);
     }
 
+    /**
+     * Asks user for a String
+     * @return
+     * @throws IOException
+     */
     public String ask() throws IOException {
         Scanner input = new Scanner(System.in);
         ArrayList<String> choices = getMenuChoices();

@@ -11,10 +11,13 @@ import java.util.Comparator;
  */
 public class bySpeakerEventComparator implements Comparator<Event> {
 
-    @Override
     /**
-     * Comparator to sort an iterable collection events by speaker name.
+     * Compares two events by Speaker
+     * @param e1 first event
+     * @param e2 second event
+     * @return and int comparing the two events
      */
+    @Override
     public int compare(Event e1, Event e2) {
         if (e1 instanceof SpeakerEvent && !(e2 instanceof SpeakerEvent)){
             return -1;

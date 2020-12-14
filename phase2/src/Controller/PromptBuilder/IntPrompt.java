@@ -4,6 +4,9 @@ import Presenter.Presenter;
 
 import java.util.Scanner;
 
+/**
+ * Prompt for asking for an int (no restrictions)
+ */
 public class IntPrompt extends Prompt{
     /**
      * Method that sets the presenter for the prompt.

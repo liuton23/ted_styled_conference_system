@@ -1,11 +1,6 @@
 package UseCases;
 
 import Entities.Message;
-import UseCases.MessageObserver.MarkType;
-import UseCases.MessageObserver.MessageListener;
-import UseCases.MessageObserver.MessageUpdate;
-
-import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;

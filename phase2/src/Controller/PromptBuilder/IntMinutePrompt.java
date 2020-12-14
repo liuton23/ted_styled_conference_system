@@ -4,6 +4,9 @@ import Presenter.Presenter;
 
 import java.util.Scanner;
 
+/**
+ * Prompt for asking for a minute int
+ */
 public class IntMinutePrompt extends IntPrompt{
     /**
      * Method that sets the presenter for the prompt.

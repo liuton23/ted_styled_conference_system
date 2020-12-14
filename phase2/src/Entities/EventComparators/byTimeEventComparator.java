@@ -11,10 +11,13 @@ import java.util.Comparator;
  */
 public class byTimeEventComparator implements Comparator<Event>{
 
-    @Override
     /**
-     * Comparator to sort an iterable collection events by event start time.
+     * Compares two events by time
+     * @param e1 first event
+     * @param e2 second event
+     * @return and int comparing the two events
      */
+    @Override
     public int compare(Event e1, Event e2) {
         ArrayList<LocalDateTime> slot1 = e1.getEventTime();
         ArrayList<LocalDateTime> slot2 = e2.getEventTime();

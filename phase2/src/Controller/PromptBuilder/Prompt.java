@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a prompt to the user
+ */
 public abstract class Prompt {
     protected Presenter presenter;
     private Menu menu;

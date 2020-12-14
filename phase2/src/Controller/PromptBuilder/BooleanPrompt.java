@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Prompt for getting a Boolean input
+ */
 public class BooleanPrompt extends Prompt {
     /**
      * Method that sets the presenter for the prompt.

@@ -23,25 +23,25 @@ public class MessageUpdate {
         this.observable = new PropertyChangeSupport(this);
     }
 
-    /*
+    /**
      * Add a new observer to observe the changes to this class.
-     * @param observer
+     * @param observer the observer
      */
     public void addObserver(PropertyChangeListener observer) {
         observable.addPropertyChangeListener(observer);
     }
 
-    /*
+    /**
      * Remove an existing observer from the list of observers.
-     * @param observer
+     * @param observer the observer
      */
     public void removeObserver(PropertyChangeListener observer) {
         observable.removePropertyChangeListener(observer);
     }
 
-    /*
+    /**
      * Notify observers o the change event.
-     * @param newEvent
+     * @param newEvent the observer
      */
     public void notifyObservers (PropertyChangeEvent newEvent)
     {
@@ -90,7 +90,6 @@ public class MessageUpdate {
      * Edit message for a already sent message
      * @param newText the updated text
      */
-
     public void editMessage(String newText){
         String oldMessage = message.getText();
         message.setText(newText);
