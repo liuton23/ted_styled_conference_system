@@ -25,12 +25,11 @@ import java.util.Scanner;
  * Controls scheduling tasks based on user input.
  */
 public class ScheduleSystem extends Controller{
-    private EventManager eventManager;// = new EventManager();
-    private UserManager userManager;// = new UserManager();
-    private RoomManager roomManager;// = new RoomManager();
+    private EventManager eventManager;
+    private UserManager userManager;
+    private RoomManager roomManager;
 
-    //Private?
-    public SchedulePresenter schedulePresenter = new SchedulePresenter();
+    private SchedulePresenter schedulePresenter = new SchedulePresenter();
 
     /**
      * Constructs an instance of ScheduleSystem with the provided EventManger, UserManager, and RoomManager.
