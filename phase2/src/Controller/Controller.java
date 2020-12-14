@@ -1,6 +1,5 @@
 package Controller;
 
-//import Controller.Registration.RegistrationPortal;
 import Controller.PromptBuilder.Prompt;
 import Controller.PromptBuilder.PromptBuilder;
 import Controller.PromptBuilder.PromptType;
@@ -20,7 +19,6 @@ import java.util.*;
 public class Controller {
 
     private Gateway gateway = new Gateway("save.ser");
-    private ScheduleDownloader scheduleDownloader = new ScheduleDownloader(new EventManager());
     private UserManager userManager = new UserManager();
     private EventManager eventManager = new EventManager();
     private EmailSystem emailSystem;
@@ -125,7 +123,7 @@ public class Controller {
                         loginSystem.createAccounts();
                         break;
                     case "D"://Download PDF of conference schedule
-                        scheduleDownloader = new ScheduleDownloader(eventManager);
+                        ScheduleDownloader scheduleDownloader = new ScheduleDownloader(eventManager);
                         scheduleDownloader.generatePDF();
                         break;
                     case "B":
