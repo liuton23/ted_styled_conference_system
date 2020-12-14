@@ -94,4 +94,7 @@ Enter “s” or “S” to create a new event. Follow the prompts.
 When entering the month, you can enter e.g. “november” or “NOVEMBER”
 Enter “a” or “A” to Add a room. Note: rooms need to be created before they can be used.
 Enter “c” or “C” to change speakers at an event. Follow the prompts.
+Enter "Ad" or "ad" to add a speaker to an event.
+Enter "R" or "r" to remove an event.
+Enter "Re" or "re" to remove a speaker from an event.
 Enter “b” or “B” to return to the account activities.
