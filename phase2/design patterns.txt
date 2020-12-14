@@ -1,0 +1,52 @@
+List of Design Patterns:
+
+1. Design pattern:
+-Observer: marking messages as unread or archived.
+Classes or Packages:
+-UseCases.MessageObserver
+Explanation:
+-It is used to update the status of a message such as read, archived, edited, etc. Separate cause,
+the user reading/archiving/editing the message, from the effect: the message changes its status.
+
+2. Design pattern:
+-Factory: creating different types of users.
+Classes or Packages:
+-Entities.UserFactory
+Explanation:
+-It distinguishes different types of users. Hides the constructor calls for different user types
+
+3. Design pattern:
+-Builder: constructing menu prompts using Menu objects.
+Classes or Packages:
+-Controller.PromptBuilder
+Explanation:
+-It helps to create long prompts in Controller. Encapsulates how these prompts are constructed.
+
+4. Design pattern:
+-Iterator: iterating through bookings in Room
+Classes or Packages:
+-Entities.Room
+Explanation:
+-Hides how the different bookings are being stored in Room when iterating through them in RoomManager
+
+5. Design pattern:
+-Strategy: different algorithms for how events are sorted
+Classes or Packages:
+-Entities.EventComparators and Controller.SignUpSystem
+Explanation:
+-Let’s the viewAllEvents() method sort events different ways without us having to create multiple
+viewAllEvents() methods with different algorithms
+
+
+
+
+
+
+
+
+
+
+
+
+
+

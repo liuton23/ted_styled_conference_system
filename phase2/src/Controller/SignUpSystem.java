@@ -58,7 +58,7 @@ public class SignUpSystem extends Controller{
      * Method that returns a list of all stored events.
      * @return list of all stored events.
      */
-    public ArrayList<String> viewAllEvents(){
+    public ArrayList<String> getEventList(){
         HashMap<String, Event> eventDict = eventManager.getAllEvents();
         ArrayList<Event> eventDictClone = getEventListClone(eventDict);
         ArrayList<String> stringEventList = new ArrayList<>();
@@ -86,9 +86,7 @@ public class SignUpSystem extends Controller{
      * @return copy list of events.
      */
     private ArrayList<Event> getEventListClone(HashMap<String, Event> eventDict){
-        ArrayList<Event> eventListClone = new ArrayList<>();
-        eventListClone.addAll(eventDict.values());
-        return eventListClone;
+        return new ArrayList<>(eventDict.values());
     }
 
     /**
@@ -102,8 +100,7 @@ public class SignUpSystem extends Controller{
         if (eventIndex < 1 || eventIndex > eventManager.getAllEvents().size()) {
             return 4;
         }
-        ArrayList<Event> eventList = new ArrayList<>();
-        eventList.addAll(eventManager.getAllEvents().values());
+        ArrayList<Event> eventList = new ArrayList<>(eventManager.getAllEvents().values());
         eventList.sort(comparator);
         if (eventIndex > eventList.size()){
             return 1;
@@ -158,8 +155,7 @@ public class SignUpSystem extends Controller{
         if (eventIndex < 1 || eventIndex > eventManager.getAllEvents().size()){
             return MessageType.incorrectID;
         }
-        ArrayList<Event> eventList = new ArrayList<>();
-        eventList.addAll(eventManager.getAllEvents().values());
+        ArrayList<Event> eventList = new ArrayList<>(eventManager.getAllEvents().values());
         eventList.sort(comparator);
         Event event = eventList.get(eventIndex-1);
         Optional<User> obj = userManager.usernameToUserObject(username);
@@ -194,7 +190,7 @@ public class SignUpSystem extends Controller{
             switch (chosen) {
                 case "V":
                     signUpPresenter.printSignUpMessage(MessageType.viewAllEvents);
-                    viewAllEvent();
+                    viewAllEvents();
                     break;
                 case "S":
                     signUpPresenter.printSignUpMessage(MessageType.signUp);
@@ -223,8 +219,7 @@ public class SignUpSystem extends Controller{
     /**
      * View all events in a sorted list.
      */
-    public void viewAllEvent() throws IOException {
-        //String chosen = askMenuInput(9);
+    public void viewAllEvents() throws IOException {
         PromptBuilder promptBuilder = new PromptBuilder();
         Prompt eventPrompt = promptBuilder.buildPrompt(presenter, PromptType.viewEventsMenu);
         String chosen = eventPrompt.ask();
@@ -232,15 +227,15 @@ public class SignUpSystem extends Controller{
         switch (chosen) {
             case "T":
                 setComparator(new byTimeEventComparator());
-                signUpPresenter.displaySortedEvents(viewAllEvents(), "time");
+                signUpPresenter.displaySortedEvents(getEventList(), "time");
                 break;
             case "N":
                 setComparator(new byTitleEventComparator());
-                signUpPresenter.displaySortedEvents(viewAllEvents(), "name");
+                signUpPresenter.displaySortedEvents(getEventList(), "name");
                 break;
             case "S":
                 setComparator(new bySpeakerEventComparator());
-                signUpPresenter.displaySortedEvents(viewAllEvents(), "speaker");
+                signUpPresenter.displaySortedEvents(getEventList(), "speaker");
                 break;
         }
     }
