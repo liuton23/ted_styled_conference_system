@@ -111,8 +111,6 @@ public class LoginSystem extends Controller {
         String username = obj1.nextLine();
         presenter.printPasswordMessage(2);//"Enter your password"
         String password = obj1.nextLine();
-        //presenter.printSelectUserType();
-        //String chosen = askMenuInput(16);
         PromptBuilder promptBuilder = new PromptBuilder();
         Prompt userTypePrompt = promptBuilder.buildPrompt(presenter, PromptType.userTypeMenu);
         String chosen = userTypePrompt.ask();

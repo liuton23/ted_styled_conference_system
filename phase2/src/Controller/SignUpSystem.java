@@ -176,7 +176,6 @@ public class SignUpSystem extends Controller{
     public void eventActivity(String username) throws IOException {
         boolean activity = true;
         while (activity) {
-            //String chosen = askMenuInput(8);
             PromptBuilder promptBuilder = new PromptBuilder();
             Prompt eventPrompt;
             if (userManager.usernameToOrganizer(username).isPresent()){
@@ -195,7 +194,6 @@ public class SignUpSystem extends Controller{
                 case "S":
                     signUpPresenter.printSignUpMessage(MessageType.signUp);
                     signUpPresenter.printSignUpMessage(MessageType.enterEventId);
-                    //index = getIntInput();
                     Prompt indexPrompt = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
                     index = indexPrompt.intAsk();
                     signUpPresenter.printSignUpMessage(signUpEvent(username, index));
@@ -203,7 +201,6 @@ public class SignUpSystem extends Controller{
                 case "D":
                     signUpPresenter.printSignUpMessage(MessageType.dropOut);
                     signUpPresenter.printSignUpMessage(MessageType.enterEventId);
-                    //index = getIntInput();
                     Prompt indexPrompt1 = promptBuilder.buildPrompt(presenter, PromptType.intPrompt);
                     index = indexPrompt1.intAsk();
                     signUpPresenter.printSignUpMessage(dropOutEvent(username, index));

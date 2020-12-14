@@ -72,11 +72,7 @@ public class MessageSystem extends Controller {
         }
     }
 
-
     //All the Organizer helper methods
-
-    //helper
-
 
     /**
      * This helper method will let only organizer sends message to all speakers at once.
@@ -202,7 +198,6 @@ public class MessageSystem extends Controller {
         PromptBuilder promptBuilder = new PromptBuilder();
         Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.mainMessageMenu);
         while (messaging) {
-            //String chosen = askMenuInput(5);
             String chosen = prompt.ask();
             switch (chosen) {
                 case "M":

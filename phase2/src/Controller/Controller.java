@@ -75,10 +75,7 @@ public class Controller {
     private void accountActivity(String username, LoginSystem loginSystem) {
         boolean loggedin = true;
         User user = userManager.usernameToUserObject(username).get();
-        //boolean canAttend = userManager.checkIsAttendee(user);
         boolean isOrg = userManager.checkIsOrganizer(user);
-        //boolean isSpeaker = userManager.checkIsSpeaker(user);
-        //boolean hasVipAccess = userManager.hasVIPAccess(user);
         while (loggedin) {
             try {
                 String chosen;
@@ -219,7 +216,6 @@ public class Controller {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }finally {
-            // TODO: add new presenters?
             presenter = new Presenter();
             emailSystem = new EmailSystem(gateway, userManager);
         }
