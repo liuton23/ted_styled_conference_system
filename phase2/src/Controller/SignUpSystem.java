@@ -66,21 +66,21 @@ public class SignUpSystem extends Controller{
         eventDictClone.sort(comparator);
         int index = 1;
         for (Event event: eventDictClone){
-            String x = "";
-            if(eventManager.getSpeakerEvents().containsKey(eventManager.getTitle(event))) {
-                SpeakerEvent speakerEvent = (SpeakerEvent) event;
-                if (speakerEvent.getSpeaker().size() == 1) {
-                    x += index + ") " + eventManager.getTitle(event) + " @ " + event.getEventTime() + " with " + eventManager.getSpeakers(speakerEvent).get(0);
-                }
-                else {
-                    x += index + ") " + eventManager.getTitle(event) + " @ " + event.getEventTime() + " with " + eventManager.getSpeakers(speakerEvent).get(0) + " and more, ";
-                }
+//            if(eventManager.getSpeakerEvents().containsKey(eventManager.getTitle(event))) {
+//                SpeakerEvent speakerEvent = (SpeakerEvent) event;
+//                if (speakerEvent.getSpeaker().size() == 1) {
+//                    x += index + ") " + eventManager.getTitle(event) + " @ " + event.getEventTime() + " with " + eventManager.getSpeakers(speakerEvent).get(0);
+//                }
+//                else {
+//                    x += index + ") " + eventManager.getTitle(event) + " @ " + event.getEventTime() + " with " + eventManager.getSpeakers(speakerEvent).get(0) + " and more, ";
+//                }
+//
+//            }
+//            else{
+//                x += index + ") " + eventManager.getTitle(event) + " @ " + event.getEventTime() +", ";
+//            }
 
-            }
-            else{
-                x += index + ") " + eventManager.getTitle(event) + " @ " + event.getEventTime() +", ";
-            }
-            stringEventList.add(x);
+            stringEventList.add(index + ") " + eventManager.getToString(event));
             index += 1;
         }
         return stringEventList;

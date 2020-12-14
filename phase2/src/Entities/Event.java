@@ -12,12 +12,12 @@ import java.util.LinkedHashMap;
  * An Instance of this class represents a speaker-less event.
  */
 public class Event implements Serializable{
-    private String title;
+    protected String title;
     // two item ArrayList
-    private ArrayList<LocalDateTime> eventTime;
-    private int room;
-    private ArrayList<String> attendeeList;
-    private int capacity;
+    protected ArrayList<LocalDateTime> eventTime;
+    protected int room;
+    protected ArrayList<String> attendeeList;
+    protected int capacity;
 
     // duration has to be an int representing a number of hours
 

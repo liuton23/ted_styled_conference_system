@@ -10,13 +10,7 @@ import java.util.LinkedHashMap;
  * An instance of this class represent an event at the tech conference that has at least one speaker speaking.
  */
 public class SpeakerEvent extends Event implements Serializable {
-    private ArrayList<String> speaker;
-    private String title;
-    // two item ArrayList
-    private ArrayList<LocalDateTime> eventTime;
-    private int room;
-    private ArrayList<String> attendeeList;
-    private int capacity;
+    protected ArrayList<String> speaker;
 
     /**
      * Constructs an instance of SpeakerEvent.
@@ -70,14 +64,14 @@ public class SpeakerEvent extends Event implements Serializable {
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
         if(this.speaker.size() == 1) {
-            return String.format(this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
+            return this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
                     this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + " with : " +
-                    this.getSpeaker() + ".");
+                    this.getSpeaker().get(0) + ".";
         }
         else{
-            return String.format(this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
+            return this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
                     this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + " with : " +
-                    this.getSpeaker().get(0) + "and more.");
+                    this.getSpeaker().get(0) + "and more.";
         }
     }
 
@@ -97,4 +91,5 @@ public class SpeakerEvent extends Event implements Serializable {
         }
         return info;
     }
+
 }

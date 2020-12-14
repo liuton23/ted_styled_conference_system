@@ -377,4 +377,12 @@ public class EventManager implements Serializable {
         return eventInfos;
     }
 
+    /**
+     * Method that returns the string representation of the provided event.
+     * @param event the event to be returned in string form.
+     * @return the string form of the event.
+     */
+    public String getToString(Event event){
+        return event.toString();
+    }
 }
