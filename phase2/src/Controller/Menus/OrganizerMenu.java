@@ -33,8 +33,8 @@ public class OrganizerMenu extends Menu{
         choices.add("C");
         choices.add("B");
         choices.add("R");
-        choices.add("Ad");
-        choices.add("Re");
+        choices.add("AD");
+        choices.add("RE");
         return choices;
     }
 }
