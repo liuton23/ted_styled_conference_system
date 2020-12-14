@@ -560,4 +560,3 @@ public class MessageSystem extends Controller {
     }
 
 }
-

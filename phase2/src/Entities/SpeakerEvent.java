@@ -13,25 +13,28 @@ public class SpeakerEvent extends Event implements Serializable {
 
     /**
      * Constructs an instance of SpeakerEvent.
-     * @param title the name of the event. Event names are unique.
-     * @param speaker an ArrayList of usernames corresponding to speakers of the event.
-     * @param year the year the event is starting in.
-     * @param month the month the event is starting in.
-     * @param day the first (and possibly only) day of the event.
-     * @param hour the starting hour of the event.
-     * @param minute the starting minute of the event.
-     * @param room the room id of the room where the event is taking place.
+     *
+     * @param title    the name of the event. Event names are unique.
+     * @param speaker  an ArrayList of usernames corresponding to speakers of the event.
+     * @param year     the year the event is starting in.
+     * @param month    the month the event is starting in.
+     * @param day      the first (and possibly only) day of the event.
+     * @param hour     the starting hour of the event.
+     * @param minute   the starting minute of the event.
+     * @param room     the room id of the room where the event is taking place.
      * @param capacity the capacity of the event.
      */
 
-    public SpeakerEvent(String title, ArrayList<String> speaker, int year, String month, int day, int hour, int minute, int room, int duration, int capacity){
+    public SpeakerEvent(String title, ArrayList<String> speaker, int year, String month, int day, int hour, int minute, int room, int duration, int capacity) {
         super(title, year, month, day, hour, minute, room, duration, capacity);
         this.speaker = speaker;
     }
 
     //getters
+
     /**
      * Method that returns a list of usernames of the speakers speaking at this event.
+     *
      * @return a list of usernames of the speakers of this event.
      */
     public ArrayList<String> getSpeaker() {
@@ -39,16 +42,19 @@ public class SpeakerEvent extends Event implements Serializable {
     }
 
     // setters
+
     /**
      * A method that adds a speaker to an event instance.
+     *
      * @param newSpeaker the speaker that is speaking at this event's username.
      */
-    public void addSpeaker(String newSpeaker){
+    public void addSpeaker(String newSpeaker) {
         this.speaker.add(newSpeaker);
     }
 
     /**
      * A method that removes a speaker from an event instance as long as at least one speaker will remain after removal.
+     *
      * @param oldSpeaker the username of the speaker to remove from the event.
      */
     public void removeSpeaker(String oldSpeaker) {
@@ -57,17 +63,17 @@ public class SpeakerEvent extends Event implements Serializable {
 
     /**
      * This method returns a string representation of the event.
+     *
      * @return a string representation of the event.
      */
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
-        if(this.speaker.size() == 1) {
+        if (this.speaker.size() == 1) {
             return this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
                     this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + " with : " +
                     this.getSpeaker().get(0) + ".";
-        }
-        else{
+        } else {
             return this.title + " @ " + this.eventTime.get(0).format(formatter) + " to " +
                     this.eventTime.get(1).format(formatter) + " in room: " + this.getRoom() + " with : " +
                     this.getSpeaker().get(0) + "and more.";
@@ -77,15 +83,15 @@ public class SpeakerEvent extends Event implements Serializable {
     /**
      * Gets a linked hash map of string representations of this event's properties (title, room, etc.)
      * mapped to the corresponding part of event info they represent
+     *
      * @return a linked hash map of string representations of this event's properties
      */
     @Override
-    public LinkedHashMap<String, String> toStringLinkedHashMap()  {
+    public LinkedHashMap<String, String> toStringLinkedHashMap() {
         LinkedHashMap<String, String> info = super.toStringLinkedHashMap(); //get info from parent class
-        if(this.speaker.size() == 1) { //add speaker(s)
+        if (this.speaker.size() == 1) { //add speaker(s)
             info.put("Speaker", this.speaker.get(0));
-        }
-        else{
+        } else {
             info.put("Speaker", this.getSpeaker().get(0) + "and more.");
         }
         return info;

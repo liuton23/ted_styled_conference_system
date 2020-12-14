@@ -57,10 +57,7 @@ public class MessagePresenter {
                 System.out.println("You can not recall this message");
                 break;
             case "cantUnArchive":
-                System.out.println("You can not remove a not archived message");
-                break;
-            case "hereAreArchived":
-                System.out.println("Here are the messages you have archived");
+                System.out.println("You can not remove a message you did not archive");
                 break;
         }
     }

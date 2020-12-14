@@ -35,7 +35,7 @@ public class Itinerary {
         } else {
             Optional<AttendAble> obj = userManager.usernameToAttendeeObject(user);
 
-            if (obj.isPresent()){
+            if (obj.isPresent()) {
                 AttendAble userObj = obj.get();
                 presenter.displaySchedule(userManager.getItinerary(userObj), "itinerary");
             }

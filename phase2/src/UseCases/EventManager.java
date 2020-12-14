@@ -157,12 +157,7 @@ public class EventManager implements Serializable {
             ArrayList<String> speakerList = eventInstance.getSpeaker();
             for (String speakerName : speakerList) {
                 if(speaker.equals(speakerName)) {
-                    LocalDateTime existingEventStart = eventInstance.getEventTime().get(0);
-                    LocalDateTime existingEventEnd = eventInstance.getEventTime().get(1);
-                    ArrayList<LocalDateTime> eventInstanceTime = new ArrayList<>();
-                    eventInstanceTime.add(existingEventStart);
-                    eventInstanceTime.add(existingEventEnd);
-                    if (checkSpeakerConflict(newEventStart, newEventEnd, eventInstanceTime)) {
+                    if (checkSpeakerConflict(newEventStart, newEventEnd, eventInstance.getEventTime())) {
                         return false;
                         }
                     }
@@ -340,7 +335,7 @@ public class EventManager implements Serializable {
         if (event instanceof SpeakerEvent){
             speakerEvents.remove(event.getTitle());
         }
-        else{
+        else {
             speakerlessEvents.remove(event.getTitle());
         }
     }
