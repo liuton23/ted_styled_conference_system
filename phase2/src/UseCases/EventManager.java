@@ -171,6 +171,13 @@ public class EventManager implements Serializable {
         return true;
     }
 
+    /**
+     * Method checking for speaker conflicts.
+     * @param start the new potential start time.
+     * @param end the new potential end time.
+     * @param eventTime the already existing event start and end times.
+     * @return true if there is a conflict and false otherwise.
+     */
     public boolean checkSpeakerConflict(LocalDateTime start, LocalDateTime end, ArrayList<LocalDateTime> eventTime) {
         LocalDateTime bookingStart = eventTime.get(0); //start time of booking
         LocalDateTime bookingEnd = eventTime.get(1);  //end time of booking
