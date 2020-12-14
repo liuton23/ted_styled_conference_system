@@ -22,16 +22,17 @@ public class MessageManager implements Serializable {
     /**
      * initiate a new message manager with a new empty message list.
      */
-    public MessageManager(){
+    public MessageManager() {
         messages = new ArrayList<>();
         messageNumStorage = new ArrayList<>();
     }
 
     /**
      * Create a message base on sender, multiple recipients, and message content.
+     *
      * @param recipients a list of usernames of the recipients
-     * @param sender username of the sender
-     * @param text content of the message
+     * @param sender     username of the sender
+     * @param text       content of the message
      * @return an message object
      */
     public int createMessage(ArrayList<String> recipients, String sender, String text) {
@@ -47,6 +48,7 @@ public class MessageManager implements Serializable {
 
     /**
      * delete a message from system
+     *
      * @param messageObj message object
      */
     public void deleteMessage(Message messageObj) {
@@ -56,22 +58,22 @@ public class MessageManager implements Serializable {
 
     /**
      * Gets a list of archived messages for a user
+     *
      * @param username username of this user
      * @return a list of archived messages
      */
-    public ArrayList<String> getArchiveMessages(String username){
-        ArrayList<String> allMessages = new ArrayList<String>();
-        for (Message m : messages){
-            if (getSenderAndRecipients(m).contains(username)){
-                if (m.getArchived(username) && m.getEdited()) {
-                    allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " To " +
-                            recipientsBuilder(m.getRecipients()) + " {" + m.getText() +
-                            "} @ " + m.getMessageTime().toString() + " (edited)");
-                } else if (m.getArchived(username)){
-                    allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " To " +
-                            recipientsBuilder(m.getRecipients()) + " {" + m.getText() +
-                            "} @ " + m.getMessageTime().toString());
-                }
+    public ArrayList<String> getArchiveMessages(String username) {
+        ArrayList<String> allMessages = new ArrayList<>();
+        ArrayList<Message> archived = getArchivedObj(username);
+        for (Message m : archived) {
+            if (m.getEdited()) {
+                allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " To " +
+                        recipientsBuilder(m.getRecipients()) + " {" + m.getText() +
+                        "} @ " + m.getMessageTime().toString() + " (edited)");
+            } else {
+                allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " To " +
+                        recipientsBuilder(m.getRecipients()) + " {" + m.getText() +
+                        "} @ " + m.getMessageTime().toString());
             }
         }
         return allMessages;
@@ -80,16 +82,17 @@ public class MessageManager implements Serializable {
 
     /**
      * Return a list of all the messages send by this sender.
+     *
      * @param sender sender's username
      * @return a list of all the messages send by this sender
      */
-    public ArrayList<String> getSendBy(String sender){
+    public ArrayList<String> getSendBy(String sender) {
         ArrayList<String> allMessages = new ArrayList<String>();
-        for (Message m : messages){
-            if (m.getSender().equals(sender) && m.getEdited()){
+        for (Message m : messages) {
+            if (m.getSender().equals(sender) && m.getEdited()) {
                 allMessages.add(m.getMessageNumber() + ": To " + recipientsBuilder(m.getRecipients()) + " {" + m.getText() +
                         "} @ " + m.getMessageTime().toString() + " (edited)");
-            } else if (m.getSender().equals(sender)){
+            } else if (m.getSender().equals(sender)) {
                 allMessages.add(m.getMessageNumber() + ": To " + recipientsBuilder(m.getRecipients()) + " {" + m.getText() +
                         "} @ " + m.getMessageTime().toString());
             }
@@ -99,10 +102,11 @@ public class MessageManager implements Serializable {
 
     /**
      * Return a list of all the messages received by this user
+     *
      * @param recipient recipient's username
      * @return a list of all the messages received by this user
      */
-    public ArrayList<String> getReceivedBy(String recipient){
+    public ArrayList<String> getReceivedBy(String recipient) {
         ArrayList<Message> allMessagesObj = getAllReceivedBy(recipient);
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : allMessagesObj) {
@@ -120,10 +124,11 @@ public class MessageManager implements Serializable {
 
     /**
      * Helper method which return a list of message objects a recipient has received so far
+     *
      * @param recipient the username of this recipient
      * @return a list of received message objects
      */
-    private ArrayList<Message> getAllReceivedBy(String recipient){
+    private ArrayList<Message> getAllReceivedBy(String recipient) {
         ArrayList<Message> allMessages = new ArrayList<Message>();
         for (Message m : messages) {
             if (m.getRecipients().contains(recipient)) {
@@ -135,15 +140,16 @@ public class MessageManager implements Serializable {
 
     /**
      * Get a list of unread messages for a recipient
+     *
      * @param recipient username of this recipient
      * @return a list of unread messages
      */
-    public ArrayList<String> getUnreadMessage(String recipient){
+    public ArrayList<String> getUnreadMessage(String recipient) {
         ArrayList<Message> allMessagesObj = getAllReceivedBy(recipient);
         ArrayList<String> allMessages = new ArrayList<String>();
         for (Message m : allMessagesObj) {
             if (!m.getRead(recipient)) {
-                if (m.getEdited()){
+                if (m.getEdited()) {
                     allMessages.add(m.getMessageNumber() + ": From " + m.getSender() + " {" + m.getText() + "} @ " +
                             m.getMessageTime().toString() + " (edited)");
                 } else {
@@ -158,84 +164,109 @@ public class MessageManager implements Serializable {
 
     /**
      * Return how many unread messages a user have
+     *
      * @param recipient username of this user
      * @return a number of how many unread messages for this user
      */
-    public int getNumOfUnreadMessage(String recipient){
+    public int getNumOfUnreadMessage(String recipient) {
         ArrayList<Message> allMessagesObj = getAllReceivedBy(recipient);
         int i = 0;
-        for (Message m: allMessagesObj){
-            if (!m.getRead(recipient)){
+        for (Message m : allMessagesObj) {
+            if (!m.getRead(recipient)) {
                 i++;
             }
         }
         return i;
     }
 
+    /**
+     * get a list of archived message objects for a user
+     *
+     * @param username username of current user
+     * @return a list of archived message for this user
+     */
+    public ArrayList<Message> getArchivedObj(String username) {
+        ArrayList<Message> archived = new ArrayList<>();
+        for (Message m : messages) {
+            if (getSenderAndRecipients(m).contains(username)) {
+                if (m.getArchived(username)) {
+                    archived.add(m);
+                }
+            }
+        }
+        return archived;
+    }
 
 
     /**
      * Gets all messages from sender to recipient.
+     *
      * @param recipient recipient's username
-     * @param sender sender's username
+     * @param sender    sender's username
      * @return a list of all messages from sender to recipient
      */
 
-    public ArrayList<String> getAllMessagesFrom(String recipient, String sender){
+    public ArrayList<String> getAllMessagesFrom(String recipient, String sender) {
         ArrayList<String> allMessages = new ArrayList<String>();
-        for (Message m : messages){
-            if (m.getSender().equals(sender) && m.getRecipients().contains(recipient)){
+        for (Message m : messages) {
+            if (m.getSender().equals(sender) && m.getRecipients().contains(recipient)) {
                 if (m.getEdited()) {
                     allMessages.add(m.getMessageNumber() + ": {" + m.getText() + "} @ " + m.getMessageTime().toString()
                             + " (edited)");
                 } else {
                     allMessages.add(m.getMessageNumber() + ": {" + m.getText() + "} @ " + m.getMessageTime().toString());
                 }
-                m.setRead(recipient,true);
+                m.setRead(recipient, true);
             }
         }
         return allMessages;
     }
 
 
-
-
     /**
      * Gets the sender and recipients of a message
+     *
      * @param messageObj message object
      * @return a list of sender and recipients
      */
-    public ArrayList<String> getSenderAndRecipients(Message messageObj){
+    public ArrayList<String> getSenderAndRecipients(Message messageObj) {
         ArrayList<String> combined = new ArrayList<String>();
         combined.add(messageObj.getSender()); // at index 0, is the sender of this message
         combined.addAll(messageObj.getRecipients());
         return combined;
     }
 
-    public String getContent(Message m){
+    /**
+     * get a content of a message
+     *
+     * @param m message object
+     * @return text
+     */
+    public String getContent(Message m) {
         return m.getText();
     }
 
 
     /**
      * Private helper function
+     *
      * @param list list of strings
      * @return a string representation of this list.
      */
-    private String recipientsBuilder(ArrayList<String> list){
+    private String recipientsBuilder(ArrayList<String> list) {
         /* Pre-condition, we use this method under the condition that list is non-empty, so we don't need
-        * empty list check */
+         * empty list check */
         String x = "";
         int max = list.size();
-        if (max == 1){
+        if (max == 1) {
             return list.get(0);
-        } else if (max <= 4){
-            for (int i = 0; i < max - 2; i++){
+        } else if (max <= 4) {
+            for (int i = 0; i < max - 2; i++) {
                 x += list.get(i) + ", ";
             }
             return x + list.get(max - 2) + " and " + list.get(max - 1);
         } else {
-            for (int i = 0; i < 2; i++){
+            for (int i = 0; i < 2; i++) {
                 x += list.get(i) + ", ";
             }
             return x + "..., " + list.get(max - 2) + " and " + list.get(max - 1);
@@ -244,13 +275,14 @@ public class MessageManager implements Serializable {
 
     /**
      * Generate a unique message number (id)
+     *
      * @param message message object
      */
-    public int messageNumGenerator(Message message){
+    public int messageNumGenerator(Message message) {
         String x = "";
-        int num = 10000 + (int)(Math.random() * (90000));
+        int num = 10000 + (int) (Math.random() * (90000));
         x = "MSG" + num;
-        if (messageNumStorage.contains(x)){
+        if (messageNumStorage.contains(x)) {
             messageNumGenerator(message);
         } else {
             messageNumStorage.add(x);
@@ -261,16 +293,18 @@ public class MessageManager implements Serializable {
 
     /**
      * Given a message number returns a message object
+     *
      * @param messageNum a message number
      * @return a message obj
      */
     public Optional<Message> numToMessageObject(String messageNum) {
-        for (Message m: messages){
-            if (m.getMessageNumber().equals(messageNum)){
+        for (Message m : messages) {
+            if (m.getMessageNumber().equals(messageNum)) {
                 return Optional.of(m);
             }
         }
         return Optional.empty();
     }
+
 
 }

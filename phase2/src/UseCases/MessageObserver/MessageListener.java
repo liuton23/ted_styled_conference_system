@@ -10,24 +10,43 @@ public class MessageListener implements PropertyChangeListener {
 
     private int markBin;
 
-    public MessageListener(){ }
+    /**
+     * Empty constructor for message listener
+     */
+    public MessageListener() {
+    }
 
 
     /**
-     * Sends message about the details of event change
+     * changes mark bin number based on different Mark type. The mark bin number will
+     * navigate which message to display on screen.
+     *
      * @param evt the event of change
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("read status")){
-            markBin = 1;
-        } else if (evt.getPropertyName().equals("archive status")) {
-            markBin = 2;
-        } else {
-            markBin = 3;
+        switch (evt.getPropertyName()) {
+            case "read status":
+                markBin = 1;
+                break;
+            case "archive":
+                markBin = 2;
+                break;
+            case "message content":
+                markBin = 3;
+                break;
+            case "unarchive":
+                markBin = 4;
+                break;
         }
     }
-    public int getMarkBin(){
+
+    /**
+     * getter for mark bin
+     *
+     * @return a integer from 1 to 4
+     */
+    public int getMarkBin() {
         return this.markBin;
     }
 

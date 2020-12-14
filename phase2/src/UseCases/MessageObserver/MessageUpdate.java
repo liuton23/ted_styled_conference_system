@@ -70,7 +70,19 @@ public class MessageUpdate {
         String oldRead  = "Not archived";
         String newRead = "archived";
         message.setArchived(changer,true);
-        PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "archive status", oldRead, newRead);
+        PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "archive", oldRead, newRead);
+        notifyObservers (newEvent);
+    }
+
+    /**
+     * change a archived message to not archived
+     * @param changer username of current user
+     */
+    public void removeArchive(String changer) {
+        String oldRead  = "Archived";
+        String newRead = "not archived";
+        message.setArchived(changer,false);
+        PropertyChangeEvent newEvent = new PropertyChangeEvent (this, "unarchive", oldRead, newRead);
         notifyObservers (newEvent);
     }
 

@@ -4,4 +4,5 @@ public enum MarkType {
     UNREAD,
     ARCHIVED,
     RECALL,
+    UNARCHIVED
 }

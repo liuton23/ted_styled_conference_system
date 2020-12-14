@@ -14,7 +14,6 @@ import UseCases.UserManager;
 import UseCases.EventManager;
 import UseCases.MessageManager;
 
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.*;
 
@@ -31,13 +30,14 @@ public class MessageSystem extends Controller {
 
     /**
      * Create an instance of MessageSystem
+     *
      * @param messageManager MessageManager
-     * @param userManager AttendeeManager
-     * @param eventManager EventManager
+     * @param userManager    AttendeeManager
+     * @param eventManager   EventManager
      */
 
     public MessageSystem(MessageManager messageManager, UserManager userManager,
-                         EventManager eventManager){
+                         EventManager eventManager) {
         this.messageManager = messageManager;
         this.userManager = userManager;
         this.eventManager = eventManager;
@@ -47,16 +47,17 @@ public class MessageSystem extends Controller {
 
     /**
      * This helper method can let all attendee, speakers and organizers message a specific user which is not an organizer.
-     * @param sender username of the sender
+     *
+     * @param sender   username of the sender
      * @param attendee username of the attendee's the sender want to send message to
-     * @param text the content of the message
+     * @param text     the content of the message
      */
-    private void messageAttendee(String sender, String attendee, String text){
+    private void messageAttendee(String sender, String attendee, String text) {
         Optional<User> obj1 = userManager.usernameToUserObject(sender);
         Optional<User> obj2 = userManager.usernameToUserObject(attendee);
-        if (!obj1.isPresent()){
+        if (!obj1.isPresent()) {
             messagePresenter.printMessageAttendee(1);
-        } else if (!obj2.isPresent()){
+        } else if (!obj2.isPresent()) {
             messagePresenter.printMessageAttendee(1);
         } else {
             User recipient = obj2.get();
@@ -79,18 +80,19 @@ public class MessageSystem extends Controller {
 
     /**
      * This helper method will let only organizer sends message to all speakers at once.
+     *
      * @param sender the username of the sender
-     * @param text the content of the message
+     * @param text   the content of the message
      */
 
-    private void messageAllSpeakers(String sender, String text){
+    private void messageAllSpeakers(String sender, String text) {
         Optional<User> obj = userManager.usernameToUserObject(sender);
         ArrayList<TalkAble> listOfSpeakers = userManager.getAllSpeakers();
         ArrayList<String> list = new ArrayList<>();
-        for (TalkAble s : listOfSpeakers){
+        for (TalkAble s : listOfSpeakers) {
             list.add(userManager.getUsername(s));
         }
-        if (!obj.isPresent()){
+        if (!obj.isPresent()) {
             messagePresenter.printMessageAllSpeakers(1); /*"Incorrect username. Please try again."*/
         } else {
             User org = obj.get();
@@ -105,15 +107,16 @@ public class MessageSystem extends Controller {
 
     /**
      * This helper method only let organizer sends message to all attendees in the system at once.
+     *
      * @param sender username of sender
-     * @param text the content of the message
+     * @param text   the content of the message
      */
 
-    private int messageAllAttendees(String sender, String text){
+    private int messageAllAttendees(String sender, String text) {
         Optional<User> obj = userManager.usernameToUserObject(sender);
-        if (!obj.isPresent()){
+        if (!obj.isPresent()) {
             return 1; /*"Incorrect username. Please try again."*/
-        }else {
+        } else {
             User org = obj.get();
             if (!userManager.checkIsOrganizer(org)) {
                 return 2; /*"Only Organizer can message all attendees."*/
@@ -131,18 +134,19 @@ public class MessageSystem extends Controller {
 
     /**
      * This helper method only let speaker message all attendees from multiple events they speak at.
+     *
      * @param eventNames a list of names of events
-     * @param sender username of the sender
-     * @param text the content of the message
+     * @param sender     username of the sender
+     * @param text       the content of the message
      */
 
-    private int messageEventAttendees(ArrayList<String> eventNames, String sender, String text){
+    private int messageEventAttendees(ArrayList<String> eventNames, String sender, String text) {
         Optional<User> obj = userManager.usernameToUserObject(sender);
         ArrayList<String> list = new ArrayList<>();
         ArrayList<String> noAtt = new ArrayList<>();
         ArrayList<String> notSpeakAt = new ArrayList<>();
 
-        if (!obj.isPresent()){
+        if (!obj.isPresent()) {
             return 2;
             //"Incorrect username. Please try again.";
         } else {
@@ -188,6 +192,7 @@ public class MessageSystem extends Controller {
 
     /**
      * Message menu to view and send messages.
+     *
      * @param username username of <code>Attendee</code>.
      */
     public void messageActivity(String username) throws IOException {
@@ -215,6 +220,7 @@ public class MessageSystem extends Controller {
 
     /**
      * This method is a prompt method for message users
+     *
      * @param username the username of current user
      * @throws IOException username do not exist
      */
@@ -252,11 +258,11 @@ public class MessageSystem extends Controller {
                     break;
                 case "E":
                     ArrayList<String> events = new ArrayList<>();
-                    messageEventAllAtt(username,events);
+                    messageEventAllAtt(username, events);
                     save();
                     break;
                 case "R":
-                    markAs(username,MarkType.RECALL);
+                    markAs(username, MarkType.RECALL);
                     save();
                     break;
                 case "B":
@@ -269,6 +275,7 @@ public class MessageSystem extends Controller {
 
     /**
      * Messages all users attending a specific event.
+     *
      * @param username username of the sender.
      */
     private void messageEventAllAtt(String username, ArrayList<String> events) throws IOException {
@@ -278,16 +285,16 @@ public class MessageSystem extends Controller {
         PromptBuilder promptBuilder = new PromptBuilder();
         Prompt prompt = promptBuilder.buildPrompt(presenter, PromptType.wishToSendMoreEventMenu);
         String chosen = prompt.ask();
-        switch(chosen){
+        switch (chosen) {
             case "S":
-                messageEventAllAtt(username,events);
+                messageEventAllAtt(username, events);
                 save();
                 break;
             case "C":
                 messagePresenter.generalPrintHelperForMS("printInputMessagePlz");
                 String message = obj.nextLine().trim();
-                int i = messageEventAttendees(events,username,message);
-                if (i > 6){ // if it's a five-digit int, message is created we need to display the number
+                int i = messageEventAttendees(events, username, message);
+                if (i > 6) { // if it's a five-digit int, message is created we need to display the number
                     messagePresenter.displayNewMessageNum(i);
                 } else {
                     messagePresenter.printMessageEventsAttendees(i);
@@ -300,6 +307,7 @@ public class MessageSystem extends Controller {
     /**
      * View message menu to view sent and received messages, and messages sent to <code>Attendee</code> with username
      * <code>username</code> by another <code>Attendee</code>.
+     *
      * @param username username of <code>Attendee</code> viewing the messages.
      */
     private void viewMessages(String username) throws IOException {
@@ -311,7 +319,7 @@ public class MessageSystem extends Controller {
             switch (chosen) {
                 case "S":
                     ArrayList<String> messagesS = messageManager.getSendBy(username);
-                    if (messagesS.size() == 0){
+                    if (messagesS.size() == 0) {
                         messagePresenter.generalPrintHelperForMS("printNoSentForU");
                     } else messagePresenter.displayListOfMessage(messagesS);
                     System.out.println();
@@ -319,7 +327,7 @@ public class MessageSystem extends Controller {
                     break;
                 case "R":
                     ArrayList<String> messagesR = messageManager.getReceivedBy(username);
-                    if (messagesR.size() == 0){
+                    if (messagesR.size() == 0) {
                         messagePresenter.generalPrintHelperForMS("printNoRecForU");
                     } else messagePresenter.displayListOfMessage(messagesR);
                     System.out.println();
@@ -327,18 +335,18 @@ public class MessageSystem extends Controller {
                     break;
                 case "U":
                     ArrayList<String> messagesU = messageManager.getUnreadMessage(username);
-                    if (messagesU.size() == 0){
+                    if (messagesU.size() == 0) {
                         messagePresenter.displayNumOfNew(0);
                     } else messagePresenter.displayListOfMessage(messagesU);
                     System.out.println();
                     save();
                     break;
                 case "M":
-                    markAs(username,MarkType.UNREAD);
+                    markAs(username, MarkType.UNREAD);
                     save();
                     break;
                 case "A":
-                    markAs(username,MarkType.ARCHIVED);
+                    markAs(username, MarkType.ARCHIVED);
                     save();
                     break;
                 case "E":
@@ -350,11 +358,13 @@ public class MessageSystem extends Controller {
                     save();
                     break;
                 case "H":
-                    ArrayList<String> messagesH = messageManager.getArchiveMessages(username);
-                    if (messagesH.size() == 0){
-                        messagePresenter.generalPrintHelperForMS("noArchive");
-                    } else messagePresenter.displayListOfMessage(messagesH);
-                    System.out.println();
+                    getArchived(username);
+                    save();
+                    break;
+                case "O":
+                    messagePresenter.generalPrintHelperForMS("hereAreArchived");
+                    getArchived(username);
+                    removeArchive(username);
                     save();
                     break;
                 case "B":
@@ -365,25 +375,26 @@ public class MessageSystem extends Controller {
     }
 
 
-
     /**
      * Messages a single user.
+     *
      * @param username username of the sender.
      */
-    public void messageOneUser(String username){
+    public void messageOneUser(String username) {
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("printPleaseInputUsername");
         String user = obj.nextLine();
         messagePresenter.generalPrintHelperForMS("printInputMessagePlz");
         String message = obj.nextLine();
-        messageAttendee(username,user,message);
+        messageAttendee(username, user, message);
     }
 
     /**
      * Messages all speakers.
+     *
      * @param username username of the sender.
      */
-    public void messageAllSpeaker(String username){
+    public void messageAllSpeaker(String username) {
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("printPleaseInputUsername");
         String message = obj.nextLine();
@@ -392,14 +403,15 @@ public class MessageSystem extends Controller {
 
     /**
      * Messages all users.
+     *
      * @param username username of the sender.
      */
-    public void messageAllAtt(String username){
+    public void messageAllAtt(String username) {
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("printInputMessagePlz");
         String message = obj.nextLine();
         int i = messageAllAttendees(username, message);
-        if (i > 3){ // if it's a five-digit int, message is created we need to display the number
+        if (i > 3) { // if it's a five-digit int, message is created we need to display the number
             messagePresenter.displayNewMessageNum(i);
         } else {
             messagePresenter.printMessageAllAttendees(i);
@@ -409,18 +421,19 @@ public class MessageSystem extends Controller {
     /**
      * Displays messages that were sent to an <code>Attendee</code> with username <code>username</code> by a specific
      * <code>Attendee</code>.
+     *
      * @param username username of <code>Attendee</code> viewing the messages.
      */
-    public void viewFrom(String username){
+    public void viewFrom(String username) {
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("printPleaseInputUsername");
         String user = obj.nextLine();
         Optional<User> obj1 = userManager.usernameToUserObject(user);
-        if (!obj1.isPresent()){
+        if (!obj1.isPresent()) {
             messagePresenter.generalPrintHelperForMS("printIncorrectUsername");
         } else {
             ArrayList<String> messageF = messageManager.getAllMessagesFrom(username, user);
-            if (messageF.size() == 0){
+            if (messageF.size() == 0) {
                 messagePresenter.thereAreNoMessForUFrom(user);
             } else messagePresenter.displayListOfMessage(messageF);
         }
@@ -429,30 +442,31 @@ public class MessageSystem extends Controller {
 
     /**
      * This method allow a user to mark a message as Archive or Unread
+     *
      * @param username the username of current user
-     * @param type the type the user want to mark a message as
+     * @param type     the type the user want to mark a message as
      */
-    private void markAs(String username, MarkType type){
+    private void markAs(String username, MarkType type) {
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("inputMessageNum");
         String messageNum = obj.nextLine().toUpperCase();
         Optional<Message> obj1 = messageManager.numToMessageObject(messageNum);
-        if (!obj1.isPresent()){
+        if (!obj1.isPresent()) {
             messagePresenter.generalPrintHelperForMS("noSuchMessageNum");
-        }else {
+        } else {
             Message obj2 = obj1.get();
-            if (!messageManager.getSenderAndRecipients(obj2).contains(username)){
+            if (!messageManager.getSenderAndRecipients(obj2).contains(username)) {
                 messagePresenter.generalPrintHelperForMS("cantMark");
-            } else if (messageManager.getSenderAndRecipients(obj2).get(0).equals(username) && type == MarkType.UNREAD){
+            } else if (messageManager.getSenderAndRecipients(obj2).get(0).equals(username) && type == MarkType.UNREAD) {
                 messagePresenter.generalPrintHelperForMS("cantUnread");
-            } else if (!messageManager.getSenderAndRecipients(obj2).get(0).equals(username) && type == MarkType.RECALL){
+            } else if (!messageManager.getSenderAndRecipients(obj2).get(0).equals(username) && type == MarkType.RECALL) {
                 messagePresenter.generalPrintHelperForMS("cantRecall");
             } else {
-                if (type == MarkType.RECALL){
+                if (type == MarkType.RECALL) {
                     messageManager.deleteMessage(obj2);
                     messagePresenter.generalPrintHelperForMS("recalled");
                 } else {
-                    observeMarkAs(obj2,username,type);
+                    observeMarkAs(obj2, username, type);
                 }
             }
         }
@@ -460,39 +474,44 @@ public class MessageSystem extends Controller {
 
     /**
      * private helper method for let messageUpdate update message and notify changes
-     * @param m message object
+     *
+     * @param m       message object
      * @param changer username of the changer
-     * @param type a type of which message can be marked as
+     * @param type    a type of which message can be marked as
      */
-    private void observeMarkAs(Message m, String changer, MarkType type){
+    private void observeMarkAs(Message m, String changer, MarkType type) {
         // precondition: the changer must be in the recipient list of this message.
         // Start observing
         MessageUpdate messageUpdate = new MessageUpdate(m);
         messageUpdate.addObserver(messageListener);
-        switch (type){
+        switch (type) {
             case UNREAD:
                 messageUpdate.markUnread(changer);
                 break;
             case ARCHIVED:
                 messageUpdate.markArchive(changer);
                 break;
+            case UNARCHIVED:
+                messageUpdate.removeArchive(changer);
+                break;
         }
-        messagePresenter.displayMarkAs(messageListener.getMarkBin(),changer);
+        messagePresenter.displayMarkAs(messageListener.getMarkBin(), changer);
         messageUpdate.removeObserver(messageListener);
     }
 
     /**
      * This method edit sent message. A message can only be edited by its sender
+     *
      * @param username the username of current user
      */
-    private void editMessage(String username){
+    private void editMessage(String username) {
         Scanner obj = new Scanner(System.in);
         messagePresenter.generalPrintHelperForMS("inputMessageNum");
         String messageNum = obj.nextLine().toUpperCase();
         Optional<Message> obj1 = messageManager.numToMessageObject(messageNum);
-        if (!obj1.isPresent()){
+        if (!obj1.isPresent()) {
             messagePresenter.generalPrintHelperForMS("noSuchMessageNum");
-        }else {
+        } else {
             Message obj2 = obj1.get();
             if (messageManager.getSenderAndRecipients(obj2).get(0).equals(username)) {
                 messagePresenter.displayOriginalMessage(messageManager.getContent(obj2));
@@ -501,11 +520,46 @@ public class MessageSystem extends Controller {
                 MessageUpdate messageUpdate = new MessageUpdate(obj2);
                 messageUpdate.addObserver(messageListener);
                 messageUpdate.editMessage(newText);
-                messagePresenter.displayMarkAs(messageListener.getMarkBin(),username);
+                messagePresenter.displayMarkAs(messageListener.getMarkBin(), username);
                 messageUpdate.removeObserver(messageListener);
                 // end observing
             } else {
                 messagePresenter.generalPrintHelperForMS("cantEdit");
+            }
+        }
+    }
+
+    /**
+     * Displays archived message;
+     *
+     * @param username username of current user
+     */
+    private void getArchived(String username) {
+        ArrayList<String> messagesH = messageManager.getArchiveMessages(username);
+        if (messagesH.size() == 0) {
+            messagePresenter.generalPrintHelperForMS("noArchive");
+        } else messagePresenter.displayListOfMessage(messagesH);
+        System.out.println();
+    }
+
+    /**
+     * change an archived message to not archived
+     *
+     * @param username username of current user
+     */
+    private void removeArchive(String username) {
+        Scanner obj = new Scanner(System.in);
+        messagePresenter.generalPrintHelperForMS("inputMessageNum");
+        String messageNum = obj.nextLine().toUpperCase();
+        Optional<Message> obj1 = messageManager.numToMessageObject(messageNum);
+        if (!obj1.isPresent()) {
+            messagePresenter.generalPrintHelperForMS("noSuchMessageNum");
+        } else {
+            Message obj2 = obj1.get();
+            if (!messageManager.getArchivedObj(username).contains(obj2)) {
+                messagePresenter.generalPrintHelperForMS("cantUnArchive");
+            } else {
+                observeMarkAs(obj2, username, MarkType.UNARCHIVED);
             }
         }
     }
