@@ -1,0 +1,20 @@
+Extensions we have implemented in phase 2:
+
+Optional/Extra:
+
+ - Message: You will receive a notification about new messages every time you enter the message board.
+You can recall the message you already sent, this will result in deleting this message in the system.
+You can edit messages you already sent, like when you have a typo before you can now change it.
+You can mark a message as Unread and Archived. Of course you can view unread messages and archived messages now
+ - Email: You can now connect your account to an email. This will become an advantage when you forget your password.
+You can simply reset the password via email.
+ - Schedule Downloader: You can now download the schedule of all events happening in the conference as a PDF.
+
+Mandatory:
+
+ - Event capacity: Now you can set an event capacity when creating an event and change it later
+ - VIP user: There will be a VIP user and a VIP only event in the System.
+ - Organizer: The organizer now can create all types of account
+ - Events: There will be more types of events. Events with no speaker, events with VIP only and events with
+multiple speakers, etc. Events can last as long as you want
+ - Events can be cancelled
